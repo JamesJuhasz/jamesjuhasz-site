@@ -45,7 +45,7 @@ export const trainingStats = [
   { value: 203, label: "Days on the water" },
   { value: 144, label: "Gym sessions" },
   { value: 2762, label: "Cycling km" },
-  { value: 34, label: "Flights taken" },
+  { value: 10352, label: "Km driven" },
 ] as const;
 
 export const givingLevels: GivingLevel[] = [

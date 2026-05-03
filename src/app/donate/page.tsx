@@ -29,32 +29,32 @@ export const metadata = {
 
 const budgetCategories = [
   {
-    icon: Compass,
-    label: "Coaching",
-    pct: 30,
-    dollars: 18000,
-    body: "On-water coach time, RIB fuel, performance support, and review.",
-  },
-  {
     icon: Plane,
     label: "Travel",
     pct: 25,
-    dollars: 15000,
-    body: "Flights and ground travel between Canada, Europe, Australia, and the US.",
+    dollars: 9000,
+    body: "Three trips to Europe ($1,500 each), one to Australia ($3,000), three to the US ($500 each). Flights + ground travel.",
   },
   {
     icon: Ship,
     label: "Regatta entries + housing",
     pct: 30,
+    dollars: 14000,
+    body: "5–6 regattas a year ($350–$650 each), club dues, team fees, $800/month rent on the road.",
+  },
+  {
+    icon: Compass,
+    label: "Coaching + boat",
+    pct: 30,
     dollars: 18000,
-    body: "Entry fees, charter costs, club dues, and rent on the road.",
+    body: "On-water coach time, RIB fuel, launch fees, boat charter and transport between continents.",
   },
   {
     icon: Wrench,
-    label: "Equipment + boat",
+    label: "Equipment",
     pct: 15,
     dollars: 9000,
-    body: "Sails (4/year), lines, wetsuits, boat charter and transport.",
+    body: "Four sails a year ($850 each), two wetsuits ($350 each), lines, electronics, and a food budget of $30/day on the road.",
   },
 ];
 

@@ -26,5 +26,9 @@ export const SITE = {
     { name: "Canadian Sailing Team", href: "https://www.sailing.ca" },
     { name: "Oakville Yacht Squadron", href: "https://www.oys.ca" },
     { name: "Devoti Sailing", href: "https://devoti-sailing.com" },
+    { name: "Ontario Quest for Gold", href: "https://www.coachingathletes.org" },
+    { name: "Allen Sailing Hardware", href: "https://www.allenbrothers.co.uk" },
+    { name: "Helly Hansen", href: "https://www.hellyhansen.com" },
+    { name: "Maurten", href: "https://www.maurten.com" },
   ],
 } as const;

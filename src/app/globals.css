@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+/*
+  Design system: jamesjuhasz.com
+  Inspired by sailing photography — deep navy water, warm foam off-white,
+  sand accent, with a single reserved CTA color (donate) for conversion.
+  Restraint converts; the donate color is used sparingly so it pops.
+*/
+
+@theme {
+  /* Colors */
+  --color-navy: #0E2240;
+  --color-navy-deep: #061122;
+  --color-navy-soft: #1F365A;
+  --color-foam: #F6F2EA;
+  --color-foam-deep: #EAE3D5;
+  --color-sand: #D8C4A6;
+  --color-sand-warm: #B89878;
+  --color-donate: #E04E2A;
+  --color-donate-hover: #C53C1B;
+  --color-ink: #0A1628;
+  --color-mist: #6F7B8E;
+  --color-line: #D6DBE3;
+
+  /* Type families (variables wired in layout.tsx) */
+  --font-serif: var(--font-fraunces);
+  --font-sans: var(--font-inter);
+
+  /* Type scale (size / line-height) */
+  --text-display: 4.25rem;
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.025em;
+  --text-h1: 3rem;
+  --text-h1--line-height: 1.1;
+  --text-h1--letter-spacing: -0.02em;
+  --text-h2: 2.25rem;
+  --text-h2--line-height: 1.15;
+  --text-h2--letter-spacing: -0.015em;
+  --text-h3: 1.5rem;
+  --text-h3--line-height: 1.3;
+  --text-h3--letter-spacing: -0.01em;
+  --text-body-lg: 1.125rem;
+  --text-body-lg--line-height: 1.7;
+  --text-body: 1rem;
+  --text-body--line-height: 1.65;
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: 1.5;
+  --text-eyebrow: 0.75rem;
+  --text-eyebrow--line-height: 1.2;
+  --text-eyebrow--letter-spacing: 0.12em;
+
+  /* Semantic spacing */
+  --spacing-section-y: 6rem;
+  --spacing-section-y-lg: 8rem;
+  --spacing-container-x: 1.5rem;
+  --spacing-stack-sm: 0.75rem;
+  --spacing-stack-md: 1.5rem;
+  --spacing-stack-lg: 3rem;
+
+  /* Container widths */
+  --container-prose: 70ch;
+  --container-narrow: 42rem;
+  --container-default: 72rem;
+  --container-wide: 84rem;
+
+  /* Radius */
+  --radius-pill: 999px;
+
+  /* Shadows */
+  --shadow-soft: 0 1px 2px rgba(10, 22, 40, 0.04), 0 4px 16px rgba(10, 22, 40, 0.06);
+  --shadow-lift: 0 8px 30px rgba(10, 22, 40, 0.12);
+}
+
+/* Base */
+html {
+  background: var(--color-foam);
+  color: var(--color-ink);
+}
+
+body {
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Headings default to serif. Override per-component if needed. */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 500;
+  color: var(--color-navy);
+}
+
+/* Selection */
+::selection {
+  background: var(--color-navy);
+  color: var(--color-foam);
+}
+
+/* Focus rings — deliberate, athletic, not browser default */
+:focus-visible {
+  outline: 2px solid var(--color-donate);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Smooth scroll for anchor links to in-page CTAs */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Utility: drop cap for editorial text */
+.drop-cap::first-letter {
+  font-family: var(--font-serif);
+  font-size: 4.25rem;
+  line-height: 0.85;
+  font-weight: 500;
+  float: left;
+  padding-right: 0.75rem;
+  padding-top: 0.5rem;
+  color: var(--color-navy);
+}

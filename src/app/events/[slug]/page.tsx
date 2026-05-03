@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { DonateCTAInline, DonateCTASidebar } from "@/components/cta/DonateCTA";
 import { PortableText } from "@/components/sanity/PortableText";
+import { JsonLd } from "@/components/JsonLd";
+import { eventJsonLd } from "@/lib/json-ld";
 import { getEventBySlug, getEventsIndex } from "@/sanity/fetch";
 
 export const revalidate = 60;
@@ -57,6 +59,16 @@ export default async function EventDetailPage({
 
   return (
     <>
+      <JsonLd
+        data={eventJsonLd({
+          title: event.title,
+          eventDate: event.eventDate,
+          endDate: event.endDate,
+          location: event.location,
+          excerpt: event.excerpt,
+          slug: event.slug,
+        })}
+      />
       {/* Hero */}
       <section className="relative min-h-[55svh] flex items-end overflow-hidden">
         <div

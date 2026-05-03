@@ -90,6 +90,7 @@ function TierCard({
         className="mt-2 w-full"
         onClick={() => onClick?.(tier.amount)}
         data-cta-location={`giving_tier_${tier.amount}`}
+        data-giving-amount={tier.amount}
       >
         Give {fmtCurrency.format(tier.amount)}
       </Button>

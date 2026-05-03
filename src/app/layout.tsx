@@ -4,6 +4,9 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingDonateCTA } from "@/components/cta/DonateCTA";
+import { AnalyticsBridge } from "@/components/AnalyticsBridge";
+import { JsonLd } from "@/components/JsonLd";
+import { personJsonLd } from "@/lib/json-ld";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 
@@ -22,6 +25,8 @@ const inter = Inter({
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
+const defaultOg = `/api/og?title=${encodeURIComponent(SITE.name)}&subtitle=${encodeURIComponent(SITE.tagline)}`;
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
@@ -35,11 +40,13 @@ export const metadata: Metadata = {
     title: `${SITE.name} — ${SITE.tagline}`,
     description: SITE.shortDescription,
     url: SITE.url,
+    images: [{ url: defaultOg, width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: `${SITE.name} — ${SITE.tagline}`,
     description: SITE.shortDescription,
+    images: [defaultOg],
   },
 };
 
@@ -64,6 +71,8 @@ export default function RootLayout({
         <main className="flex-1">{children}</main>
         <Footer />
         <FloatingDonateCTA />
+        <AnalyticsBridge />
+        <JsonLd data={personJsonLd} />
         {GA_ID ? <GoogleAnalytics gaId={GA_ID} /> : null}
       </body>
     </html>

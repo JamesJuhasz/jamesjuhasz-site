@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { DonateCTAInline } from "@/components/cta/DonateCTA";
+import { trackFormSubmitted } from "@/lib/gtag";
 
 /*
   /name-my-boat — community engagement + soft conversion.
@@ -41,6 +42,7 @@ export default function NameMyBoatPage() {
         headers: { "Content-Type": "application/json" },
       });
       if (!res.ok) throw new Error("Submission failed");
+      trackFormSubmitted("name-my-boat");
       router.push("/thank-you?from=name-my-boat");
     } catch {
       setState("error");

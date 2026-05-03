@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { DonateCTAInline } from "@/components/cta/DonateCTA";
+import { trackFormSubmitted } from "@/lib/gtag";
 
 /*
   /clinic-registration — small revenue stream + community engagement.
@@ -46,6 +47,7 @@ export default function ClinicRegistrationPage() {
         headers: { "Content-Type": "application/json" },
       });
       if (!res.ok) throw new Error();
+      trackFormSubmitted("clinic-registration");
       router.push("/thank-you?from=clinic-registration");
     } catch {
       setState("error");

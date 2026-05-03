@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { DonateCTAInline } from "@/components/cta/DonateCTA";
+import { trackSubscribeSubmitted, trackFormSubmitted } from "@/lib/gtag";
 
 export default function SubscribePage() {
   const router = useRouter();
@@ -23,6 +24,8 @@ export default function SubscribePage() {
         headers: { "Content-Type": "application/json" },
       });
       if (!res.ok) throw new Error();
+      trackSubscribeSubmitted("page");
+      trackFormSubmitted("subscribe");
       router.push("/thank-you?from=subscribe");
     } catch {
       setState("error");

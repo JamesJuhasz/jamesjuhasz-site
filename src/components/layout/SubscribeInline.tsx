@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ArrowRight, Check } from "lucide-react";
 import { cn } from "@/lib/cn";
+import { trackSubscribeSubmitted } from "@/lib/gtag";
 
 export function SubscribeInline() {
   const [email, setEmail] = useState("");
@@ -14,10 +15,19 @@ export function SubscribeInline() {
     e.preventDefault();
     if (!email) return;
     setState("submitting");
-    // Day 6 wires the real handler. Day 1 stubs with a no-op success.
-    await new Promise((r) => setTimeout(r, 400));
-    setState("ok");
-    setEmail("");
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        body: JSON.stringify({ email }),
+        headers: { "Content-Type": "application/json" },
+      });
+      if (!res.ok) throw new Error();
+      trackSubscribeSubmitted("footer");
+      setState("ok");
+      setEmail("");
+    } catch {
+      setState("error");
+    }
   }
 
   return (
@@ -47,7 +57,11 @@ export function SubscribeInline() {
       </div>
       {state === "ok" ? (
         <p className="text-caption text-foam/80">
-          Thanks — you’re on the list. (Stub: real handler ships Day 6.)
+          Thanks — you're on the list.
+        </p>
+      ) : state === "error" ? (
+        <p className="text-caption text-donate">
+          Something went wrong. Try again in a moment.
         </p>
       ) : null}
     </form>

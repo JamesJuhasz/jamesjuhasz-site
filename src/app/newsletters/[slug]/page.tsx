@@ -2,10 +2,11 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
-import { Badge } from "@/components/ui/Badge";
 import { Reveal } from "@/components/ui/Reveal";
 import { DonateCTASidebar, DonateCTAInline } from "@/components/cta/DonateCTA";
 import { PortableText } from "@/components/sanity/PortableText";
+import { JsonLd } from "@/components/JsonLd";
+import { articleJsonLd } from "@/lib/json-ld";
 import { getPostBySlug, getPostsIndex } from "@/sanity/fetch";
 
 export const revalidate = 60;
@@ -29,9 +30,25 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = await getPostBySlug(slug);
   if (!post) return { title: "Post not found" };
+  const ogUrl = `/api/og?variant=post&title=${encodeURIComponent(
+    post.title,
+  )}&subtitle=${encodeURIComponent(
+    new Intl.DateTimeFormat("en-CA", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    }).format(new Date(post.publishedAt)),
+  )}`;
   return {
     title: post.title,
     description: post.excerpt,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      type: "article",
+      publishedTime: post.publishedAt,
+      images: [ogUrl],
+    },
   };
 }
 
@@ -48,6 +65,14 @@ export default async function PostPage({
 
   return (
     <>
+      <JsonLd
+        data={articleJsonLd({
+          title: post.title,
+          publishedAt: post.publishedAt,
+          excerpt: post.excerpt,
+          slug: post.slug,
+        })}
+      />
       <section className="py-section-y bg-foam-deep border-b border-line">
         <Container width="prose">
           <Link

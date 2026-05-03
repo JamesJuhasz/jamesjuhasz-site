@@ -9,12 +9,22 @@ import { Reveal } from "@/components/ui/Reveal";
 import { DonorboxEmbed } from "@/components/sections/DonorboxEmbed";
 import { GivingTiers } from "@/components/sections/GivingTiers";
 import { FAQ } from "@/components/sections/FAQ";
+import { JsonLd } from "@/components/JsonLd";
+import { donateActionJsonLd } from "@/lib/json-ld";
 import { pressEntries } from "@/lib/seed-data";
+import { SITE } from "@/lib/site";
 
 export const metadata = {
   title: "Donate — Help me get to LA 2028",
   description:
     "Support the Olympic sailing campaign. Recurring monthly support makes the biggest difference. Tax receipts where available.",
+  openGraph: {
+    title: "Help me get to LA 2028",
+    description: "Donate to the Olympic ILCA 7 sailing campaign.",
+    images: [
+      `/api/og?title=${encodeURIComponent("Help me get to LA 2028.")}&subtitle=${encodeURIComponent("Donate to the Olympic ILCA 7 campaign")}`,
+    ],
+  },
 };
 
 const budgetCategories = [
@@ -140,9 +150,12 @@ export default async function DonatePage({
   const raw = Array.isArray(sp.amount) ? sp.amount[0] : sp.amount;
   const amount = raw && /^\d+$/.test(raw) ? Number(raw) : null;
   const featuredPress = pressEntries[0];
+  // Site (used in OG image fallback)
+  void SITE;
 
   return (
     <>
+      <JsonLd data={donateActionJsonLd} />
       {/* HERO — half-viewport, embed above the fold */}
       <section className="relative overflow-hidden">
         <div

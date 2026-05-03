@@ -1,47 +1,30 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { SITE } from "@/lib/site";
 
-/*
-  Day 2 hero. Photo background lands Day 7 via the asset picker.
-  For now, layered navy gradient + subtle SVG wave pattern stands in —
-  structurally complete, swap-ready (replace .hero-bg with <Image fill />).
-*/
-
 export function HomeHero() {
   return (
     <section className="relative min-h-[100svh] flex flex-col justify-end overflow-hidden">
-      {/* Background — replace with next/image fill on Day 7 */}
-      <div
-        className="absolute inset-0 -z-10"
-        aria-hidden
-        style={{
-          background:
-            "radial-gradient(120% 80% at 30% 30%, #1F365A 0%, #0E2240 45%, #061122 100%)",
-        }}
+      <Image
+        src="/images/hero.jpg"
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        className="-z-20 object-cover"
       />
-      {/* Wave pattern overlay */}
-      <svg
+      {/* Navy tint over photo for brand consistency + text legibility */}
+      <div
         aria-hidden
-        className="absolute inset-x-0 bottom-0 -z-10 w-full opacity-25 mix-blend-screen"
-        viewBox="0 0 1440 320"
-        fill="none"
-      >
-        <path
-          d="M0 220 C 240 180, 480 260, 720 220 S 1200 180, 1440 220 L 1440 320 L 0 320 Z"
-          fill="#D8C4A6"
-        />
-        <path
-          d="M0 240 C 240 200, 480 280, 720 240 S 1200 200, 1440 240 L 1440 320 L 0 320 Z"
-          fill="#0E2240"
-        />
-      </svg>
+        className="absolute inset-0 -z-10 bg-navy-deep/30 mix-blend-multiply"
+      />
       {/* Bottom legibility gradient */}
       <div
-        className="absolute inset-x-0 bottom-0 h-1/2 -z-10 bg-gradient-to-t from-navy-deep/90 via-navy/40 to-transparent"
         aria-hidden
+        className="absolute inset-x-0 bottom-0 h-2/3 -z-10 bg-gradient-to-t from-navy-deep/90 via-navy/40 to-transparent"
       />
 
       <Container width="wide" className="pb-section-y-lg pt-section-y">

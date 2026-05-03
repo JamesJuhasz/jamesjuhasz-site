@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Compass, Plane, Wrench, Ship, Award, ShieldCheck, Sparkles } from "lucide-react";
 import { Container } from "@/components/ui/Container";
@@ -158,13 +159,17 @@ export default async function DonatePage({
       <JsonLd data={donateActionJsonLd} />
       {/* HERO — half-viewport, embed above the fold */}
       <section className="relative overflow-hidden">
+        <Image
+          src="/images/section/02.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="-z-20 object-cover"
+        />
         <div
           aria-hidden
-          className="absolute inset-0 -z-10"
-          style={{
-            background:
-              "radial-gradient(120% 70% at 80% 20%, #1F365A 0%, #0E2240 50%, #061122 100%)",
-          }}
+          className="absolute inset-0 -z-10 bg-navy-deep/70 mix-blend-multiply"
         />
         <Container width="wide" className="pt-section-y pb-section-y">
           <div className="grid lg:grid-cols-12 gap-12 items-start">

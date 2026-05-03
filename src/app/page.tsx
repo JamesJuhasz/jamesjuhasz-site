@@ -162,7 +162,11 @@ export default function HomePage() {
               </div>
               <div className="lg:col-span-7">
                 <Reveal delay={0.15}>
-                  <EventCard event={featuredEvent} size="lg" />
+                  <EventCard
+                    event={featuredEvent}
+                    size="lg"
+                    imageSrc="/images/featured-event.jpg"
+                  />
                 </Reveal>
               </div>
             </div>

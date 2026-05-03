@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { SectionHeader } from "@/components/ui/SectionHeader";
@@ -20,17 +21,21 @@ export default function AboutPage() {
     <>
       {/* EDITORIAL HERO */}
       <section className="relative min-h-[80svh] flex items-end overflow-hidden">
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10"
-          style={{
-            background:
-              "radial-gradient(120% 80% at 70% 30%, #1F365A 0%, #0E2240 50%, #061122 100%)",
-          }}
+        <Image
+          src="/images/about-portrait.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="-z-20 object-cover"
         />
         <div
           aria-hidden
-          className="absolute inset-x-0 bottom-0 h-1/2 -z-10 bg-gradient-to-t from-navy-deep/90 via-navy/40 to-transparent"
+          className="absolute inset-0 -z-10 bg-navy-deep/30 mix-blend-multiply"
+        />
+        <div
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 h-2/3 -z-10 bg-gradient-to-t from-navy-deep/90 via-navy/40 to-transparent"
         />
         <Container width="wide" className="pb-section-y-lg pt-section-y">
           <p className="text-eyebrow uppercase tracking-[0.18em] text-sand mb-6">
@@ -72,18 +77,15 @@ export default function AboutPage() {
           </div>
 
           <figure className="my-12">
-            <div
-              className="aspect-[16/10] rounded-2xl"
-              style={{
-                background:
-                  "linear-gradient(135deg, #1F365A 0%, #0E2240 50%, #061122 100%)",
-              }}
-              aria-hidden
-            />
-            <figcaption className="mt-3 text-caption text-mist text-center">
-              Junior sailing at OYS — early years on the water. Real photo
-              swaps in Day 7.
-            </figcaption>
+            <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-foam-deep">
+              <Image
+                src="/images/section/01.jpg"
+                alt="On the water — campaign shot"
+                fill
+                sizes="(min-width: 1024px) 70ch, 100vw"
+                className="object-cover"
+              />
+            </div>
           </figure>
 
           <h3 className="font-serif text-h2 mt-16 text-navy">

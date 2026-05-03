@@ -1,0 +1,78 @@
+import Link from "next/link";
+import { MapPin, Trophy, ArrowUpRight } from "lucide-react";
+import { Badge } from "@/components/ui/Badge";
+import type { SeedEvent } from "@/lib/seed-data";
+
+const dateFmt = new Intl.DateTimeFormat("en-CA", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+});
+
+export function EventCard({
+  event,
+  size = "md",
+}: {
+  event: SeedEvent;
+  size?: "md" | "lg";
+}) {
+  const isUpcoming = event.status === "upcoming";
+  const isLg = size === "lg";
+
+  function formatRange() {
+    const start = dateFmt.format(new Date(event.eventDate));
+    if (!event.endDate || event.endDate === event.eventDate) return start;
+    const end = dateFmt.format(new Date(event.endDate));
+    return `${start} – ${end}`;
+  }
+
+  return (
+    <Link
+      href={`/events/${event.slug}`}
+      className="group flex flex-col gap-4 rounded-2xl bg-white ring-1 ring-line p-6 hover:shadow-lift hover:-translate-y-0.5 transition-all"
+    >
+      <div
+        aria-hidden
+        className={`relative ${isLg ? "aspect-[3/2]" : "aspect-[16/10]"} w-full rounded-xl overflow-hidden`}
+        style={{
+          background: isUpcoming
+            ? "linear-gradient(135deg, #D8C4A6 0%, #B89878 100%)"
+            : "linear-gradient(135deg, #1F365A 0%, #061122 100%)",
+        }}
+      >
+        <div className="absolute top-3 left-3">
+          <Badge tone={isUpcoming ? "navy" : "sand"}>
+            {isUpcoming ? "Upcoming" : event.status === "recent" ? "Recent" : "Past"}
+          </Badge>
+        </div>
+        {event.resultPosition ? (
+          <div className="absolute top-3 right-3">
+            <Badge tone="donate">
+              <Trophy size={12} /> {event.resultPosition}
+            </Badge>
+          </div>
+        ) : null}
+      </div>
+      <div className="flex flex-col gap-2">
+        <p className="text-caption uppercase tracking-wider text-mist">
+          {event.category} · {formatRange()}
+        </p>
+        <h3 className={`font-serif ${isLg ? "text-h2" : "text-h3"} text-navy group-hover:text-navy-deep transition-colors`}>
+          {event.title}
+        </h3>
+        <p className="text-body text-ink/70 line-clamp-2 inline-flex items-start gap-1.5">
+          <MapPin size={14} className="mt-1 flex-shrink-0 text-mist" aria-hidden />
+          <span>{event.location}</span>
+        </p>
+        {isLg ? (
+          <p className="text-body text-ink/80 line-clamp-3 mt-2">
+            {event.excerpt}
+          </p>
+        ) : null}
+        <span className="mt-2 inline-flex items-center gap-1 text-caption text-navy font-medium">
+          Read more <ArrowUpRight size={14} />
+        </span>
+      </div>
+    </Link>
+  );
+}

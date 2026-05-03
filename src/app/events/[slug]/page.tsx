@@ -5,7 +5,10 @@ import { Container } from "@/components/ui/Container";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { DonateCTAInline, DonateCTASidebar } from "@/components/cta/DonateCTA";
-import { allEvents } from "@/lib/seed-data";
+import { PortableText } from "@/components/sanity/PortableText";
+import { getEventBySlug, getEventsIndex } from "@/sanity/fetch";
+
+export const revalidate = 60;
 
 const dateFmt = new Intl.DateTimeFormat("en-CA", {
   month: "long",
@@ -13,8 +16,9 @@ const dateFmt = new Intl.DateTimeFormat("en-CA", {
   year: "numeric",
 });
 
-export function generateStaticParams() {
-  return allEvents.map((e) => ({ slug: e.slug }));
+export async function generateStaticParams() {
+  const events = await getEventsIndex();
+  return events.map((e) => ({ slug: e.slug }));
 }
 
 export async function generateMetadata({
@@ -23,7 +27,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const event = allEvents.find((e) => e.slug === slug);
+  const event = await getEventBySlug(slug);
   if (!event) return { title: "Event not found" };
   return {
     title: event.title,
@@ -37,11 +41,14 @@ export default async function EventDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  const event = await getEventBySlug(slug);
+  if (!event) notFound();
+
+  const allEvents = await getEventsIndex();
   const idx = allEvents.findIndex((e) => e.slug === slug);
-  if (idx === -1) notFound();
-  const event = allEvents[idx];
   const prev = idx > 0 ? allEvents[idx - 1] : null;
-  const next = idx < allEvents.length - 1 ? allEvents[idx + 1] : null;
+  const next =
+    idx >= 0 && idx < allEvents.length - 1 ? allEvents[idx + 1] : null;
 
   const range =
     event.endDate && event.endDate !== event.eventDate
@@ -107,20 +114,17 @@ export default async function EventDetailPage({
         <Container width="wide">
           <div className="grid lg:grid-cols-12 gap-10">
             <article className="lg:col-span-8 prose-area">
-              <div className="space-y-6 text-body-lg text-ink/85 leading-relaxed">
-                <p className="drop-cap">{event.excerpt}</p>
-                <p>
-                  This event diary lands once the regatta is over — full
-                  recap, conditions notes, key moments, and what changes for
-                  the next one. (Day 5 wires this body to Sanity portable
-                  text.)
-                </p>
-                <p>
-                  Until then, the highlight: the biggest signal from this
-                  event is what it says about the campaign's trajectory — and
-                  whether the support that funds it is paying back.
-                </p>
-              </div>
+              {event.body ? (
+                <PortableText value={event.body} />
+              ) : (
+                <div className="space-y-6 text-body-lg text-ink/85 leading-relaxed">
+                  <p className="drop-cap">{event.excerpt}</p>
+                  <p>
+                    Full diary entry pending. Once Sanity is configured and
+                    the import has run, the body lands here as portable text.
+                  </p>
+                </div>
+              )}
 
               {/* Inline CTA at end of body */}
               <div className="mt-12 rounded-2xl bg-navy text-foam p-8">

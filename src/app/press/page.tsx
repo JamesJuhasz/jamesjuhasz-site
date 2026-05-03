@@ -6,7 +6,9 @@ import { Badge } from "@/components/ui/Badge";
 import { Reveal } from "@/components/ui/Reveal";
 import { Button } from "@/components/ui/Button";
 import { DonateCTAInline } from "@/components/cta/DonateCTA";
-import { pressEntries } from "@/lib/seed-data";
+import { getPressMentions } from "@/sanity/fetch";
+
+export const revalidate = 60;
 
 export const metadata = {
   title: "Press",
@@ -19,8 +21,9 @@ const dateFmt = new Intl.DateTimeFormat("en-CA", {
   year: "numeric",
 });
 
-export default function PressPage() {
-  const sorted = [...pressEntries].sort(
+export default async function PressPage() {
+  const press = await getPressMentions();
+  const sorted = [...press].sort(
     (a, b) =>
       new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
   );

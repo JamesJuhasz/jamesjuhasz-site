@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import { Card } from "@/components/ui/Card";
 import type { SeedPost } from "@/lib/seed-data";
 
 const monthFmt = new Intl.DateTimeFormat("en-CA", {
@@ -8,6 +9,43 @@ const monthFmt = new Intl.DateTimeFormat("en-CA", {
   day: "numeric",
   year: "numeric",
 });
+
+const STOP_WORDS = new Set([
+  "in",
+  "on",
+  "at",
+  "the",
+  "a",
+  "an",
+  "and",
+  "of",
+  "to",
+  "by",
+  "for",
+  "from",
+  "with",
+  "as",
+  "but",
+  "or",
+  "nor",
+]);
+
+/**
+ * Lowercase common stop words (prepositions, articles, conjunctions) when they
+ * appear mid-title. The first word is always left alone to preserve sentence
+ * casing. Used by cleanText for titles only — not excerpts.
+ */
+function fixTitleCasing(s: string): string {
+  return s
+    .split(/(\s+)/)
+    .map((tok, i) => {
+      if (i === 0) return tok; // first word always capitalised
+      if (/^\s+$/.test(tok)) return tok;
+      if (STOP_WORDS.has(tok.toLowerCase())) return tok.toLowerCase();
+      return tok;
+    })
+    .join("");
+}
 
 /**
  * Defensive cleanup for text that may have come from the Squarespace XML
@@ -19,8 +57,8 @@ const monthFmt = new Intl.DateTimeFormat("en-CA", {
  * Seed-data is already clean — this guards against Sanity-fetched posts that
  * still carry the un-decoded entities the importer produced.
  */
-function cleanText(input: string): string {
-  return input
+function cleanText(input: string, isTitle = false): string {
+  const cleaned = input
     .replace(/&nbsp;/g, " ")
     .replace(/&amp;/g, "&")
     .replace(/&quot;/g, '"')
@@ -31,16 +69,18 @@ function cleanText(input: string): string {
     .replace(/\s+/g, " ")
     .replace(/\beuropean\b/g, "European")
     .trim();
+  return isTitle ? fixTitleCasing(cleaned) : cleaned;
 }
 
 export function PostCard({ post }: { post: SeedPost }) {
   const coverUrl = post.coverImage?.asset?.url;
-  const title = cleanText(post.title);
+  const title = cleanText(post.title, true);
   const excerpt = cleanText(post.excerpt);
   return (
-    <Link
+    <Card
+      as={Link}
       href={`/newsletters/${post.slug}`}
-      className="group flex flex-col gap-4 rounded-2xl bg-white ring-1 ring-mist p-6 hover:shadow-lift hover:-translate-y-0.5 transition-all"
+      className="group flex flex-col gap-4 shadow-none hover:shadow-lift hover:-translate-y-0.5 transition-all"
     >
       <div className="relative aspect-[16/10] w-full rounded-xl overflow-hidden bg-fog">
         {coverUrl ? (
@@ -65,6 +105,6 @@ export function PostCard({ post }: { post: SeedPost }) {
           Read post <ArrowUpRight size={14} />
         </span>
       </div>
-    </Link>
+    </Card>
   );
 }

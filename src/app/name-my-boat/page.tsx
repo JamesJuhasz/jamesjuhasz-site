@@ -51,10 +51,10 @@ export default function NameMyBoatPage() {
 
   return (
     <>
-      <section className="py-section-y bg-foam-deep border-b border-line">
+      <section className="py-section-y bg-fog border-b border-mist">
         <Container width="default">
           <Badge tone="sand">Community</Badge>
-          <h1 className="mt-4 font-serif text-display text-navy max-w-[18ch]">
+          <h1 className="mt-4 font-display text-display text-ink max-w-[18ch]">
             Help name James' boat.
           </h1>
           <p className="mt-6 max-w-prose text-body-lg text-ink/80">
@@ -70,7 +70,7 @@ export default function NameMyBoatPage() {
         <Container width="default">
           <div className="grid lg:grid-cols-12 gap-10">
             <div className="lg:col-span-7">
-              <h2 className="font-serif text-h2 text-navy">How it works</h2>
+              <h2 className="font-display text-h2 text-ink">How it works</h2>
               <ul className="mt-6 grid gap-4">
                 {[
                   "All monthly contributors are entered into the draw.",
@@ -85,7 +85,7 @@ export default function NameMyBoatPage() {
                   >
                     <span
                       aria-hidden
-                      className="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-pill bg-navy text-foam text-caption"
+                      className="mt-1 inline-flex h-6 w-6 items-center justify-center rounded-pill bg-ink text-paper text-caption"
                     >
                       ✓
                     </span>
@@ -96,7 +96,7 @@ export default function NameMyBoatPage() {
             </div>
             <div className="lg:col-span-5">
               <Card>
-                <p className="text-eyebrow uppercase tracking-wider text-mist mb-2">
+                <p className="text-eyebrow uppercase tracking-wider text-ink-3 mb-2">
                   Suggest a name
                 </p>
                 <form className="flex flex-col gap-3" onSubmit={onSubmit}>
@@ -117,17 +117,17 @@ export default function NameMyBoatPage() {
                     className="absolute opacity-0 pointer-events-none -z-10 h-0 w-0"
                     aria-hidden
                   />
-                  <label className="flex items-center gap-2 text-caption text-ink/75">
+                  <label className="flex items-center gap-2 text-caption text-ink-3">
                     <input
                       type="checkbox"
                       name="subscribe"
                       defaultChecked
-                      className="h-4 w-4 rounded border-line"
+                      className="h-4 w-4 rounded border-mist"
                     />
                     Send me campaign updates by email
                   </label>
                   {state === "error" ? (
-                    <p className="text-caption text-donate">
+                    <p className="text-caption text-red">
                       Something went wrong. Try again or email directly.
                     </p>
                   ) : null}
@@ -146,7 +146,7 @@ export default function NameMyBoatPage() {
         </Container>
       </section>
 
-      <section className="py-section-y bg-foam-deep border-y border-line">
+      <section className="py-section-y bg-fog border-y border-mist">
         <Container width="default">
           <SectionHeader
             eyebrow="In the running"
@@ -157,7 +157,7 @@ export default function NameMyBoatPage() {
             {submittedNames.map((name) => (
               <li
                 key={name}
-                className="rounded-pill bg-foam ring-1 ring-line px-4 py-2 text-body text-navy font-serif"
+                className="rounded-pill bg-paper ring-1 ring-mist px-4 py-2 text-body text-ink font-display"
               >
                 {name}
               </li>
@@ -191,23 +191,23 @@ function Field({
 }) {
   return (
     <label className="flex flex-col gap-1">
-      <span className="text-caption text-mist uppercase tracking-wider">
+      <span className="text-caption text-ink-3 uppercase tracking-wider">
         {label}
-        {required ? <span className="text-donate"> *</span> : null}
+        {required ? <span className="text-red"> *</span> : null}
       </span>
       {as === "textarea" ? (
         <textarea
           name={name}
           rows={3}
           required={required}
-          className="rounded-xl bg-foam-deep ring-1 ring-line px-4 py-3 text-body text-ink resize-none focus:outline-none focus:ring-navy/60"
+          className="rounded-xl bg-fog ring-1 ring-mist px-4 py-3 text-body text-ink resize-none focus:outline-none focus:ring-ink/60"
         />
       ) : (
         <input
           name={name}
           type={type}
           required={required}
-          className="rounded-pill bg-foam-deep ring-1 ring-line px-4 py-3 text-body text-ink focus:outline-none focus:ring-navy/60"
+          className="rounded-pill bg-fog ring-1 ring-mist px-4 py-3 text-body text-ink focus:outline-none focus:ring-ink/60"
         />
       )}
     </label>

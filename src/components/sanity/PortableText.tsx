@@ -26,7 +26,7 @@ const components: PortableTextComponents = {
             sizes="(min-width: 1024px) 70ch, 100vw"
           />
           {value.caption ? (
-            <figcaption className="mt-2 text-caption text-mist text-center">
+            <figcaption className="mt-2 text-caption text-ink-3 text-center">
               {value.caption}
             </figcaption>
           ) : null}
@@ -34,12 +34,12 @@ const components: PortableTextComponents = {
       );
     },
     pullQuote: ({ value }) => (
-      <blockquote className="my-10 border-l-4 border-donate pl-6">
-        <p className="font-serif text-h3 text-navy leading-snug">
+      <blockquote className="my-10 border-l-4 border-red pl-6">
+        <p className="font-display text-h3 text-ink leading-snug">
           {value.text}
         </p>
         {value.attribution ? (
-          <cite className="mt-3 block text-caption text-mist not-italic">
+          <cite className="mt-3 block text-caption text-ink-3 not-italic">
             — {value.attribution}
           </cite>
         ) : null}
@@ -57,18 +57,18 @@ const components: PortableTextComponents = {
   },
   block: {
     h2: ({ children }) => (
-      <h2 className="font-serif text-h2 text-navy mt-12 mb-4">{children}</h2>
+      <h2 className="font-display text-h2 text-ink mt-12 mb-4">{children}</h2>
     ),
     h3: ({ children }) => (
-      <h3 className="font-serif text-h3 text-navy mt-10 mb-3">{children}</h3>
+      <h3 className="font-display text-h3 text-ink mt-10 mb-3">{children}</h3>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="my-6 border-l-4 border-line pl-5 text-body-lg text-ink/80 italic">
+      <blockquote className="my-6 border-l-4 border-mist pl-5 text-body-lg text-ink/80 italic">
         {children}
       </blockquote>
     ),
     normal: ({ children }) => (
-      <p className="my-5 text-body-lg text-ink/85 leading-relaxed">{children}</p>
+      <p className="my-5 text-body-lg text-ink/80 leading-relaxed">{children}</p>
     ),
   },
   marks: {
@@ -77,7 +77,7 @@ const components: PortableTextComponents = {
       const isInternal = href.startsWith("/");
       if (isInternal) {
         return (
-          <Link href={href} className="text-navy underline">
+          <Link href={href} className="text-ink underline">
             {children}
           </Link>
         );
@@ -87,7 +87,7 @@ const components: PortableTextComponents = {
           href={href}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-navy underline"
+          className="text-ink underline"
         >
           {children}
         </a>

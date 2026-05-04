@@ -42,6 +42,47 @@ function isJamesFeatured(p: SeedPress): boolean {
   return false;
 }
 
+/**
+ * Hand-mapped monograms for known publications. Falls back to the first 1-2
+ * uppercase letters of the publication name for anything not in the table.
+ */
+const MONOGRAM_MAP: Record<string, string> = {
+  "sail canada": "SC",
+  "toronto guardian": "TG",
+  "sail-world.com": "SW",
+  "sail-world": "SW",
+  "world sailing": "WS",
+  "sailweb": "SW",
+  "scuttlebutt": "SB",
+  "scuttlebutt sailing news": "SB",
+  "oakville news": "ON",
+  "oakville beaver": "OB",
+  "afloat.ie": "AF",
+  "afloat": "AF",
+  "inhalton": "IN",
+  "inhalton.com": "IN",
+};
+
+function getMonogram(publication: string): string {
+  const key = publication.trim().toLowerCase();
+  if (MONOGRAM_MAP[key]) return MONOGRAM_MAP[key];
+
+  // Fallback: take first letters of the first two words, uppercased.
+  const words = publication
+    .replace(/[^A-Za-z\s]/g, " ")
+    .split(/\s+/)
+    .filter(Boolean);
+  if (words.length >= 2) {
+    return (words[0][0] + words[1][0]).toUpperCase();
+  }
+  if (words.length === 1) {
+    return words[0].slice(0, 2).toUpperCase();
+  }
+  // Last resort: strip non-alpha and take first two chars.
+  const stripped = publication.replace(/[^A-Za-z]/g, "");
+  return stripped.slice(0, 2).toUpperCase() || "··";
+}
+
 export default async function PressPage() {
   const press = await getPressMentions();
   const sorted = [...press].sort(
@@ -99,7 +140,14 @@ export default async function PressPage() {
                           loading="lazy"
                           className="w-full aspect-[4/3] object-cover rounded-md bg-fog mb-3"
                         />
-                      ) : null}
+                      ) : (
+                        <div
+                          aria-hidden="true"
+                          className="w-12 h-12 mb-3 inline-flex items-center justify-center bg-fog ring-1 ring-mist rounded-md font-display text-h3 font-semibold text-ink-3"
+                        >
+                          {getMonogram(p.publication)}
+                        </div>
+                      )}
                       <Badge>{p.publication}</Badge>
                       <p className="mt-2 text-caption text-ink-3">
                         {dateFmt.format(new Date(p.publishedAt))}

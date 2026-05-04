@@ -84,7 +84,7 @@ export default async function EventsPage() {
               <span className="font-display text-display leading-none tracking-tight text-red">
                 T-{daysToLA}
               </span>
-              <span className="font-display text-h3 leading-none tracking-tight text-ink/70">
+              <span className="font-display text-h3 leading-none tracking-tight text-ink/80">
                 days · LA 2028
               </span>
             </div>
@@ -167,7 +167,7 @@ export default async function EventsPage() {
               <h2 className="mt-2 font-display text-h2 text-ink">
                 Looking for past results?
               </h2>
-              <p className="mt-2 text-body text-ink/70 max-w-prose">
+              <p className="mt-2 text-body text-ink/75 max-w-prose">
                 Every regatta result — placement, fleet, and a link to the full
                 scoreboard — lives on the Results page.
               </p>

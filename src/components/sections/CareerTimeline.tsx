@@ -30,7 +30,7 @@ export function CareerTimeline() {
                 {item.year} · {item.location}
               </p>
               <h3 className="font-display text-h3 text-ink">{item.title}</h3>
-              <p className="mt-2 text-body text-ink/80 max-w-prose">
+              <p className="mt-2 text-body text-ink/75 max-w-prose">
                 {item.body}
               </p>
             </Reveal>

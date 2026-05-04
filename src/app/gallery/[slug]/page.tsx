@@ -36,6 +36,8 @@ export default async function GalleryDetailPage({
   if (!gallery) notFound();
 
   const photos = photosForGallery(gallery.slug, 12);
+  const heroPhoto = photos[0];
+  const tilePhotos = photos.slice(1);
   const aspects = ["aspect-[4/5]", "aspect-[3/2]", "aspect-square", "aspect-[5/4]"];
   const related = galleries.filter((g) => g.slug !== gallery.slug).slice(0, 4);
 
@@ -69,8 +71,20 @@ export default async function GalleryDetailPage({
 
       <section className="py-section-y">
         <Container width="wide">
+          {heroPhoto ? (
+            <Reveal className="relative aspect-[21/9] rounded-2xl overflow-hidden bg-fog mb-3">
+              <Image
+                src={heroPhoto}
+                alt=""
+                fill
+                priority
+                sizes="(min-width: 1280px) 1200px, 100vw"
+                className="object-cover hover:scale-[1.02] transition-transform duration-700"
+              />
+            </Reveal>
+          ) : null}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {photos.map((src, i) => (
+            {tilePhotos.map((src, i) => (
               <Reveal
                 key={`${src}-${i}`}
                 delay={Math.min(i * 0.04, 0.32)}
@@ -87,7 +101,7 @@ export default async function GalleryDetailPage({
             ))}
           </div>
           <p className="mt-6 text-caption text-ink-3">
-            Showing a curated 12 from a larger archive. Full per-gallery sets land in a later pass.
+            A curated selection from the campaign archive.
           </p>
         </Container>
       </section>

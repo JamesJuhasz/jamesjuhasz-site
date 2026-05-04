@@ -20,9 +20,9 @@ export function ComingSoon({
     <section className="py-section-y-lg">
       <Container width="narrow">
         <Badge tone="sand">Coming on {day}</Badge>
-        <h1 className="mt-4 font-serif text-h1 text-navy">{title}</h1>
+        <h1 className="mt-4 font-display text-h1 text-ink">{title}</h1>
         {blurb ? (
-          <p className="mt-4 text-body-lg text-ink/75">{blurb}</p>
+          <p className="mt-4 text-body-lg text-ink/80">{blurb}</p>
         ) : null}
         <div className="mt-8 flex gap-3">
           <Button href="/" variant="ghost">

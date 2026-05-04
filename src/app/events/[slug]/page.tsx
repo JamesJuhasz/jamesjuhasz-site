@@ -77,18 +77,18 @@ export default async function EventDetailPage({
           style={{
             background:
               event.status === "upcoming"
-                ? "linear-gradient(135deg, #D8C4A6 0%, #B89878 100%)"
-                : "linear-gradient(135deg, #1F365A 0%, #0E2240 50%, #061122 100%)",
+                ? "linear-gradient(135deg, #F5F2ED 0%, #C8CDD3 100%)"
+                : "linear-gradient(135deg, #2A2F36 0%, #0E1116 50%, #0B1E2E 100%)",
           }}
         />
         <div
           aria-hidden
-          className="absolute inset-x-0 bottom-0 h-1/2 -z-10 bg-gradient-to-t from-navy-deep/85 via-navy/30 to-transparent"
+          className="absolute inset-x-0 bottom-0 h-1/2 -z-10 bg-gradient-to-t from-ink/85 via-ink/30 to-transparent"
         />
         <Container width="wide" className="pb-16 pt-section-y">
           <Link
             href="/events"
-            className="inline-flex items-center gap-1 text-foam/85 hover:text-foam mb-6 text-caption uppercase tracking-wider"
+            className="inline-flex items-center gap-1 text-paper/85 hover:text-paper mb-6 text-caption uppercase tracking-wider"
           >
             <ChevronLeft size={14} /> All events
           </Link>
@@ -107,10 +107,10 @@ export default async function EventDetailPage({
               </Badge>
             ) : null}
           </div>
-          <h1 className="font-serif text-h1 lg:text-display text-foam max-w-[20ch]">
+          <h1 className="font-display text-h1 lg:text-display text-paper max-w-[20ch]">
             {event.title}
           </h1>
-          <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-body text-foam/85">
+          <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-body text-paper/85">
             <span className="inline-flex items-center gap-1.5">
               <Calendar size={16} aria-hidden /> {range}
             </span>
@@ -129,7 +129,7 @@ export default async function EventDetailPage({
               {event.body ? (
                 <PortableText value={event.body} />
               ) : (
-                <div className="space-y-6 text-body-lg text-ink/85 leading-relaxed">
+                <div className="space-y-6 text-body-lg text-ink/80 leading-relaxed">
                   <p className="drop-cap">{event.excerpt}</p>
                   <p>
                     Full diary entry pending. Once Sanity is configured and
@@ -139,16 +139,16 @@ export default async function EventDetailPage({
               )}
 
               {/* Inline CTA at end of body */}
-              <div className="mt-12 rounded-2xl bg-navy text-foam p-8">
-                <p className="text-eyebrow uppercase tracking-wider text-sand mb-2">
+              <div className="mt-12 rounded-2xl bg-ink text-paper p-8">
+                <p className="text-eyebrow uppercase tracking-wider text-red mb-2">
                   Was this useful?
                 </p>
-                <p className="font-serif text-h3 text-foam">
+                <p className="font-display text-h3 text-paper">
                   {event.status === "upcoming"
                     ? "Help fund the start line."
                     : "Help fund the next one."}
                 </p>
-                <p className="mt-3 text-body text-foam/80 max-w-prose">
+                <p className="mt-3 text-body text-paper/80 max-w-prose">
                   Each event runs $500–3,000 in entry fees, travel, and
                   housing alone. Your contribution lands directly on the next
                   scoreboard.
@@ -166,16 +166,16 @@ export default async function EventDetailPage({
               </div>
 
               {/* Prev / next */}
-              <nav className="mt-16 grid sm:grid-cols-2 gap-4 border-t border-line pt-8">
+              <nav className="mt-16 grid sm:grid-cols-2 gap-4 border-t border-mist pt-8">
                 {prev ? (
                   <Link
                     href={`/events/${prev.slug}`}
-                    className="rounded-2xl ring-1 ring-line p-5 hover:bg-foam-deep transition-colors"
+                    className="rounded-2xl ring-1 ring-mist p-5 hover:bg-fog transition-colors"
                   >
-                    <p className="text-eyebrow uppercase tracking-wider text-mist mb-1">
+                    <p className="text-eyebrow uppercase tracking-wider text-ink-3 mb-1">
                       <ChevronLeft size={12} className="inline" /> Previous
                     </p>
-                    <p className="font-serif text-h3 text-navy">{prev.title}</p>
+                    <p className="font-display text-h3 text-ink">{prev.title}</p>
                   </Link>
                 ) : (
                   <div />
@@ -183,12 +183,12 @@ export default async function EventDetailPage({
                 {next ? (
                   <Link
                     href={`/events/${next.slug}`}
-                    className="rounded-2xl ring-1 ring-line p-5 hover:bg-foam-deep transition-colors text-right"
+                    className="rounded-2xl ring-1 ring-mist p-5 hover:bg-fog transition-colors text-right"
                   >
-                    <p className="text-eyebrow uppercase tracking-wider text-mist mb-1">
+                    <p className="text-eyebrow uppercase tracking-wider text-ink-3 mb-1">
                       Next <ChevronRight size={12} className="inline" />
                     </p>
-                    <p className="font-serif text-h3 text-navy">{next.title}</p>
+                    <p className="font-display text-h3 text-ink">{next.title}</p>
                   </Link>
                 ) : null}
               </nav>
@@ -201,8 +201,8 @@ export default async function EventDetailPage({
                   body="Every event is a real scoreboard. Your support is where the next one starts."
                   location="event_sidebar"
                 />
-                <div className="rounded-2xl ring-1 ring-line bg-white p-5">
-                  <p className="text-eyebrow uppercase tracking-wider text-mist mb-2">
+                <div className="rounded-2xl ring-1 ring-mist bg-white p-5">
+                  <p className="text-eyebrow uppercase tracking-wider text-ink-3 mb-2">
                     More events
                   </p>
                   <ul className="flex flex-col gap-3">
@@ -213,11 +213,11 @@ export default async function EventDetailPage({
                         <li key={e.slug}>
                           <Link
                             href={`/events/${e.slug}`}
-                            className="text-body text-navy hover:underline"
+                            className="text-body text-ink hover:underline"
                           >
                             {e.title}
                           </Link>
-                          <p className="text-caption text-mist">
+                          <p className="text-caption text-ink-3">
                             {dateFmt.format(new Date(e.eventDate))}
                           </p>
                         </li>

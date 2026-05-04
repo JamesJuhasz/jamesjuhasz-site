@@ -73,15 +73,15 @@ export default async function PostPage({
           slug: post.slug,
         })}
       />
-      <section className="py-section-y bg-foam-deep border-b border-line">
+      <section className="py-section-y bg-fog border-b border-mist">
         <Container width="prose">
           <Link
             href="/newsletters"
-            className="inline-flex items-center gap-1 text-mist hover:text-navy mb-6 text-caption uppercase tracking-wider"
+            className="inline-flex items-center gap-1 text-ink-3 hover:text-ink mb-6 text-caption uppercase tracking-wider"
           >
             <ChevronLeft size={14} /> All posts
           </Link>
-          <p className="text-eyebrow uppercase tracking-wider text-mist mb-3">
+          <p className="text-eyebrow uppercase tracking-wider text-ink-3 mb-3">
             {dateFmt.format(new Date(post.publishedAt))}
             {post.tags?.length ? (
               <>
@@ -90,9 +90,9 @@ export default async function PostPage({
               </>
             ) : null}
           </p>
-          <h1 className="font-serif text-h1 text-navy">{post.title}</h1>
+          <h1 className="font-display text-h1 text-ink">{post.title}</h1>
           {post.excerpt ? (
-            <p className="mt-4 text-body-lg text-ink/75 max-w-prose">
+            <p className="mt-4 text-body-lg text-ink/80 max-w-prose">
               {post.excerpt}
             </p>
           ) : null}
@@ -119,16 +119,16 @@ export default async function PostPage({
                 className="my-12 -mx-container-x"
               />
 
-              <nav className="mt-12 grid sm:grid-cols-2 gap-4 border-t border-line pt-8">
+              <nav className="mt-12 grid sm:grid-cols-2 gap-4 border-t border-mist pt-8">
                 {"previous" in post && post.previous ? (
                   <Link
                     href={`/newsletters/${post.previous.slug}`}
-                    className="rounded-2xl ring-1 ring-line p-5 hover:bg-foam-deep transition-colors"
+                    className="rounded-2xl ring-1 ring-mist p-5 hover:bg-fog transition-colors"
                   >
-                    <p className="text-eyebrow uppercase tracking-wider text-mist mb-1">
+                    <p className="text-eyebrow uppercase tracking-wider text-ink-3 mb-1">
                       <ChevronLeft size={12} className="inline" /> Previous
                     </p>
-                    <p className="font-serif text-h3 text-navy">
+                    <p className="font-display text-h3 text-ink">
                       {post.previous.title}
                     </p>
                   </Link>
@@ -138,12 +138,12 @@ export default async function PostPage({
                 {"next" in post && post.next ? (
                   <Link
                     href={`/newsletters/${post.next.slug}`}
-                    className="rounded-2xl ring-1 ring-line p-5 hover:bg-foam-deep transition-colors text-right"
+                    className="rounded-2xl ring-1 ring-mist p-5 hover:bg-fog transition-colors text-right"
                   >
-                    <p className="text-eyebrow uppercase tracking-wider text-mist mb-1">
+                    <p className="text-eyebrow uppercase tracking-wider text-ink-3 mb-1">
                       Next <ChevronRight size={12} className="inline" />
                     </p>
-                    <p className="font-serif text-h3 text-navy">
+                    <p className="font-display text-h3 text-ink">
                       {post.next.title}
                     </p>
                   </Link>

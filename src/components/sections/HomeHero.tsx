@@ -1,5 +1,3 @@
-import Link from "next/link";
-import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { HeroParallax } from "@/components/sections/HeroParallax";
@@ -28,6 +26,23 @@ export function HomeHero() {
           <SailNumberMark size="md" align="right" mode="dark" />
         </div>
       </Container>
+
+      {/* Top broadcast strip — moved from bottom for clearer hierarchy */}
+      <div className="mt-6 border-y border-paper/15 bg-ink/40 backdrop-blur-sm">
+        <Container
+          width="wide"
+          className="flex flex-wrap items-center justify-between gap-x-8 gap-y-2 py-3"
+        >
+          <div className="flex flex-wrap gap-x-8 gap-y-1">
+            <Mini k="Class" v={SITE.classLabel} />
+            <Mini k="Sail №" v={SITE.sailNumber} />
+            <Mini k="Next Goal" v={SITE.campaignLabel} />
+          </div>
+          <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-paper/60">
+            Updated {new Date().toLocaleDateString("en-CA", { month: "short", year: "numeric" })}
+          </div>
+        </Container>
+      </div>
 
       <Container
         width="wide"
@@ -72,31 +87,6 @@ export function HomeHero() {
           </Button>
         </div>
       </Container>
-
-      {/* Footer ticker — broadcast strip */}
-      <div className="border-t border-paper/15 bg-ink/60 backdrop-blur-sm">
-        <Container
-          width="wide"
-          className="flex flex-wrap items-center justify-between gap-x-8 gap-y-2 py-3"
-        >
-          <div className="flex flex-wrap gap-x-8 gap-y-1">
-            <Mini k="Class" v={SITE.classLabel} />
-            <Mini k="Sail №" v={SITE.sailNumber} />
-            <Mini k="Next Goal" v={SITE.campaignLabel} />
-          </div>
-          <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-paper/60">
-            Updated {new Date().toLocaleDateString("en-CA", { month: "short", year: "numeric" })}
-          </div>
-        </Container>
-      </div>
-
-      <Link
-        href="#stakes"
-        className="absolute bottom-20 left-1/2 -translate-x-1/2 inline-flex h-10 w-10 items-center justify-center rounded-pill ring-1 ring-paper/30 text-paper/80 hover:text-paper hover:ring-paper/60 transition"
-        aria-label="Scroll down"
-      >
-        <ChevronDown size={18} />
-      </Link>
     </section>
   );
 }

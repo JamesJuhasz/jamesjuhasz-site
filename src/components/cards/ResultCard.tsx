@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, MapPin, Search, Trophy } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
+import { Card } from "@/components/ui/Card";
 import type { Result } from "@/lib/results";
 
 const dateFmt = new Intl.DateTimeFormat("en-CA", {
@@ -28,7 +29,7 @@ export function ResultCard({ result }: { result: Result }) {
   const hasUrl = Boolean(result.externalUrl);
 
   return (
-    <article className="group flex flex-col gap-4 rounded-2xl bg-white ring-1 ring-mist p-6 hover:shadow-lift hover:-translate-y-0.5 transition-all">
+    <Card as="article" className="group flex flex-col gap-4 shadow-none hover:shadow-lift hover:-translate-y-0.5 transition-all">
       <div className="relative aspect-[16/10] w-full rounded-xl overflow-hidden bg-fog">
         {src ? (
           <Image
@@ -136,6 +137,6 @@ export function ResultCard({ result }: { result: Result }) {
           ) : null}
         </div>
       </div>
-    </article>
+    </Card>
   );
 }

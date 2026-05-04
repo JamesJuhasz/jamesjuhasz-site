@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import {
   motion,
@@ -23,9 +23,7 @@ export function Header() {
   const pathname = usePathname();
   const onDarkHero = pathname ? DARK_HERO_PATHS.has(pathname) : false;
   const [scrolled, setScrolled] = useState(false);
-  const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
-  const lastY = useRef(0);
   const reduceMotion = useReducedMotion();
   // Header overlays a dark photo only when on a dark-hero page AND not scrolled.
   const overDark = onDarkHero && !scrolled;
@@ -36,16 +34,7 @@ export function Header() {
 
   useEffect(() => {
     const onScroll = () => {
-      const y = window.scrollY;
-      setScrolled(y > 12);
-      // Auto-hide once past 200px and scrolling down; reveal on any upward scroll
-      const goingDown = y > lastY.current;
-      if (y > 200 && goingDown) {
-        setHidden(true);
-      } else {
-        setHidden(false);
-      }
-      lastY.current = y;
+      setScrolled(window.scrollY > 12);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -67,11 +56,15 @@ export function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-40 w-full transition-[transform,background-color,backdrop-filter] duration-300",
+        "sticky top-0 z-40 w-full transition-[background-color,backdrop-filter] duration-300",
         scrolled
           ? "bg-paper/90 backdrop-blur-md ring-1 ring-mist/70"
           : "bg-transparent",
-        hidden && !open ? "-translate-y-full" : "translate-y-0",
+        // Subtle dim band only when transparent over a dark hero — gives the
+        // nav links and lockup enough contrast against the hero photo at top.
+        overDark
+          ? "before:absolute before:inset-x-0 before:top-0 before:h-24 before:bg-gradient-to-b before:from-ink/55 before:to-transparent before:-z-10 before:pointer-events-none"
+          : "",
       )}
     >
       <div className="mx-auto flex h-16 w-full max-w-wide items-center justify-between gap-6 px-container-x">
@@ -99,7 +92,7 @@ export function Header() {
               className={cn(
                 "transition-colors relative after:absolute after:left-0 after:-bottom-1 after:h-px after:w-0 after:bg-red after:transition-all hover:after:w-full",
                 overDark
-                  ? "text-paper/85 hover:text-paper"
+                  ? "text-paper hover:text-paper"
                   : "text-ink-2 hover:text-ink",
               )}
             >

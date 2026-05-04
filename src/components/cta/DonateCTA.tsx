@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -26,16 +27,16 @@ export function DonateCTAInline({
   return (
     <section className={cn("py-section-y", className)}>
       <Container width="default">
-        <div className="rounded-3xl bg-navy text-foam shadow-lift overflow-hidden">
+        <div className="rounded-3xl bg-ink text-paper shadow-lift overflow-hidden">
           <div className="grid md:grid-cols-12 gap-8 items-center p-8 md:p-12">
             <div className="md:col-span-8">
-              <p className="text-eyebrow uppercase tracking-wider text-sand mb-3">
+              <p className="text-eyebrow uppercase tracking-wider text-red mb-3">
                 Join the campaign
               </p>
-              <h3 className="font-serif text-h2 leading-tight text-foam">
+              <h3 className="font-display text-h2 leading-tight text-paper">
                 {headline}
               </h3>
-              <p className="mt-4 text-body-lg text-foam/80 max-w-prose">
+              <p className="mt-4 text-body-lg text-paper/80 max-w-prose">
                 {body}
               </p>
             </div>
@@ -73,12 +74,12 @@ export function DonateCTASidebar({
 }: SidebarProps) {
   return (
     <Card tone="navy" className={cn("flex flex-col gap-3", className)}>
-      <div className="flex items-center gap-2 text-sand">
+      <div className="flex items-center gap-2 text-red">
         <Heart size={16} aria-hidden />
         <p className="text-eyebrow uppercase tracking-wider">Campaign</p>
       </div>
-      <h4 className="font-serif text-h3 text-foam">{headline}</h4>
-      <p className="text-body text-foam/80">{body}</p>
+      <h4 className="font-display text-h3 text-paper">{headline}</h4>
+      <p className="text-body text-paper/80">{body}</p>
       <Button
         href={SITE.donate.href}
         variant="donate"
@@ -93,6 +94,7 @@ export function DonateCTASidebar({
 }
 
 export function FloatingDonateCTA() {
+  const pathname = usePathname();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -107,6 +109,9 @@ export function FloatingDonateCTA() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Redundant on the donate flow itself — hide on /donate and /thank-you.
+  if (pathname === "/donate" || pathname === "/thank-you") return null;
 
   return (
     <div

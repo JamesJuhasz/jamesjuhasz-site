@@ -15,6 +15,10 @@ type Props = {
  * scrolled past the first viewport, tracks the active section via
  * IntersectionObserver, and links to anchored sections.
  *
+ * Renders as a vertical left-rail on `lg:` breakpoints — a thin column of
+ * dot+label pairs along the left edge so it never overlaps body content.
+ * Hidden below `lg:`.
+ *
  * Pages opt in by passing a `sections` array. The matching section
  * elements must have a `id` attribute (the page is responsible for that).
  */
@@ -23,7 +27,7 @@ export function SectionNav({ sections }: Props) {
   const [visible, setVisible] = useState(false);
 
   // Show once past first viewport, hide when within the last 200vh of the
-  // page so a floating pill never lands over the footer or final CTA.
+  // page so the rail never lands over the footer or final CTA.
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
@@ -63,32 +67,42 @@ export function SectionNav({ sections }: Props) {
   return (
     <div
       className={cn(
-        "hidden lg:block fixed left-1/2 -translate-x-1/2 top-24 z-30",
+        "hidden lg:block fixed left-6 top-1/2 -translate-y-1/2 z-30",
         "transition-all duration-300",
-        visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none",
+        visible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2 pointer-events-none",
       )}
       aria-label="On-page navigation"
     >
-      <nav className="flex items-center gap-1 rounded-pill bg-paper ring-1 ring-mist/60 px-2 py-1 shadow-soft">
+      <nav className="relative flex flex-col gap-4 pl-3">
+        <span
+          aria-hidden
+          className="absolute left-0 top-1 bottom-1 w-px bg-mist"
+        />
         {sections.map((s) => {
           const isActive = active === s.id;
           return (
             <Link
               key={s.id}
               href={`#${s.id}`}
-              className={cn(
-                "relative px-3 py-1.5 text-caption uppercase tracking-wider transition-colors rounded-pill",
-                isActive ? "text-ink" : "text-ink-3 hover:text-ink",
-              )}
+              aria-label={s.label}
+              className="group relative flex items-center"
             >
-              {s.label}
               <span
                 aria-hidden
                 className={cn(
-                  "absolute left-3 right-3 -bottom-0.5 h-px bg-red transition-opacity",
-                  isActive ? "opacity-100" : "opacity-0",
+                  "block h-2 w-2 rounded-full transition-colors",
+                  isActive ? "bg-red" : "bg-mist group-hover:bg-ink-3",
                 )}
               />
+              <span
+                className={cn(
+                  "ml-3 text-caption uppercase tracking-wider whitespace-nowrap transition-all duration-200",
+                  "opacity-0 -translate-x-1 pointer-events-none group-hover:opacity-100 group-hover:translate-x-0 group-hover:pointer-events-auto",
+                  isActive ? "text-ink" : "text-ink-3",
+                )}
+              >
+                {s.label}
+              </span>
             </Link>
           );
         })}

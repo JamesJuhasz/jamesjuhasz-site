@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { InstagramGlyph, YoutubeGlyph } from "@/components/ui/SocialIcons";
 import { Container } from "@/components/ui/Container";
+import { Button } from "@/components/ui/Button";
 import { SubscribeInline } from "./SubscribeInline";
 import { SITE } from "@/lib/site";
 
@@ -24,9 +25,11 @@ const footerNavGroups: {
     ],
   },
   {
-    label: "Get involved",
+    // Subscribe (active CTA) + Contact (utility link for press inquiries)
+    // share a "ways to reach the campaign" theme. Donate stands alone as a
+    // dedicated red CTA in the bottom row — too important to bury in a list.
+    label: "Connect",
     items: [
-      { href: "/donate", label: "Donate" },
       { href: "/subscribe", label: "Subscribe" },
       { href: "/contact", label: "Contact" },
     ],
@@ -131,14 +134,21 @@ export function Footer() {
           </ul>
         </div>
 
-        <div className="mt-12 flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-caption text-paper/60">
+        <div className="mt-12 flex flex-col gap-6 md:flex-row md:items-center md:justify-between md:gap-8 text-caption text-paper/60">
           <p>
             © {year} {SITE.name}. All rights reserved. Built by James.
           </p>
-          <p>
-            This site uses analytics cookies to understand how visitors find the
-            campaign.
-          </p>
+          <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-6">
+            <p className="md:max-w-md">
+              This site uses analytics cookies to understand how visitors find
+              the campaign.
+            </p>
+            {/* Standalone red Donate CTA — promoted out of the nav list so the
+                primary call to action remains visually prominent in the footer. */}
+            <Button href={SITE.donate.href} variant="donate" size="sm">
+              {SITE.donate.label}
+            </Button>
+          </div>
         </div>
       </Container>
     </footer>

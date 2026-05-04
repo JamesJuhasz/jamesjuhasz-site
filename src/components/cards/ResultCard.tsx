@@ -50,9 +50,19 @@ export function ResultCard({ result }: { result: Result }) {
             />
           </div>
         )}
-        {result.country ? (
+        {/*
+          Top-left badge: in the cover-image case, show the venue country
+          (gives the regatta its geographic context). In the fallback/empty
+          case, show the sailor's sail number — the venue code by itself on
+          a Trophy gradient reads as "James is from USA/DEU" which is wrong.
+        */}
+        {src && result.country ? (
           <div className="absolute top-3 left-3 z-10">
             <Badge tone="sand">{result.country}</Badge>
+          </div>
+        ) : !src ? (
+          <div className="absolute top-3 left-3 z-10">
+            <Badge tone="sand">CAN 217718</Badge>
           </div>
         ) : null}
         {hasResult ? (

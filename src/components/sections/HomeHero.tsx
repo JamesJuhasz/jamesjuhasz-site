@@ -112,7 +112,7 @@ function HeroStat({
 }) {
   return (
     <div>
-      <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-red">
+      <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-paper/60">
         {label}
       </div>
       <div className="mt-1.5 font-display text-lg sm:text-xl font-semibold tracking-tight text-paper">

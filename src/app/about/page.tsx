@@ -30,7 +30,7 @@ export default function AboutPage() {
   return (
     <>
       {/* EDITORIAL HERO */}
-      <section className="relative isolate min-h-[80svh] flex items-end overflow-hidden [&_img]:object-[center_25%] md:[&_img]:object-center">
+      <section className="relative isolate min-h-[80svh] flex items-end overflow-hidden [&_img]:object-[50%_15%]">
         <HeroParallax src="/images/about-portrait.jpg" priority />
         <div
           aria-hidden

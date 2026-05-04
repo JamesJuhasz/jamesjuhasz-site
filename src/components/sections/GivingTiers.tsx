@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { givingLevels, type GivingLevel } from "@/lib/seed-data";
@@ -55,10 +56,18 @@ function TierCard({
     <Card
       tone={featured ? "navy" : "default"}
       className={cn(
-        "flex flex-col gap-3",
+        "relative flex flex-col gap-3",
         featured && "shadow-lift",
       )}
     >
+      {featured && (
+        <Badge
+          tone="sand"
+          className="absolute -top-3 right-4 shadow-soft"
+        >
+          Most Popular
+        </Badge>
+      )}
       <p
         className={cn(
           "text-eyebrow uppercase tracking-wider",

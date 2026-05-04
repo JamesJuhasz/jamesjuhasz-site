@@ -1,6 +1,7 @@
 /*
-  Gallery sub-collection seed (Day 3). Names mirror the Squarespace folders
-  in ./squarespace-backup/all-images/. Real photos land Day 7 via Sanity.
+  Gallery sub-collections, mirroring jamesjuhasz.com — most recent first.
+  Photos live in /public/images/galleries/<slug>/photo-NN.<ext>; each gallery
+  has 16 hand-ordered shots taken from the original Squarespace galleries.
 */
 
 export type Gallery = {
@@ -8,117 +9,170 @@ export type Gallery = {
   title: string;
   dateRange: string;
   context?: string;
+  /** Total photos in the original Squarespace gallery (we ship a curated 16). */
   photoCount: number;
-  /** Short tone hint for the placeholder card gradient (Day 3 only). */
+  /** Cover photo path (in /public). */
+  coverImage: string;
+  /** Tone hint kept for legacy use; no longer drives placeholder gradients. */
   toneHue?: number;
+  /** Ordered photo list shown on the detail page (16 items). */
+  photos: string[];
 };
+
+const photo = (slug: string, n: number, ext: "jpg" | "png" = "jpg") =>
+  `/images/galleries/${slug}/photo-${String(n).padStart(2, "0")}.${ext}`;
+
+const seq = (slug: string, count = 16, ext: "jpg" | "png" = "jpg") =>
+  Array.from({ length: count }, (_, i) => photo(slug, i + 1, ext));
 
 export const galleries: Gallery[] = [
   {
-    slug: "malta-summer-2020",
-    title: "Malta — Summer 2020",
-    dateRange: "Jun – Sep 2020",
-    context: "First Mediterranean season at SailCoach.",
-    photoCount: 64,
-    toneHue: 210,
+    slug: "spring-2023",
+    title: "Spring 2023",
+    dateRange: "Mar – May 2023",
+    context: "Princesa Sofía and a strong Trofeo block.",
+    photoCount: 45,
+    coverImage: photo("spring-2023", 1),
+    toneHue: 205,
+    photos: seq("spring-2023"),
   },
   {
-    slug: "malta-winter-202021",
-    title: "Malta — Winter 2020/21",
-    dateRange: "Oct 2020 – Mar 2021",
-    context: "Year-round breeze, deep training group.",
-    photoCount: 81,
+    slug: "winter-202223",
+    title: "Winter 2022/23",
+    dateRange: "Dec 2022 – Feb 2023",
+    context: "Off-season training between blocks.",
+    photoCount: 35,
+    coverImage: photo("winter-202223", 1, "png"),
     toneHue: 220,
-  },
-  {
-    slug: "spring-2020",
-    title: "Spring 2020",
-    dateRange: "Mar – May 2020",
-    context: "Pre-COVID training in Florida.",
-    photoCount: 48,
-    toneHue: 35,
-  },
-  {
-    slug: "spring-2021",
-    title: "Spring 2021",
-    dateRange: "Mar – May 2021",
-    context: "Lake Garda with the international squad.",
-    photoCount: 53,
-    toneHue: 195,
-  },
-  {
-    slug: "fall-2020",
-    title: "Fall 2020",
-    dateRange: "Sep – Nov 2020",
-    context: "First fall block on the Mediterranean.",
-    photoCount: 41,
-    toneHue: 25,
-  },
-  {
-    slug: "fall-2021",
-    title: "Fall 2021",
-    dateRange: "Sep – Nov 2021",
-    context: "Pre-Worlds preparation block.",
-    photoCount: 67,
-    toneHue: 15,
-  },
-  {
-    slug: "uk-summer-2021",
-    title: "UK — Summer 2021",
-    dateRange: "Jun – Aug 2021",
-    context: "European championships circuit.",
-    photoCount: 55,
-    toneHue: 200,
-  },
-  {
-    slug: "winter-202122",
-    title: "Winter 2021/22",
-    dateRange: "Dec 2021 – Feb 2022",
-    context: "Quiet block — boat speed and rig work.",
-    photoCount: 39,
-    toneHue: 215,
-  },
-  {
-    slug: "spring-2022",
-    title: "Spring 2022",
-    dateRange: "Mar – May 2022",
-    context: "Princesa Sofía, Hyères, Allianz.",
-    photoCount: 72,
-    toneHue: 190,
-  },
-  {
-    slug: "summer-2022",
-    title: "Summer 2022",
-    dateRange: "Jun – Aug 2022",
-    context: "Worlds in Texas + European training.",
-    photoCount: 88,
-    toneHue: 30,
+    photos: seq("winter-202223", 16, "png"),
   },
   {
     slug: "fall2022",
     title: "Fall 2022",
     dateRange: "Sep – Nov 2022",
     context: "Hyères + warm-up regattas.",
-    photoCount: 60,
+    photoCount: 102,
+    coverImage: photo("fall2022", 1),
     toneHue: 20,
+    photos: seq("fall2022"),
   },
   {
-    slug: "spring-2023",
-    title: "Spring 2023",
-    dateRange: "Mar – May 2023",
-    context: "Princesa Sofía and a strong Trofeo block.",
-    photoCount: 75,
-    toneHue: 205,
+    slug: "summer-2022",
+    title: "Summer 2022",
+    dateRange: "Jun – Aug 2022",
+    context: "Worlds in Texas + European training.",
+    photoCount: 51,
+    coverImage: photo("summer-2022", 1),
+    toneHue: 30,
+    photos: seq("summer-2022"),
   },
   {
-    slug: "2017-2018-2019",
-    title: "Junior years — 2017 to 2019",
+    slug: "spring-2022",
+    title: "Spring 2022",
+    dateRange: "Mar – May 2022",
+    context: "Princesa Sofía, Hyères, Allianz.",
+    photoCount: 28,
+    coverImage: photo("spring-2022", 1),
+    toneHue: 190,
+    photos: seq("spring-2022"),
+  },
+  {
+    slug: "winter-202122",
+    title: "Winter 2021/22",
+    dateRange: "Dec 2021 – Feb 2022",
+    context: "Quiet block — boat speed and rig work.",
+    photoCount: 29,
+    coverImage: photo("winter-202122", 1),
+    toneHue: 215,
+    photos: seq("winter-202122"),
+  },
+  {
+    slug: "fall-2021",
+    title: "Fall 2021",
+    dateRange: "Sep – Nov 2021",
+    context: "Pre-Worlds preparation block.",
+    photoCount: 44,
+    coverImage: photo("fall-2021", 1),
+    toneHue: 15,
+    photos: seq("fall-2021"),
+  },
+  {
+    slug: "summer-2021",
+    title: "Summer 2021",
+    dateRange: "Jun – Aug 2021",
+    context: "European championships circuit.",
+    photoCount: 41,
+    coverImage: photo("summer-2021", 1),
+    toneHue: 200,
+    photos: seq("summer-2021"),
+  },
+  {
+    slug: "spring-2021",
+    title: "Spring 2021",
+    dateRange: "Mar – May 2021",
+    context: "Lake Garda with the international squad.",
+    photoCount: 18,
+    coverImage: photo("spring-2021", 1),
+    toneHue: 195,
+    photos: seq("spring-2021"),
+  },
+  {
+    slug: "winter-202021",
+    title: "Winter 2020/21",
+    dateRange: "Dec 2020 – Feb 2021",
+    context: "Year-round breeze, deep training group.",
+    photoCount: 26,
+    coverImage: photo("winter-202021", 1),
+    toneHue: 220,
+    photos: seq("winter-202021"),
+  },
+  {
+    slug: "fall-2020",
+    title: "Fall 2020",
+    dateRange: "Sep – Nov 2020",
+    context: "First fall block on the Mediterranean.",
+    photoCount: 52,
+    coverImage: photo("fall-2020", 1),
+    toneHue: 25,
+    photos: seq("fall-2020"),
+  },
+  {
+    slug: "summer-2020",
+    title: "Summer 2020",
+    dateRange: "Jun – Aug 2020",
+    context: "First Mediterranean season at SailCoach.",
+    photoCount: 58,
+    coverImage: photo("summer-2020", 1),
+    toneHue: 210,
+    photos: seq("summer-2020"),
+  },
+  {
+    slug: "spring-2020",
+    title: "Spring 2020",
+    dateRange: "Mar – May 2020",
+    context: "Pre-COVID training in Florida.",
+    photoCount: 24,
+    coverImage: photo("spring-2020", 1),
+    toneHue: 35,
+    photos: seq("spring-2020"),
+  },
+  {
+    slug: "junior-years",
+    title: "2017, 2018, 2019",
     dateRange: "2017 – 2019",
     context: "ILCA 4 then ILCA 7 transition. Junior fleets, learning years.",
-    photoCount: 95,
+    photoCount: 35,
+    coverImage: photo("junior-years", 1),
     toneHue: 45,
+    photos: seq("junior-years"),
   },
 ];
+
+/** Photos for a gallery's detail page. */
+export function photosForGallery(slug: string, count = 12): string[] {
+  const g = galleries.find((x) => x.slug === slug);
+  return g ? g.photos.slice(0, count) : [];
+}
 
 export function getGallery(slug: string) {
   return galleries.find((g) => g.slug === slug);

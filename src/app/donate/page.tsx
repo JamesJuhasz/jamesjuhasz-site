@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Compass, Plane, Wrench, Ship, Award, ShieldCheck, Sparkles } from "lucide-react";
+import { Compass, Plane, Wrench, Ship, Award, ShieldCheck, Sparkles, Receipt } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -10,6 +10,8 @@ import { Reveal } from "@/components/ui/Reveal";
 import { DonorboxEmbed } from "@/components/sections/DonorboxEmbed";
 import { GivingTiers } from "@/components/sections/GivingTiers";
 import { FAQ } from "@/components/sections/FAQ";
+import { HeroParallax } from "@/components/sections/HeroParallax";
+import { SectionNav } from "@/components/layout/SectionNav";
 import { JsonLd } from "@/components/JsonLd";
 import { donateActionJsonLd } from "@/lib/json-ld";
 import { pressEntries } from "@/lib/seed-data";
@@ -75,6 +77,14 @@ const trustSignals = [
     label: "Year-round campaign",
     body: "Twelve months of training across Canada, Malta, and Europe.",
   },
+  {
+    icon: Receipt,
+    label: "Tax status",
+    // NOTE: PLACEHOLDER COPY — confirm legal status of the campaign before
+    // shipping. If a registered athlete-trust or charity is in place,
+    // donations may be tax-deductible and this should be updated.
+    body: "Direct campaign — donations are not tax-deductible. Every dollar funds training, travel, and equipment for the LA 2028 cycle.",
+  },
 ];
 
 const faqItems = [
@@ -114,7 +124,7 @@ const faqItems = [
       <p>
         Yes. For sail branding, a named regatta sponsorship, or a specific
         equipment package, get in touch via the{" "}
-        <Link href="/contact" className="text-navy underline">
+        <Link href="/contact" className="text-ink underline">
           contact form
         </Link>{" "}
         and we'll put a partnership package together.
@@ -127,7 +137,7 @@ const faqItems = [
       <p>
         Yes. Every supporter receives the monthly newsletter — race recaps,
         training notes, and travel updates. You can also{" "}
-        <Link href="/subscribe" className="text-navy underline">
+        <Link href="/subscribe" className="text-ink underline">
           subscribe directly
         </Link>{" "}
         without donating.
@@ -157,41 +167,43 @@ export default async function DonatePage({
   return (
     <>
       <JsonLd data={donateActionJsonLd} />
+      <SectionNav
+        sections={[
+          { id: "give", label: "Give" },
+          { id: "levels", label: "Levels" },
+          { id: "where", label: "Where it goes" },
+          { id: "trust", label: "Trust" },
+          { id: "faq", label: "FAQ" },
+        ]}
+      />
       {/* HERO — half-viewport, embed above the fold */}
-      <section className="relative overflow-hidden">
-        <Image
-          src="/images/section/02.jpg"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="-z-20 object-cover"
-        />
+      <section className="relative isolate overflow-hidden">
+        <HeroParallax src="/images/section/02.jpg" priority amount={0.1} />
         <div
           aria-hidden
-          className="absolute inset-0 -z-10 bg-navy-deep/70 mix-blend-multiply"
+          className="absolute inset-0 -z-10 bg-gradient-to-b from-ink/40 to-ink/85"
         />
         <Container width="wide" className="pt-section-y pb-section-y">
           <div className="grid lg:grid-cols-12 gap-12 items-start">
-            <div className="lg:col-span-5 text-foam">
+            <div className="lg:col-span-5 text-paper">
               <Badge tone="donate">Donate</Badge>
-              <h1 className="mt-4 font-serif text-display text-foam max-w-[16ch]">
+              <h1 className="mt-4 font-display text-display text-paper max-w-[16ch]">
                 Help me get to LA 2028.
               </h1>
-              <p className="mt-6 max-w-prose text-body-lg text-foam/85">
+              <p className="mt-6 max-w-prose text-body-lg text-paper/85">
                 A full year on the campaign costs around $60,000 CAD. National
                 team funding covers about half — donations and sponsorship close
                 the gap. Recurring monthly support is the most useful thing,
                 because it lets me plan a season instead of a regatta.
               </p>
-              <p className="mt-3 text-caption text-foam/60">
+              <p className="mt-3 text-caption text-paper/60">
                 Stripe + PayPal via Donorbox · Secure · Cancel anytime
               </p>
             </div>
             <div className="lg:col-span-7" id="give">
               <DonorboxEmbed amount={amount} />
               {amount ? (
-                <p className="mt-3 text-caption text-foam/70">
+                <p className="mt-3 text-caption text-paper/70">
                   Pre-filled with {fmtCurrency.format(amount)}. Adjust the
                   amount inside the form if you'd like.
                 </p>
@@ -202,7 +214,7 @@ export default async function DonatePage({
       </section>
 
       {/* GIVING LEVELS */}
-      <section className="py-section-y">
+      <section id="levels" className="py-section-y">
         <Container width="wide">
           <SectionHeader
             eyebrow="Giving levels"
@@ -214,14 +226,14 @@ export default async function DonatePage({
               <GivingTiers />
             </div>
           </Reveal>
-          <p className="mt-6 text-caption text-mist">
+          <p className="mt-6 text-caption text-ink-3">
             Most supporters give monthly — recurring support is the most useful kind.
           </p>
         </Container>
       </section>
 
       {/* WHERE YOUR SUPPORT GOES */}
-      <section className="py-section-y bg-foam-deep border-y border-line">
+      <section id="where" className="py-section-y bg-fog border-y border-mist">
         <Container width="wide">
           <SectionHeader
             eyebrow="Transparency"
@@ -232,16 +244,16 @@ export default async function DonatePage({
             <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
               {budgetCategories.map(({ icon: Icon, ...c }) => (
                 <Card key={c.label} className="flex flex-col gap-3">
-                  <div className="inline-flex h-10 w-10 items-center justify-center rounded-pill bg-navy text-foam">
+                  <div className="inline-flex h-10 w-10 items-center justify-center rounded-pill bg-ink text-paper">
                     <Icon size={18} aria-hidden />
                   </div>
-                  <p className="font-serif text-h3 text-navy">{c.label}</p>
+                  <p className="font-display text-h3 text-ink">{c.label}</p>
                   <p className="text-body text-ink/75">{c.body}</p>
-                  <div className="mt-auto pt-2 flex items-baseline justify-between border-t border-line">
-                    <span className="text-body-lg font-medium text-navy">
+                  <div className="mt-auto pt-2 flex items-baseline justify-between border-t border-mist">
+                    <span className="text-body-lg font-medium text-ink">
                       {c.pct}%
                     </span>
-                    <span className="text-caption text-mist">
+                    <span className="text-caption text-ink-3">
                       ~{fmtCurrency.format(c.dollars)}/yr
                     </span>
                   </div>
@@ -251,19 +263,19 @@ export default async function DonatePage({
           </Reveal>
           {/* Bar chart */}
           <Reveal delay={0.1}>
-            <div className="mt-12 rounded-2xl bg-white ring-1 ring-line p-6">
-              <p className="text-eyebrow uppercase tracking-wider text-mist mb-4">
+            <div className="mt-12 rounded-2xl bg-white ring-1 ring-mist p-6">
+              <p className="text-eyebrow uppercase tracking-wider text-ink-3 mb-4">
                 Annual budget split
               </p>
-              <div className="flex h-10 w-full overflow-hidden rounded-pill ring-1 ring-line">
+              <div className="flex h-10 w-full overflow-hidden rounded-pill ring-1 ring-mist">
                 {budgetCategories.map((c, i) => (
                   <div
                     key={c.label}
-                    className="flex items-center justify-center text-caption text-foam font-medium"
+                    className="flex items-center justify-center text-caption text-paper font-medium"
                     style={{
                       width: `${c.pct}%`,
-                      background: ["#0E2240", "#1F365A", "#B89878", "#D8C4A6"][i % 4],
-                      color: i < 2 ? "#F6F2EA" : "#0A1628",
+                      background: ["#0E1116", "#2A2F36", "#5A6068", "#C8CDD3"][i % 4],
+                      color: i < 2 ? "#FFFFFF" : "#0E1116",
                     }}
                     title={`${c.label}: ${c.pct}%`}
                   >
@@ -271,14 +283,14 @@ export default async function DonatePage({
                   </div>
                 ))}
               </div>
-              <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-caption text-mist">
+              <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-caption text-ink-3">
                 {budgetCategories.map((c, i) => (
                   <span key={c.label} className="inline-flex items-center gap-2">
                     <span
                       aria-hidden
                       className="h-2.5 w-2.5 rounded-full"
                       style={{
-                        background: ["#0E2240", "#1F365A", "#B89878", "#D8C4A6"][i % 4],
+                        background: ["#0E1116", "#2A2F36", "#5A6068", "#C8CDD3"][i % 4],
                       }}
                     />
                     {c.label}
@@ -290,8 +302,20 @@ export default async function DonatePage({
         </Container>
       </section>
 
+      {/* PHOTOGRAPHIC BREAK */}
+      <section aria-hidden className="relative h-[42vh] min-h-[280px] overflow-hidden">
+        <Image
+          src="/images/section/04.jpg"
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-ink/30 via-transparent to-fog/40" />
+      </section>
+
       {/* TRANSPARENCY + TRUST */}
-      <section className="py-section-y">
+      <section id="trust" className="py-section-y">
         <Container width="default">
           <div className="grid lg:grid-cols-12 gap-10 items-center">
             <div className="lg:col-span-5">
@@ -306,11 +330,11 @@ export default async function DonatePage({
                 {trustSignals.map(({ icon: Icon, ...t }) => (
                   <li key={t.label}>
                     <Card className="flex items-start gap-4">
-                      <div className="inline-flex h-10 w-10 items-center justify-center rounded-pill bg-navy text-foam flex-shrink-0">
+                      <div className="inline-flex h-10 w-10 items-center justify-center rounded-pill bg-ink text-paper flex-shrink-0">
                         <Icon size={18} aria-hidden />
                       </div>
                       <div>
-                        <p className="font-serif text-h3 text-navy">{t.label}</p>
+                        <p className="font-display text-h3 text-ink">{t.label}</p>
                         <p className="mt-1 text-body text-ink/75">{t.body}</p>
                       </div>
                     </Card>
@@ -323,7 +347,7 @@ export default async function DonatePage({
       </section>
 
       {/* SOCIAL PROOF */}
-      <section className="py-section-y bg-foam-deep border-y border-line">
+      <section className="py-section-y bg-fog border-y border-mist">
         <Container width="wide">
           <SectionHeader
             eyebrow="Voices"
@@ -332,25 +356,34 @@ export default async function DonatePage({
           <div className="mt-10 grid lg:grid-cols-12 gap-8">
             <div className="lg:col-span-5">
               <Card tone="navy" className="h-full flex flex-col gap-4">
-                <p className="text-eyebrow uppercase tracking-wider text-sand">
+                <p className="text-eyebrow uppercase tracking-wider text-red">
                   From a supporter
                 </p>
-                <p className="font-serif text-h3 text-foam leading-snug">
+                <p className="font-display text-h3 text-paper leading-snug">
                   "James turned up to every regatta last year better prepared
                   than the year before. That's the campaign in one sentence —
                   and that's what supporting him gets you."
                 </p>
-                <p className="mt-auto text-caption text-foam/70">
-                  — Founding supporter, Oakville
-                </p>
+                <div className="mt-auto flex items-center gap-3">
+                  {/* PLACEHOLDER initials — supporter is anonymous; "FS" = Founding Supporter. Replace when a named quote is available. */}
+                  <span
+                    aria-hidden
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-fog text-ink text-eyebrow uppercase tracking-wider flex-shrink-0"
+                  >
+                    FS
+                  </span>
+                  <p className="text-caption text-paper/70">
+                    — Founding supporter, Oakville
+                  </p>
+                </div>
               </Card>
             </div>
             <div className="lg:col-span-7">
               <Card className="flex flex-col gap-4">
-                <p className="text-eyebrow uppercase tracking-wider text-mist">
+                <p className="text-eyebrow uppercase tracking-wider text-ink-3">
                   From the press
                 </p>
-                <p className="font-serif text-h3 text-navy leading-snug">
+                <p className="font-display text-h3 text-ink leading-snug">
                   "{featuredPress.articleTitle}"
                 </p>
                 {featuredPress.excerpt ? (
@@ -358,12 +391,12 @@ export default async function DonatePage({
                     {featuredPress.excerpt}
                   </p>
                 ) : null}
-                <p className="text-caption text-mist">
+                <p className="text-caption text-ink-3">
                   — {featuredPress.publication}
                 </p>
                 <Link
                   href="/press"
-                  className="text-caption text-navy underline mt-auto"
+                  className="text-caption text-ink underline mt-auto"
                 >
                   Read all coverage →
                 </Link>
@@ -374,7 +407,7 @@ export default async function DonatePage({
       </section>
 
       {/* FAQ */}
-      <section className="py-section-y-lg">
+      <section id="faq" className="py-section-y-lg">
         <Container width="default">
           <SectionHeader
             eyebrow="FAQ"
@@ -389,8 +422,8 @@ export default async function DonatePage({
       {/* FINAL CTA */}
       <section className="py-section-y-lg">
         <Container width="wide">
-          <div className="rounded-3xl bg-navy text-foam p-8 md:p-12 lg:p-16 shadow-lift overflow-hidden text-center">
-            <h2 className="font-serif text-display text-foam max-w-[20ch] mx-auto">
+          <div className="rounded-3xl bg-ink text-paper p-8 md:p-12 lg:p-16 shadow-lift overflow-hidden text-center">
+            <h2 className="font-display text-display text-paper max-w-[20ch] mx-auto">
               Every dollar gets me closer to the start line.
             </h2>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
@@ -406,7 +439,7 @@ export default async function DonatePage({
                 href="/subscribe"
                 variant="ghost"
                 size="lg"
-                className="text-foam ring-foam/30 hover:bg-foam/10"
+                className="text-paper ring-paper/30 hover:bg-paper/10"
               >
                 Just get updates
               </Button>

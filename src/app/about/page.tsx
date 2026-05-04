@@ -7,8 +7,10 @@ import { Card } from "@/components/ui/Card";
 import { Reveal } from "@/components/ui/Reveal";
 import { Badge } from "@/components/ui/Badge";
 import { CareerTimeline } from "@/components/sections/CareerTimeline";
+import { HeroParallax } from "@/components/sections/HeroParallax";
 import { DonateCTAInline, DonateCTASidebar } from "@/components/cta/DonateCTA";
 import { aboutStats, pressEntries } from "@/lib/seed-data";
+import { daysToLA2028 } from "@/lib/countdown";
 
 export const metadata = {
   title: "About",
@@ -17,34 +19,31 @@ export const metadata = {
 };
 
 export default function AboutPage() {
+  const daysToLA = daysToLA2028();
+  // Replace the placeholder "2028 / LA Olympics" stat (which animated through
+  // intermediate values like 1,222 mid-count) with a live countdown.
+  const stats = aboutStats.map((s) =>
+    s.label === "LA Olympics"
+      ? { value: daysToLA, suffix: undefined, label: "Days till LA 2028" }
+      : s,
+  );
   return (
     <>
       {/* EDITORIAL HERO */}
-      <section className="relative min-h-[80svh] flex items-end overflow-hidden">
-        <Image
-          src="/images/about-portrait.jpg"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="-z-20 object-cover"
-        />
+      <section className="relative isolate min-h-[80svh] flex items-end overflow-hidden [&_img]:object-[center_25%] md:[&_img]:object-center">
+        <HeroParallax src="/images/about-portrait.jpg" priority />
         <div
           aria-hidden
-          className="absolute inset-0 -z-10 bg-navy-deep/30 mix-blend-multiply"
-        />
-        <div
-          aria-hidden
-          className="absolute inset-x-0 bottom-0 h-2/3 -z-10 bg-gradient-to-t from-navy-deep/90 via-navy/40 to-transparent"
+          className="absolute inset-x-0 bottom-0 h-3/4 -z-10 bg-gradient-to-t from-ink/85 via-ink/45 to-transparent"
         />
         <Container width="wide" className="pb-section-y-lg pt-section-y">
-          <p className="text-eyebrow uppercase tracking-[0.18em] text-sand mb-6">
+          <p className="text-eyebrow uppercase tracking-[0.18em] text-red mb-6">
             About James
           </p>
-          <h1 className="font-serif text-display text-foam max-w-[20ch]">
+          <h1 className="font-display text-display text-paper max-w-[20ch]">
             From a 7-year-old on the Great Lakes to chasing Olympic gold.
           </h1>
-          <p className="mt-6 max-w-prose text-body-lg text-foam/85">
+          <p className="mt-6 max-w-prose text-body-lg text-paper/85">
             One sport, one boat, one start line in 2028.
           </p>
         </Container>
@@ -53,12 +52,12 @@ export default function AboutPage() {
       {/* THE STORY — editorial */}
       <section className="py-section-y-lg">
         <Container width="prose">
-          <p className="text-eyebrow uppercase tracking-wider text-mist mb-4">
+          <p className="text-eyebrow uppercase tracking-wider text-ink-3 mb-4">
             The story · 6 min read
           </p>
-          <h2 className="font-serif text-h1 text-navy">James' story</h2>
+          <h2 className="font-display text-h1 text-ink">James' story</h2>
 
-          <div className="mt-10 space-y-6 text-body-lg text-ink/85 leading-relaxed">
+          <div className="mt-10 space-y-6 text-body-lg text-ink/80 leading-relaxed">
             <p className="drop-cap">
               It all started one summer on my parents' boat. Every weekend we
               were on the lake, my sister and I exploring the shoreline, the
@@ -77,7 +76,7 @@ export default function AboutPage() {
           </div>
 
           <figure className="my-12">
-            <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-foam-deep">
+            <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-fog">
               <Image
                 src="/images/section/01.jpg"
                 alt="On the water — campaign shot"
@@ -88,10 +87,10 @@ export default function AboutPage() {
             </div>
           </figure>
 
-          <h3 className="font-serif text-h2 mt-16 text-navy">
+          <h3 className="font-display text-h2 mt-16 text-ink">
             The Mediterranean move
           </h3>
-          <div className="mt-6 space-y-6 text-body-lg text-ink/85 leading-relaxed">
+          <div className="mt-6 space-y-6 text-body-lg text-ink/80 leading-relaxed">
             <p>
               At 21, mid-pandemic, I packed up and moved to Malta. SailCoach has
               the deepest international training group in the ILCA 7, and the
@@ -101,6 +100,21 @@ export default function AboutPage() {
               this level: you don't lose to the equipment, you lose to people
               who've sailed 10,000 hours more than you.
             </p>
+          </div>
+
+          <figure className="my-12">
+            <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-fog">
+              <Image
+                src="/images/section/03.jpg"
+                alt="Mediterranean training block"
+                fill
+                sizes="(min-width: 1024px) 70ch, 100vw"
+                className="object-cover"
+              />
+            </div>
+          </figure>
+
+          <div className="space-y-6 text-body-lg text-ink/80 leading-relaxed">
             <p>
               I now split my time between Europe and home, training twelve
               months a year. The Canadian Sailing Team selection in 2024 was the
@@ -121,7 +135,7 @@ export default function AboutPage() {
       />
 
       {/* CAREER TIMELINE */}
-      <section className="py-section-y-lg bg-foam-deep border-y border-line">
+      <section className="py-section-y-lg bg-fog border-y border-mist">
         <Container width="default">
           <SectionHeader
             eyebrow="Career timeline"
@@ -138,7 +152,7 @@ export default function AboutPage() {
       <section className="py-section-y">
         <Container width="default">
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-            {aboutStats.map((s) => (
+            {stats.map((s) => (
               <StatNumber
                 key={s.label}
                 value={s.value}
@@ -151,7 +165,7 @@ export default function AboutPage() {
       </section>
 
       {/* PRESS & RECOGNITION */}
-      <section className="py-section-y bg-foam-deep border-y border-line">
+      <section className="py-section-y bg-fog border-y border-mist">
         <Container width="wide">
           <div className="flex flex-wrap items-end justify-between gap-6 mb-8">
             <SectionHeader
@@ -168,7 +182,7 @@ export default function AboutPage() {
               {pressEntries.map((p) => (
                 <Card key={p.articleTitle} className="flex flex-col gap-2">
                   <Badge>{p.publication}</Badge>
-                  <h3 className="font-serif text-h3 text-navy">
+                  <h3 className="font-display text-h3 text-ink">
                     <a
                       href={p.externalUrl}
                       target="_blank"
@@ -195,10 +209,10 @@ export default function AboutPage() {
         <Container width="default">
           <div className="grid lg:grid-cols-3 gap-8 items-center">
             <div className="lg:col-span-2">
-              <h2 className="font-serif text-h1 text-navy">
+              <h2 className="font-display text-h1 text-ink">
                 Help me get to LA 2028.
               </h2>
-              <p className="mt-4 max-w-prose text-body-lg text-ink/75">
+              <p className="mt-4 max-w-prose text-body-lg text-ink/80">
                 Three years out. The campaign runs on supporters. Pick a tier,
                 or set your own — every contribution is the next day on the
                 water.

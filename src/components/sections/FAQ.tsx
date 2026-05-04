@@ -9,7 +9,7 @@ type QA = { question: string; answer: React.ReactNode };
 export function FAQ({ items }: { items: QA[] }) {
   const [open, setOpen] = useState<number | null>(0);
   return (
-    <ul className="flex flex-col divide-y divide-line">
+    <ul className="flex flex-col divide-y divide-mist">
       {items.map((qa, i) => {
         const isOpen = open === i;
         return (
@@ -20,13 +20,13 @@ export function FAQ({ items }: { items: QA[] }) {
               aria-expanded={isOpen}
               className="w-full flex items-center justify-between gap-6 py-5 text-left"
             >
-              <span className="font-serif text-h3 text-navy">
+              <span className="font-display text-h3 text-ink">
                 {qa.question}
               </span>
               <span
                 className={cn(
-                  "flex-shrink-0 transition-transform text-mist",
-                  isOpen && "rotate-180 text-navy",
+                  "flex-shrink-0 transition-transform text-ink-3",
+                  isOpen && "rotate-180 text-ink",
                 )}
               >
                 <ChevronDown size={20} />

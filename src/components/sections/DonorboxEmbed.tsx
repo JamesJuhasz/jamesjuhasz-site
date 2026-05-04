@@ -52,14 +52,20 @@ export function DonorboxEmbed({ amount }: Props) {
     return <DonorboxFallback />;
   }
 
+  // currency=CAD asks Donorbox to render the form in Canadian dollars.
+  // NOTE: this URL param may be ignored if the Donorbox campaign itself is
+  // configured to a different default currency; the campaign settings on
+  // donorbox.org are the source of truth. Flag if the embed still shows USD.
   const iframeSrc =
     `https://donorbox.org/embed/${embedId}` +
-    (amount ? `?default_interval=o&amount=${amount}` : "?default_interval=m");
+    (amount
+      ? `?default_interval=o&amount=${amount}&currency=CAD`
+      : "?default_interval=m&currency=CAD");
 
   return (
     <div
       ref={ref}
-      className="w-full rounded-3xl overflow-hidden bg-white ring-1 ring-line shadow-lift"
+      className="w-full max-w-[420px] ml-auto rounded-3xl overflow-hidden shadow-lift"
     >
       <iframe
         src={iframeSrc}
@@ -87,20 +93,20 @@ export function DonorboxEmbed({ amount }: Props) {
 function DonorboxFallback() {
   return (
     <Card className="flex flex-col items-start gap-4">
-      <p className="text-eyebrow uppercase tracking-wider text-mist">
+      <p className="text-eyebrow uppercase tracking-wider text-ink-3">
         Donorbox embed — pending campaign setup
       </p>
-      <h3 className="font-serif text-h3 text-navy">
+      <h3 className="font-display text-h3 text-ink">
         The Donorbox widget will render here.
       </h3>
       <p className="text-body text-ink/75 max-w-prose">
-        Set <code className="rounded bg-foam-deep px-1.5 py-0.5 text-caption">
+        Set <code className="rounded bg-fog px-1.5 py-0.5 text-caption">
           NEXT_PUBLIC_DONORBOX_CAMPAIGN_URL
         </code> and{" "}
-        <code className="rounded bg-foam-deep px-1.5 py-0.5 text-caption">
+        <code className="rounded bg-fog px-1.5 py-0.5 text-caption">
           NEXT_PUBLIC_DONORBOX_EMBED_ID
         </code>{" "}
-        in <code className="rounded bg-foam-deep px-1.5 py-0.5 text-caption">.env.local</code>{" "}
+        in <code className="rounded bg-fog px-1.5 py-0.5 text-caption">.env.local</code>{" "}
         (and on Railway). Until then, this card stands in.
       </p>
       <Button

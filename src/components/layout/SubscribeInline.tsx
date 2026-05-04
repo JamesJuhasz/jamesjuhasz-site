@@ -32,7 +32,7 @@ export function SubscribeInline() {
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-2">
-      <div className="flex items-center gap-2 rounded-pill bg-foam/10 ring-1 ring-foam/25 focus-within:ring-foam/60 transition">
+      <div className="flex items-center gap-2 rounded-pill bg-paper/10 ring-1 ring-paper/25 focus-within:ring-paper/60 transition">
         <input
           type="email"
           name="email"
@@ -41,7 +41,7 @@ export function SubscribeInline() {
           placeholder="you@example.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="flex-1 bg-transparent px-5 py-3 text-body text-foam placeholder:text-foam/40 outline-none"
+          className="flex-1 bg-transparent px-5 py-3 text-body text-paper placeholder:text-paper/40 outline-none"
           disabled={state === "submitting" || state === "ok"}
         />
         <button
@@ -49,18 +49,18 @@ export function SubscribeInline() {
           aria-label="Subscribe"
           disabled={state === "submitting" || state === "ok"}
           className={cn(
-            "mr-1 inline-flex h-10 w-10 items-center justify-center rounded-pill bg-foam text-navy hover:bg-sand transition-colors disabled:opacity-60",
+            "mr-1 inline-flex h-10 w-10 items-center justify-center rounded-pill bg-paper text-ink hover:bg-fog transition-colors disabled:opacity-60",
           )}
         >
           {state === "ok" ? <Check size={18} /> : <ArrowRight size={18} />}
         </button>
       </div>
       {state === "ok" ? (
-        <p className="text-caption text-foam/80">
+        <p className="text-caption text-paper/80">
           Thanks — you're on the list.
         </p>
       ) : state === "error" ? (
-        <p className="text-caption text-donate">
+        <p className="text-caption text-red">
           Something went wrong. Try again in a moment.
         </p>
       ) : null}

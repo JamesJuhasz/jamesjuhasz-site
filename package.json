@@ -9,7 +9,10 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "import:dry": "tsx scripts/import-from-export.ts --dry --limit=3",
-    "import:full": "tsx scripts/import-from-export.ts"
+    "import:full": "tsx scripts/import-from-export.ts",
+    "backfill:covers": "tsx scripts/backfill-covers.ts",
+    "press:fetch": "tsx scripts/fetch-press.ts",
+    "results:fetch": "tsx scripts/fetch-results.ts"
   },
   "dependencies": {
     "@next/third-parties": "^16.2.4",
@@ -45,6 +48,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
     "jsdom": "^29.1.1",
+    "playwright": "^1.59.1",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
     "typescript": "^5"

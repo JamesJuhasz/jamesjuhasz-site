@@ -1,44 +1,58 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
+import { HeroParallax } from "@/components/sections/HeroParallax";
+import { SailNumberMark } from "@/components/brand/SailNumberMark";
+import { daysToLA2028 } from "@/lib/countdown";
 import { SITE } from "@/lib/site";
 
 export function HomeHero() {
+  const daysRemaining = daysToLA2028();
+
   return (
-    <section className="relative min-h-[100svh] flex flex-col justify-end overflow-hidden">
-      <Image
-        src="/images/hero.jpg"
-        alt=""
-        fill
-        priority
-        sizes="100vw"
-        className="-z-20 object-cover"
-      />
-      {/* Navy tint over photo for brand consistency + text legibility */}
+    <section className="relative isolate min-h-[100svh] flex flex-col overflow-hidden text-paper">
+      <HeroParallax src="/images/hero.jpg" priority />
+      {/* Full-height legibility wash — ink fades from top through bottom (matches brand cover artboard) */}
       <div
         aria-hidden
-        className="absolute inset-0 -z-10 bg-navy-deep/30 mix-blend-multiply"
-      />
-      {/* Bottom legibility gradient */}
-      <div
-        aria-hidden
-        className="absolute inset-x-0 bottom-0 h-2/3 -z-10 bg-gradient-to-t from-navy-deep/90 via-navy/40 to-transparent"
+        className="absolute inset-0 -z-10 bg-gradient-to-b from-ink/30 via-ink/30 to-ink/85"
       />
 
-      <Container width="wide" className="pb-section-y-lg pt-section-y">
-        <p className="text-eyebrow uppercase tracking-[0.18em] text-sand mb-6">
-          Olympic ILCA 7 — LA 2028
-        </p>
-        <h1 className="font-serif text-display text-foam max-w-[18ch]">
-          {SITE.name}
+      {/* Top eyebrow + sail number watermark */}
+      <Container width="wide" className="pt-24 sm:pt-28">
+        <div className="flex items-start justify-between gap-6">
+          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-red">
+            T-{daysRemaining} DAYS · LA 2028 OPENING
+          </p>
+          <SailNumberMark size="md" align="right" mode="dark" />
+        </div>
+      </Container>
+
+      <Container
+        width="wide"
+        className="mt-auto pb-section-y-lg pt-section-y"
+      >
+        <h1
+          className="font-display font-bold text-paper max-w-[20ch]"
+          style={{
+            fontSize: "clamp(3rem, 8vw, 6.5rem)",
+            lineHeight: 0.95,
+            letterSpacing: "-0.04em",
+          }}
+        >
+          Canadian sailor
+          <br />
+          on the road to LA 2028
+          <span className="text-red">.</span>
         </h1>
-        <p className="mt-6 max-w-prose text-body-lg text-foam/85">
-          Chasing Olympic gold from the Great Lakes to the Mediterranean. A
-          Canadian Sailing Team athlete in the most-contested single-handed
-          class in the world.
-        </p>
+
+        <div className="mt-10 grid grid-cols-2 sm:grid-cols-3 gap-x-12 gap-y-6 max-w-3xl">
+          <HeroStat label="Sailor" value="James Juhasz" sub="CAN 217718" />
+          <HeroStat label="Class" value="ILCA 7" sub="Men's Dinghy" />
+          <HeroStat label="Goal" value="LA 2028" sub="Olympic Games" />
+        </div>
+
         <div className="mt-10 flex flex-wrap items-center gap-3">
           <Button
             href="/donate"
@@ -48,19 +62,80 @@ export function HomeHero() {
           >
             Support the Campaign
           </Button>
-          <Button href="/newsletters" variant="ghost" size="lg" className="text-foam ring-foam/30 hover:bg-foam/10">
+          <Button
+            href="/newsletters"
+            variant="ghost"
+            size="lg"
+            className="text-paper ring-paper/30 hover:bg-paper/10"
+          >
             Read the journey
           </Button>
         </div>
       </Container>
 
+      {/* Footer ticker — broadcast strip */}
+      <div className="border-t border-paper/15 bg-ink/60 backdrop-blur-sm">
+        <Container
+          width="wide"
+          className="flex flex-wrap items-center justify-between gap-x-8 gap-y-2 py-3"
+        >
+          <div className="flex flex-wrap gap-x-8 gap-y-1">
+            <Mini k="Class" v={SITE.classLabel} />
+            <Mini k="Sail №" v={SITE.sailNumber} />
+            <Mini k="Next Goal" v={SITE.campaignLabel} />
+          </div>
+          <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-paper/60">
+            Updated {new Date().toLocaleDateString("en-CA", { month: "short", year: "numeric" })}
+          </div>
+        </Container>
+      </div>
+
       <Link
         href="#stakes"
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 inline-flex h-10 w-10 items-center justify-center rounded-pill ring-1 ring-foam/30 text-foam/80 hover:text-foam hover:ring-foam/60 transition"
+        className="absolute bottom-20 left-1/2 -translate-x-1/2 inline-flex h-10 w-10 items-center justify-center rounded-pill ring-1 ring-paper/30 text-paper/80 hover:text-paper hover:ring-paper/60 transition"
         aria-label="Scroll down"
       >
         <ChevronDown size={18} />
       </Link>
     </section>
+  );
+}
+
+function HeroStat({
+  label,
+  value,
+  sub,
+}: {
+  label: string;
+  value: string;
+  sub?: string;
+}) {
+  return (
+    <div>
+      <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-red">
+        {label}
+      </div>
+      <div className="mt-1.5 font-display text-lg sm:text-xl font-semibold tracking-tight text-paper">
+        {value}
+      </div>
+      {sub ? (
+        <div className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-paper/60">
+          {sub}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+function Mini({ k, v }: { k: string; v: string }) {
+  return (
+    <div className="flex items-baseline gap-2">
+      <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-paper/60">
+        {k}
+      </span>
+      <span className="font-display text-sm font-semibold tracking-tight text-paper">
+        {v}
+      </span>
+    </div>
   );
 }

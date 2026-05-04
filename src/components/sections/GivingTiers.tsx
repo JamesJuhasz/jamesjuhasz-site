@@ -56,21 +56,21 @@ function TierCard({
       tone={featured ? "navy" : "default"}
       className={cn(
         "flex flex-col gap-3",
-        featured && "ring-2 ring-donate/60",
+        featured && "shadow-lift",
       )}
     >
       <p
         className={cn(
           "text-eyebrow uppercase tracking-wider",
-          featured ? "text-sand" : "text-mist",
+          featured ? "text-paper/60" : "text-ink-3",
         )}
       >
         {tier.label}
       </p>
       <p
         className={cn(
-          "font-serif text-h2 leading-none",
-          featured ? "text-foam" : "text-navy",
+          "font-display text-h2 leading-none",
+          featured ? "text-paper" : "text-ink",
         )}
       >
         {fmtCurrency.format(tier.amount)}
@@ -78,7 +78,7 @@ function TierCard({
       <p
         className={cn(
           "text-body",
-          featured ? "text-foam/80" : "text-ink/75",
+          featured ? "text-paper/80" : "text-ink/75",
         )}
       >
         {tier.outcome}
@@ -101,8 +101,8 @@ function TierCard({
 function CustomTierCard({ onClick }: { onClick?: (amount: number) => void }) {
   return (
     <Card tone="muted" className="flex flex-col gap-3">
-      <p className="text-eyebrow uppercase tracking-wider text-mist">Custom</p>
-      <p className="font-serif text-h2 leading-none text-navy">Your call</p>
+      <p className="text-eyebrow uppercase tracking-wider text-ink-3">Custom</p>
+      <p className="font-display text-h2 leading-none text-ink">Your call</p>
       <p className="text-body text-ink/75">
         Whatever feels right. Every contribution moves me forward.
       </p>

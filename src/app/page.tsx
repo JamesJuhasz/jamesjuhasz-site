@@ -10,42 +10,55 @@ import { GivingTiers } from "@/components/sections/GivingTiers";
 import { PostCard } from "@/components/cards/PostCard";
 import { EventCard } from "@/components/cards/EventCard";
 import { DonateCTAInline } from "@/components/cta/DonateCTA";
-import {
-  trainingStats,
-  recentPosts,
-  allEvents,
-} from "@/lib/seed-data";
+import { trainingStats } from "@/lib/seed-data";
+import { getPostsIndex, getEventsIndex } from "@/sanity/fetch";
 import { SITE } from "@/lib/site";
+
+export const revalidate = 60;
 
 export const metadata = {
   title: `${SITE.name} — ${SITE.tagline}`,
   description: SITE.shortDescription,
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [allPosts, events] = await Promise.all([
+    getPostsIndex(),
+    getEventsIndex(),
+  ]);
+  const recentPosts = allPosts.slice(0, 3);
   const featuredEvent =
-    allEvents.find((e) => e.status === "upcoming") ?? allEvents[0];
+    events.find((e) => e.status === "upcoming") ?? events[0];
 
   return (
     <>
       <HomeHero />
 
       {/* SOCIAL PROOF BAR */}
-      <section className="bg-foam-deep border-y border-line">
+      <section className="bg-fog border-y border-mist">
         <Container width="wide" className="py-12">
-          <p className="text-eyebrow uppercase tracking-wider text-mist mb-6">
+          <p className="text-eyebrow uppercase tracking-wider text-ink-3 mb-6">
             Backed by
           </p>
-          <ul className="flex flex-wrap gap-x-10 gap-y-4 mb-12">
-            {SITE.supporters.map((s) => (
-              <li
-                key={s.name}
-                className="text-body-lg font-serif text-navy/80"
-              >
-                {s.name}
-              </li>
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 mb-12">
+            {SITE.supporterGroups.map((group) => (
+              <div key={group.label}>
+                <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-ink-3 mb-3">
+                  {group.label}
+                </p>
+                <ul className="flex flex-col gap-1.5">
+                  {group.items.map((s) => (
+                    <li
+                      key={s.name}
+                      className="text-body-lg font-display text-ink/80"
+                    >
+                      {s.name}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             ))}
-          </ul>
+          </div>
           <Reveal>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
               {trainingStats.map((s) => (
@@ -57,7 +70,7 @@ export default function HomePage() {
               ))}
             </div>
           </Reveal>
-          <p className="mt-6 text-caption text-mist max-w-prose">
+          <p className="mt-6 text-caption text-ink-3 max-w-prose">
             Training summary, last 12 months — full-time campaign on the road.
           </p>
         </Container>
@@ -93,7 +106,7 @@ export default function HomePage() {
                     value={50}
                     label="funds one full day of training in Europe"
                   />
-                  <p className="text-body text-foam/80">
+                  <p className="text-body text-paper/80">
                     Coaching time, RIB fuel, launch fees, food on the road —
                     the cost of one race day in a real fleet.
                   </p>
@@ -105,7 +118,7 @@ export default function HomePage() {
       </section>
 
       {/* RECENT JOURNEY */}
-      <section className="py-section-y bg-foam-deep border-y border-line">
+      <section className="py-section-y bg-fog border-y border-mist">
         <Container width="wide">
           <div className="flex flex-wrap items-end justify-between gap-6 mb-10">
             <SectionHeader
@@ -117,13 +130,13 @@ export default function HomePage() {
               Read all updates
             </Button>
           </div>
-          <Reveal>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {recentPosts.map((post) => (
-                <PostCard key={post.slug} post={post} />
-              ))}
-            </div>
-          </Reveal>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {recentPosts.map((post, i) => (
+              <Reveal key={post.slug} delay={i * 0.08}>
+                <PostCard post={post} />
+              </Reveal>
+            ))}
+          </div>
         </Container>
       </section>
 
@@ -177,15 +190,15 @@ export default function HomePage() {
       {/* THE PARTNERSHIP ASK */}
       <section className="py-section-y-lg">
         <Container width="wide">
-          <div className="rounded-3xl bg-navy text-foam shadow-lift overflow-hidden p-8 md:p-12 lg:p-16">
+          <div className="rounded-3xl bg-ink text-paper shadow-lift overflow-hidden p-8 md:p-12 lg:p-16">
             <div className="max-w-prose">
-              <p className="text-eyebrow uppercase tracking-wider text-sand mb-4">
+              <p className="text-eyebrow uppercase tracking-wider text-red mb-4">
                 Join the campaign
               </p>
-              <h2 className="font-serif text-h1 text-foam">
+              <h2 className="font-display text-h1 text-paper">
                 Pick a tier. Or set your own.
               </h2>
-              <p className="mt-4 text-body-lg text-foam/80">
+              <p className="mt-4 text-body-lg text-paper/80">
                 Recurring monthly support is the difference between scrambling
                 between regattas and showing up prepared. Anything works — and
                 every dollar lands where it should.

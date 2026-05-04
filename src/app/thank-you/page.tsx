@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { SITE } from "@/lib/site";
 
 /*
   /thank-you — context-aware via ?from=. Different copy per source so
@@ -67,12 +68,15 @@ export default async function ThankYouPage({
   const raw = Array.isArray(sp.from) ? sp.from[0] : sp.from;
   const key = (raw as FromKey) ?? "default";
   const v = variants[key] ?? variants.default;
+  const ig = SITE.social.instagram;
+  const yt = SITE.social.youtube;
+  const hasSocial = Boolean(ig || yt);
 
   return (
     <section className="py-section-y-lg">
       <Container width="narrow">
         <Badge tone="sand">{v.eyebrow}</Badge>
-        <h1 className="mt-4 font-serif text-display text-navy">{v.title}</h1>
+        <h1 className="mt-4 font-display text-display text-ink">{v.title}</h1>
         <p className="mt-6 text-body-lg text-ink/80 max-w-prose">{v.body}</p>
         <div className="mt-10 flex flex-wrap gap-3">
           <Button href="/newsletters" variant="primary" size="lg">
@@ -82,24 +86,46 @@ export default async function ThankYouPage({
             Back home
           </Button>
         </div>
-        <div className="mt-12 border-t border-line pt-6">
-          <p className="text-eyebrow uppercase tracking-wider text-mist mb-2">
+        <div className="mt-12 border-t border-mist pt-6">
+          <p className="text-eyebrow uppercase tracking-wider text-ink-3 mb-2">
             While you're here
           </p>
           <p className="text-body text-ink/75">
-            Follow along on{" "}
-            <Link href="https://instagram.com" className="underline">
-              Instagram
-            </Link>
-            ,{" "}
-            <Link href="https://youtube.com" className="underline">
-              YouTube
-            </Link>
-            , and the{" "}
-            <Link href="/newsletters" className="underline">
-              newsletter
-            </Link>
-            .
+            {hasSocial ? (
+              <>
+                Follow along
+                {ig ? (
+                  <>
+                    {" on "}
+                    <Link href={ig} className="underline">
+                      Instagram
+                    </Link>
+                  </>
+                ) : null}
+                {ig && yt ? "," : ""}
+                {yt ? (
+                  <>
+                    {ig ? " " : " on "}
+                    <Link href={yt} className="underline">
+                      YouTube
+                    </Link>
+                  </>
+                ) : null}
+                , and the{" "}
+                <Link href="/newsletters" className="underline">
+                  newsletter
+                </Link>
+                .
+              </>
+            ) : (
+              <>
+                Read the latest in the{" "}
+                <Link href="/newsletters" className="underline">
+                  newsletter
+                </Link>
+                .
+              </>
+            )}
           </p>
         </div>
       </Container>

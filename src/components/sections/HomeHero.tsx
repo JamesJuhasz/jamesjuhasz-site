@@ -12,14 +12,30 @@ export function HomeHero() {
 
   return (
     <section className="relative isolate min-h-[100svh] flex flex-col overflow-hidden text-paper">
-      <HeroParallax src="/images/hero-candidates/dsc00156.jpg" priority />
+      {/* Desktop */}
+      <div className="hidden sm:block">
+        <HeroParallax src="/images/hero-candidates/dsc00156.jpg" priority />
+      </div>
+
+      {/* Mobile: single portrait-friendly image */}
+      <div className="sm:hidden absolute inset-0 -z-20 overflow-hidden">
+        <Image
+          src="/images/hero-candidates/dsc02737.jpg"
+          alt=""
+          fill
+          priority
+          unoptimized
+          sizes="100vw"
+          className="object-cover"
+        />
+      </div>
       <div
         aria-hidden
         className="absolute inset-0 -z-10 bg-gradient-to-b from-ink/30 via-ink/30 to-ink/85"
       />
 
       {/* Top eyebrow + sail number watermark */}
-      <Container width="wide" className="pt-24 sm:pt-28">
+      <Container width="wide" className="pt-20 sm:pt-28">
         <div className="flex items-start justify-between gap-4 sm:gap-6">
           <div className="flex flex-wrap items-center gap-x-3 sm:gap-x-4 gap-y-2 min-w-0">
             <div
@@ -98,7 +114,7 @@ export function HomeHero() {
 
       <Container
         width="wide"
-        className="mt-auto pb-section-y-lg pt-section-y"
+        className="mt-auto pb-4 sm:pb-section-y-lg pt-section-y"
       >
         <div className="grid lg:grid-cols-12 gap-10 lg:items-end">
           <div className="lg:col-span-7">

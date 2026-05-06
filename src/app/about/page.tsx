@@ -28,7 +28,7 @@ export default function AboutPage() {
   return (
     <>
       {/* EDITORIAL HERO */}
-      <section className="relative isolate min-h-[80svh] flex items-end overflow-hidden">
+      <section className="relative isolate min-h-svh md:min-h-[80svh] flex items-end overflow-hidden">
         <HeroParallax
           src="/images/hero-candidates/260326_sailingenergy_trofeo-sofia_pm1_1927-edit-2_(2).jpg"
           priority
@@ -45,14 +45,12 @@ export default function AboutPage() {
           <h1 className="font-display text-display text-paper max-w-[20ch]">
             From a 7-year-old on the Great Lakes to chasing Olympic gold.
           </h1>
-          <p className="mt-6 max-w-prose text-body-lg text-paper/85">
-            One sport, one boat, one start line in 2028.
-          </p>
+
         </Container>
       </section>
 
       {/* THE STORY — editorial */}
-      <section className="py-section-y-lg">
+      <section className="pb-section-y-lg pt-0">
         <Container width="prose">
           <p className="text-eyebrow uppercase tracking-wider text-ink-3 mb-4">
             The story · 6 min read

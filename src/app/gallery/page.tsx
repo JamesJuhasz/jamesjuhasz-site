@@ -1,7 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
-import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Reveal } from "@/components/ui/Reveal";
+import { HeroParallax } from "@/components/sections/HeroParallax";
 import { Badge } from "@/components/ui/Badge";
 import { DonateCTAInline } from "@/components/cta/DonateCTA";
 import { galleries } from "@/lib/galleries";
@@ -36,46 +37,64 @@ const layoutSizes = [
 export default function GalleryIndexPage() {
   return (
     <>
-      <section className="py-section-y bg-foam-deep border-b border-line">
-        <Container width="wide">
-          <SectionHeader
-            eyebrow="Gallery"
-            title="Photos from the road"
-            lede="Thirteen sub-galleries — Malta, the Mediterranean circuit, Lake Garda, the junior years. The campaign as it actually looks."
-          />
+      <section className="relative isolate overflow-hidden min-h-[55svh] flex items-end">
+        <HeroParallax
+          src="/images/hero-candidates/img_9086.jpg"
+          alt="Sailor on the racecourse with CAN sail"
+          priority
+          amount={0.1}
+          objectPosition="50% 45%"
+        />
+        <div
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 h-3/4 -z-10 bg-gradient-to-t from-ink/85 via-ink/45 to-transparent"
+        />
+        <Container width="wide" className="pt-section-y pb-section-y">
+          <p className="text-eyebrow uppercase font-medium text-paper/70 mb-3">
+            Gallery
+          </p>
+          <h1 className="font-display text-display text-paper max-w-[20ch]">
+            Photos from the road
+          </h1>
+          <p className="mt-6 max-w-prose text-body-lg text-paper/85">
+            Fourteen sub-galleries — Malta, the Mediterranean circuit, Lake Garda, the junior years. The campaign as it actually looks.
+          </p>
         </Container>
       </section>
 
       <section className="py-section-y">
         <Container width="wide">
-          <Reveal>
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-              {galleries.map((g, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+            {galleries.map((g, i) => (
+              <Reveal
+                key={g.slug}
+                delay={Math.min(i * 0.05, 0.4)}
+                className={layoutSizes[i % layoutSizes.length]}
+              >
                 <Link
-                  key={g.slug}
                   href={`/gallery/${g.slug}`}
-                  className={`group relative overflow-hidden rounded-2xl ring-1 ring-line/50 hover:shadow-lift transition-all ${layoutSizes[i % layoutSizes.length]}`}
+                  className="group relative h-full w-full overflow-hidden rounded-2xl ring-1 ring-mist/50 hover:shadow-lift transition-all block"
                 >
-                  <div
-                    aria-hidden
-                    className="absolute inset-0 transition-transform duration-500 group-hover:scale-105"
-                    style={{
-                      background: `linear-gradient(135deg, hsl(${g.toneHue ?? 210} 45% 28%) 0%, hsl(${g.toneHue ?? 210} 50% 14%) 100%)`,
-                    }}
+                  <Image
+                    src={g.coverImage}
+                    alt=""
+                    fill
+                    sizes="(min-width: 1024px) 50vw, 100vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                   />
                   <div
                     aria-hidden
-                    className="absolute inset-0 bg-gradient-to-t from-navy-deep/80 via-navy/20 to-transparent"
+                    className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/30 to-transparent"
                   />
                   <div className="relative h-full flex flex-col justify-end p-6">
-                    <p className="text-eyebrow uppercase tracking-wider text-sand mb-2">
+                    <p className="text-eyebrow uppercase tracking-wider text-red mb-2">
                       {g.dateRange} · {g.photoCount} photos
                     </p>
-                    <h3 className="font-serif text-h3 text-foam max-w-prose">
+                    <h3 className="font-display text-h3 text-paper max-w-prose">
                       {g.title}
                     </h3>
                     {g.context ? (
-                      <p className="mt-2 text-body text-foam/80 max-w-prose line-clamp-2">
+                      <p className="mt-2 text-body text-paper/80 max-w-prose line-clamp-2">
                         {g.context}
                       </p>
                     ) : null}
@@ -84,9 +103,9 @@ export default function GalleryIndexPage() {
                     <Badge tone="navy">View</Badge>
                   </div>
                 </Link>
-              ))}
-            </div>
-          </Reveal>
+              </Reveal>
+            ))}
+          </div>
         </Container>
       </section>
 

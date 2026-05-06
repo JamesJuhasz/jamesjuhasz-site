@@ -1,6 +1,6 @@
 import { Container } from "@/components/ui/Container";
-import { SectionHeader } from "@/components/ui/SectionHeader";
 import { StatNumber } from "@/components/ui/StatNumber";
+import { HeroParallax } from "@/components/sections/HeroParallax";
 import { DonateCTAInline } from "@/components/cta/DonateCTA";
 import { ResultsFilter } from "@/components/sections/ResultsFilter";
 import { deriveResultStats, getResults } from "@/lib/results";
@@ -45,14 +45,34 @@ export default async function ResultsPage() {
 
   return (
     <>
-      <section className="py-section-y bg-fog border-b border-mist">
+      <section className="relative isolate overflow-hidden min-h-[55svh] flex items-end">
+        <HeroParallax
+          src="/images/hero-candidates/img_8434.jpg"
+          alt="Tight racing at a mark"
+          priority
+          amount={0.1}
+          objectPosition="50% 70%"
+        />
+        <div
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 h-3/4 -z-10 bg-gradient-to-t from-ink/85 via-ink/45 to-transparent"
+        />
+        <Container width="wide" className="pt-section-y pb-section-y">
+          <p className="text-eyebrow uppercase font-medium text-paper/70 mb-3">
+            Results
+          </p>
+          <h1 className="font-display text-display text-paper max-w-[20ch]">
+            Race log
+          </h1>
+          <p className="mt-6 max-w-prose text-body-lg text-paper/85">
+            Every regatta from the LA28 campaign — placement, fleet, and a link to the full scoreboard. Pulled from CoachAible and enriched nightly from public results pages.
+          </p>
+        </Container>
+      </section>
+
+      <section className="py-10 bg-fog border-b border-mist">
         <Container width="wide">
-          <SectionHeader
-            eyebrow="Results"
-            title="Race log"
-            lede="Every regatta from the LA28 campaign — placement, fleet, and a link to the full scoreboard. Pulled from CoachAible and enriched nightly from public results pages."
-          />
-          <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {/* Pass raw counts (including 0) — `—` is reserved for unknown,
                 while a literal `0` is honest data the donor needs to see. */}
             <StatOrDash value={stats.total} label="Regattas raced" />
@@ -63,7 +83,7 @@ export default async function ResultsPage() {
         </Container>
       </section>
 
-      <section className="py-section-y">
+      <section className="pt-8 pb-section-y">
         <Container width="wide">
           <ResultsFilter results={results} />
         </Container>

@@ -31,7 +31,7 @@ export async function sendEmail({ subject, text, replyTo, to }: SendArgs): Promi
     return { ok: true };
   }
   try {
-    const { error } = await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from: FROM,
       to: to ?? TO,
       subject,
@@ -39,10 +39,13 @@ export async function sendEmail({ subject, text, replyTo, to }: SendArgs): Promi
       replyTo,
     });
     if (error) {
+      console.error("[email] Resend rejected send:", error);
       return { ok: false, error: error.message };
     }
+    console.log("[email] sent:", { id: data?.id, to: to ?? TO, subject });
     return { ok: true };
   } catch (err) {
+    console.error("[email] Resend threw:", err);
     return { ok: false, error: (err as Error).message };
   }
 }

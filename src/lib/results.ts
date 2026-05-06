@@ -4,7 +4,8 @@ import {
   type ConsolidatedEvent,
 } from "@/lib/coachaible";
 import { getEventsIndex } from "@/sanity/fetch";
-import { seedResults, type SeedEvent, type SeedResult } from "@/lib/seed-data";
+import { type SeedEvent } from "@/lib/seed-data";
+import { getWorldSailingResults } from "@/lib/world-sailing";
 import resultsAuto from "@/data/results-auto.json";
 
 export type ScrapedResult = {
@@ -37,6 +38,8 @@ export type Result = {
   excerpt?: string;
   slug?: string;
   location?: string;
+  /** Candidate results URL awaiting human review — not yet confirmed accurate. */
+  pendingUrl?: string | null;
 };
 
 const STATS_WINDOW_DAYS = 730;
@@ -91,27 +94,6 @@ function fromConsolidated(
   };
 }
 
-function fromSeedResult(r: SeedResult): Result {
-  return {
-    id: r.id,
-    title: r.title,
-    startDate: r.startDate,
-    endDate: r.endDate,
-    country: r.country,
-    position: r.position,
-    totalCompetitors: r.totalCompetitors,
-    fleet: r.fleet,
-    externalUrl: r.externalUrl,
-    source: r.source,
-    coverImage: r.coverImage
-      ? { url: r.coverImage.asset.url, alt: r.coverImage.alt }
-      : undefined,
-    excerpt: r.excerpt,
-    slug: r.slug,
-    location: r.location,
-  };
-}
-
 function fromSanityOnly(event: SeedEvent): Result {
   return {
     id: `sanity-${event.slug}`,
@@ -134,12 +116,12 @@ function fromSanityOnly(event: SeedEvent): Result {
 }
 
 export async function getResults(): Promise<Result[]> {
-  // Curated seed results are the authoritative race log. They include verified
-  // 2026 placements and clearly-flagged guesses for older entries.
-  if (seedResults.length > 0) {
-    return seedResults
-      .map(fromSeedResult)
-      .sort((a, b) => (a.startDate < b.startDate ? 1 : -1));
+  // World Sailing is the authoritative source for past regatta results.
+  // The fixture under src/data/world-sailing-events.json is regenerated from
+  // the federation profile by scripts/fetch-world-sailing.ts.
+  const wsResults = getWorldSailingResults();
+  if (wsResults.length > 0) {
+    return wsResults;
   }
 
   const [statsApi, sanityEvents] = await Promise.all([

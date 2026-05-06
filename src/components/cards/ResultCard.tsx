@@ -27,6 +27,7 @@ export function ResultCard({ result }: { result: Result }) {
   const src = result.coverImage?.url;
   const hasResult = Boolean(result.position);
   const hasUrl = Boolean(result.externalUrl);
+  const hasPendingUrl = !hasUrl && Boolean(result.pendingUrl);
 
   return (
     <Card as="article" className="group flex flex-col gap-4 shadow-none hover:shadow-lift hover:-translate-y-0.5 transition-all">
@@ -51,19 +52,9 @@ export function ResultCard({ result }: { result: Result }) {
             />
           </div>
         )}
-        {/*
-          Top-left badge: in the cover-image case, show the venue country
-          (gives the regatta its geographic context). In the fallback/empty
-          case, show the sailor's sail number — the venue code by itself on
-          a Trophy gradient reads as "James is from USA/DEU" which is wrong.
-        */}
-        {src && result.country ? (
+        {result.country ? (
           <div className="absolute top-3 left-3 z-10">
             <Badge tone="sand">{result.country}</Badge>
-          </div>
-        ) : !src ? (
-          <div className="absolute top-3 left-3 z-10">
-            <Badge tone="sand">CAN 217718</Badge>
           </div>
         ) : null}
         {hasResult ? (
@@ -94,9 +85,6 @@ export function ResultCard({ result }: { result: Result }) {
             {result.totalCompetitors ? (
               <span className="text-ink-3"> of {result.totalCompetitors}</span>
             ) : null}
-            {result.fleet ? (
-              <span className="text-ink-3"> · {result.fleet}</span>
-            ) : null}
           </p>
         ) : (
           // No placement yet: render an honest "coming" badge instead of
@@ -116,6 +104,16 @@ export function ResultCard({ result }: { result: Result }) {
               className="inline-flex items-center gap-1 text-ink font-medium hover:text-ink-2"
             >
               View full results <ArrowUpRight size={14} />
+            </a>
+          ) : hasPendingUrl ? (
+            <a
+              href={result.pendingUrl!}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Candidate results page — awaiting confirmation"
+              className="inline-flex items-center gap-1 text-ink-3 font-medium hover:text-ink"
+            >
+              Results <ArrowUpRight size={14} />
             </a>
           ) : (
             <a

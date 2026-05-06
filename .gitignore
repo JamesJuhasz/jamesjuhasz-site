@@ -53,3 +53,7 @@ next-env.d.ts
 
 # Audit screenshots/findings
 /audit/
+
+# Claude Code internals
+.claude/scheduled_tasks.lock
+.claude/worktrees/

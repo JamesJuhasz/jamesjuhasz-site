@@ -4,6 +4,7 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { StatNumber } from "@/components/ui/StatNumber";
 import { Reveal } from "@/components/ui/Reveal";
+import { HeroParallax } from "@/components/sections/HeroParallax";
 import { UpcomingEventCard } from "@/components/cards/UpcomingEventCard";
 import { EventCard } from "@/components/cards/EventCard";
 import { DonateCTAInline } from "@/components/cta/DonateCTA";
@@ -16,6 +17,7 @@ import {
   filterDisplayable,
   type ConsolidatedEvent,
 } from "@/lib/coachaible";
+import { enrichEventsWithImages } from "@/lib/venue-image";
 import { daysToLA2028 } from "@/lib/countdown";
 
 export const revalidate = 60;
@@ -57,8 +59,8 @@ export default async function EventsPage() {
     fetchTrainingStats(365),
   ]);
 
-  const upcomingFromApi: ConsolidatedEvent[] = upcomingApi
-    ? filterDisplayable(consolidateEvents(upcomingApi.events))
+  const upcomingFromApi = upcomingApi
+    ? await enrichEventsWithImages(filterDisplayable(consolidateEvents(upcomingApi.events)))
     : [];
   const upcomingFromSanity = events.filter((e) => e.status === "upcoming");
   const usingSanityFallback =
@@ -69,22 +71,36 @@ export default async function EventsPage() {
 
   return (
     <>
-      <section className="py-section-y bg-fog border-b border-mist">
-        <Container width="wide">
-          <SectionHeader
-            eyebrow="Events"
-            title="What's next"
-            lede="Where the campaign goes next. Each event is a chance to score Olympic qualification points. Past results live on the Results page."
-          />
+      <section className="relative isolate overflow-hidden min-h-[55svh] flex items-end">
+        <HeroParallax
+          src="/images/hero-candidates/dsc00156.jpg"
+          alt="Boat heading upwind on the racecourse"
+          priority
+          amount={0.1}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 h-3/4 -z-10 bg-gradient-to-t from-ink/85 via-ink/45 to-transparent"
+        />
+        <Container width="wide" className="pt-section-y pb-section-y">
+          <p className="text-eyebrow uppercase font-medium text-paper/70 mb-3">
+            Events
+          </p>
+          <h1 className="font-display text-display text-paper max-w-[20ch]">
+            What&apos;s next
+          </h1>
+          <p className="mt-6 max-w-prose text-body-lg text-paper/85">
+            Where the campaign goes next. Each event is a chance to score Olympic qualification points. Past results live on the Results page.
+          </p>
           <div className="mt-10 flex flex-col items-start gap-3">
-            <span className="text-caption uppercase tracking-wider text-ink-3">
+            <span className="text-caption uppercase tracking-wider text-paper/70">
               Countdown to LA 2028
             </span>
             <div className="flex items-baseline gap-3">
               <span className="font-display text-display leading-none tracking-tight text-red">
                 T-{daysToLA}
               </span>
-              <span className="font-display text-h3 leading-none tracking-tight text-ink/80">
+              <span className="font-display text-h3 leading-none tracking-tight text-paper/85">
                 days · LA 2028
               </span>
             </div>
@@ -92,18 +108,16 @@ export default async function EventsPage() {
         </Container>
       </section>
 
-      <section className="py-section-y border-b border-mist">
+      <section className="py-8 border-b border-mist">
         <Container width="wide">
-          <p className="text-caption uppercase tracking-wider text-ink-3">
-            Last 365 days
-          </p>
-          <h2 className="mt-2 font-display text-h2 text-ink">
-            The campaign so far
-          </h2>
-          <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-6">
+            <h2 className="font-display text-h3 text-ink">The campaign so far</h2>
+            <p className="text-caption uppercase tracking-wider text-ink-3">Last 365 days</p>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             <StatOrDash
-              value={stats?.daysOnWater ?? null}
-              label="Days on water"
+              value={stats?.trainingDays ?? null}
+              label="Training Days"
             />
             <StatOrDash
               value={stats?.eventsCompleted ?? null}
@@ -115,7 +129,7 @@ export default async function EventsPage() {
             />
             <StatOrDash
               value={stats?.countriesTraveled ?? null}
-              label="Countries"
+              label="Countries Visited"
             />
           </div>
         </Container>
@@ -132,7 +146,7 @@ export default async function EventsPage() {
             <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {upcomingFromApi.map((e, i) => (
                 <Reveal key={e.id} delay={Math.min(i * 0.06, 0.36)}>
-                  <UpcomingEventCard event={e} />
+                  <UpcomingEventCard event={e} destinationImageUrl={e.destinationImageUrl} city={e.city} />
                 </Reveal>
               ))}
             </div>

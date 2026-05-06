@@ -113,7 +113,7 @@ export function Header() {
           <button
             type="button"
             className={cn(
-              "lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-pill ring-1 transition-colors",
+              "lg:hidden inline-flex h-11 w-11 items-center justify-center rounded-pill ring-1 transition-colors",
               overDark
                 ? "ring-paper/30 bg-transparent text-paper hover:bg-paper/10"
                 : "ring-mist bg-paper text-ink hover:bg-fog",

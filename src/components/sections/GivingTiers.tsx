@@ -93,7 +93,7 @@ function TierCard({
         {tier.outcome}
       </p>
       <Button
-        href={`/donate?amount=${tier.amount}`}
+        href={`/donate?amount=${tier.amount}&interval=m`}
         variant={featured ? "donate" : "secondary"}
         size="md"
         className="mt-2 w-full"
@@ -101,7 +101,7 @@ function TierCard({
         data-cta-location={`giving_tier_${tier.amount}`}
         data-giving-amount={tier.amount}
       >
-        Give {fmtCurrency.format(tier.amount)}
+        Give {fmtCurrency.format(tier.amount)}/mo
       </Button>
     </Card>
   );

@@ -1,4 +1,17 @@
 {
-  "generatedAt": "",
-  "domains": {}
+  "generatedAt": "2026-05-06T10:03:39.893Z",
+  "domains": {
+    "www.cork.org": {
+      "approvals": 4,
+      "lastApprovedAt": "2026-05-06T10:03:39.893Z"
+    },
+    "rvan.ca": {
+      "approvals": 1,
+      "lastApprovedAt": "2026-05-06T09:22:52.666Z"
+    },
+    "scoring.sailti.com": {
+      "approvals": 8,
+      "lastApprovedAt": "2026-05-06T09:29:11.813Z"
+    }
+  }
 }

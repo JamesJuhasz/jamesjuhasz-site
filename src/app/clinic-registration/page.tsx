@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { HeroParallax } from "@/components/sections/HeroParallax";
 import { DonateCTAInline } from "@/components/cta/DonateCTA";
 import { trackFormSubmitted } from "@/lib/gtag";
 
@@ -56,13 +57,23 @@ export default function ClinicRegistrationPage() {
 
   return (
     <>
-      <section className="py-section-y bg-foam-deep border-b border-line">
-        <Container width="default">
+      <section className="relative isolate overflow-hidden min-h-[55svh] flex items-end">
+        <HeroParallax
+          src="/images/hero-candidates/img_8859.jpg"
+          alt="On-water coaching"
+          priority
+          amount={0.1}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 h-3/4 -z-10 bg-gradient-to-t from-ink/85 via-ink/45 to-transparent"
+        />
+        <Container width="default" className="pt-section-y pb-section-y">
           <Badge tone="navy">Coaching</Badge>
-          <h1 className="mt-4 font-serif text-display text-navy max-w-[18ch]">
+          <h1 className="mt-4 font-display text-display text-paper max-w-[18ch]">
             High-performance clinics with James.
           </h1>
-          <p className="mt-6 max-w-prose text-body-lg text-ink/80">
+          <p className="mt-6 max-w-prose text-body-lg text-paper/85">
             Learn 1-on-1 from a national-team ILCA 7 sailor. Goal-setting,
             on-water coaching, video review, and a debrief that actually moves
             your sailing forward.
@@ -79,12 +90,12 @@ export default function ClinicRegistrationPage() {
           <div className="mt-8 grid gap-6 md:grid-cols-2">
             {upcomingClinics.map((c) => (
               <Card key={c.title} className="flex flex-col gap-3">
-                <p className="text-eyebrow uppercase tracking-wider text-mist">
+                <p className="text-eyebrow uppercase tracking-wider text-ink-3">
                   {c.date} · {c.location}
                 </p>
-                <h3 className="font-serif text-h3 text-navy">{c.title}</h3>
+                <h3 className="font-display text-h3 text-ink">{c.title}</h3>
                 <p className="text-body text-ink/75">{c.body}</p>
-                <p className="mt-auto text-h3 font-serif text-navy">
+                <p className="mt-auto text-h3 font-display text-ink">
                   ${c.price} CAD
                 </p>
               </Card>
@@ -93,10 +104,10 @@ export default function ClinicRegistrationPage() {
         </Container>
       </section>
 
-      <section className="py-section-y bg-foam-deep border-y border-line">
+      <section className="py-section-y bg-fog border-y border-mist">
         <Container width="default">
           <Card>
-            <h2 className="font-serif text-h2 text-navy">Register</h2>
+            <h2 className="font-display text-h2 text-ink">Register</h2>
             <p className="mt-2 text-body text-ink/75 max-w-prose">
               Tell me a bit about you and I'll follow up within 24 hours with
               payment + scheduling details.
@@ -132,7 +143,7 @@ export default function ClinicRegistrationPage() {
                 aria-hidden
               />
               {state === "error" ? (
-                <p className="text-caption text-donate">
+                <p className="text-caption text-red">
                   Something went wrong. Try again or email directly.
                 </p>
               ) : null}
@@ -172,23 +183,23 @@ function Field({
 }) {
   return (
     <label className="flex flex-col gap-1">
-      <span className="text-caption text-mist uppercase tracking-wider">
+      <span className="text-caption text-ink-3 uppercase tracking-wider">
         {label}
-        {required ? <span className="text-donate"> *</span> : null}
+        {required ? <span className="text-red"> *</span> : null}
       </span>
       {as === "textarea" ? (
         <textarea
           name={name}
           rows={3}
           required={required}
-          className="rounded-xl bg-foam-deep ring-1 ring-line px-4 py-3 text-body text-ink resize-none focus:outline-none focus:ring-navy/60"
+          className="rounded-xl bg-fog ring-1 ring-mist px-4 py-3 text-body text-ink resize-none focus:outline-none focus:ring-ink/60"
         />
       ) : (
         <input
           name={name}
           type={type}
           required={required}
-          className="rounded-pill bg-foam-deep ring-1 ring-line px-4 py-3 text-body text-ink focus:outline-none focus:ring-navy/60"
+          className="rounded-pill bg-fog ring-1 ring-mist px-4 py-3 text-body text-ink focus:outline-none focus:ring-ink/60"
         />
       )}
     </label>
@@ -208,15 +219,15 @@ function SelectField({
 }) {
   return (
     <label className="flex flex-col gap-1">
-      <span className="text-caption text-mist uppercase tracking-wider">
+      <span className="text-caption text-ink-3 uppercase tracking-wider">
         {label}
-        {required ? <span className="text-donate"> *</span> : null}
+        {required ? <span className="text-red"> *</span> : null}
       </span>
       <select
         name={name}
         required={required}
         defaultValue=""
-        className="rounded-pill bg-foam-deep ring-1 ring-line px-4 py-3 text-body text-ink focus:outline-none focus:ring-navy/60"
+        className="rounded-pill bg-fog ring-1 ring-mist px-4 py-3 text-body text-ink focus:outline-none focus:ring-ink/60"
       >
         <option value="" disabled>
           Choose one

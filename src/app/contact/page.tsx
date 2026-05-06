@@ -6,6 +6,7 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
+import { HeroParallax } from "@/components/sections/HeroParallax";
 import { trackFormSubmitted } from "@/lib/gtag";
 
 export default function ContactPage() {
@@ -40,15 +41,25 @@ export default function ContactPage() {
 
   return (
     <>
-      <section className="py-section-y bg-foam-deep border-b border-line">
-        <Container width="narrow">
+      <section className="relative isolate overflow-hidden min-h-[55svh] flex items-end">
+        <HeroParallax
+          src="/images/hero-candidates/img_9280.jpg"
+          alt="Open water"
+          priority
+          amount={0.1}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 h-3/4 -z-10 bg-gradient-to-t from-ink/85 via-ink/45 to-transparent"
+        />
+        <Container width="narrow" className="pt-section-y pb-section-y">
           <Badge>Contact</Badge>
-          <h1 className="mt-4 font-serif text-display text-navy">
+          <h1 className="mt-4 font-display text-display text-paper">
             Get in touch.
           </h1>
-          <p className="mt-6 text-body-lg text-ink/80 max-w-prose">
+          <p className="mt-6 text-body-lg text-paper/85 max-w-prose">
             Press inquiries, sponsorship conversations, training questions —
-            send a note and I'll respond within a few days. Often within 48
+            send a note and I&apos;ll respond within a few days. Often within 48
             hours.
           </p>
         </Container>
@@ -74,7 +85,7 @@ export default function ContactPage() {
                 aria-hidden
               />
               {state === "error" ? (
-                <p className="text-caption text-donate">{errorMsg}</p>
+                <p className="text-caption text-red">{errorMsg}</p>
               ) : null}
               <Button
                 variant="primary"
@@ -106,23 +117,23 @@ function Field({
 }) {
   return (
     <label className="flex flex-col gap-1">
-      <span className="text-caption text-mist uppercase tracking-wider">
+      <span className="text-caption text-ink-3 uppercase tracking-wider">
         {label}
-        {required ? <span className="text-donate"> *</span> : null}
+        {required ? <span className="text-red"> *</span> : null}
       </span>
       {as === "textarea" ? (
         <textarea
           name={name}
           rows={5}
           required={required}
-          className="rounded-xl bg-foam-deep ring-1 ring-line px-4 py-3 text-body text-ink resize-none focus:outline-none focus:ring-navy/60"
+          className="rounded-xl bg-fog ring-1 ring-mist px-4 py-3 text-body text-ink resize-none focus:outline-none focus:ring-ink/60"
         />
       ) : (
         <input
           name={name}
           type={type}
           required={required}
-          className="rounded-pill bg-foam-deep ring-1 ring-line px-4 py-3 text-body text-ink focus:outline-none focus:ring-navy/60"
+          className="rounded-pill bg-fog ring-1 ring-mist px-4 py-3 text-body text-ink focus:outline-none focus:ring-ink/60"
         />
       )}
     </label>

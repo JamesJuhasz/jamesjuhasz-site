@@ -11,15 +11,25 @@
 */
 
 import verifiedRaw from "@/data/results-verified.json";
-import type { ResultsVerifiedFile, VerifiedResult } from "./types";
+import reviewRaw from "@/data/results-review.json";
+import type { ResultsVerifiedFile, ResultsReviewFile, VerifiedResult } from "./types";
 
 const _file = verifiedRaw as ResultsVerifiedFile;
 const _byId = new Map<string, VerifiedResult>(
   _file.results.map((r) => [r.worldSailingEventId, r]),
 );
 
+const _reviewFile = reviewRaw as ResultsReviewFile;
+const _reviewById = new Map<string, VerifiedResult>(
+  _reviewFile.results.map((r) => [r.worldSailingEventId, r]),
+);
+
 export function getVerified(worldSailingEventId: string): VerifiedResult | undefined {
   return _byId.get(worldSailingEventId);
+}
+
+export function getReview(worldSailingEventId: string): VerifiedResult | undefined {
+  return _reviewById.get(worldSailingEventId);
 }
 
 export function getAllVerified(): VerifiedResult[] {

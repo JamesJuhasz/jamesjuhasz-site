@@ -1,13 +1,17 @@
 import * as React from "react";
 import { cn } from "@/lib/cn";
 
-type Tone = "default" | "navy" | "sand" | "donate";
+type Tone = "default" | "ink" | "fog" | "red" | "navy" | "sand" | "donate";
 
 const toneStyles: Record<Tone, string> = {
-  default: "bg-foam-deep text-navy ring-1 ring-line",
-  navy: "bg-navy text-foam",
-  sand: "bg-sand text-navy",
-  donate: "bg-donate text-white",
+  default: "bg-fog text-ink ring-1 ring-mist",
+  ink: "bg-ink text-paper",
+  fog: "bg-fog text-ink ring-1 ring-mist",
+  red: "bg-red text-paper",
+  // Back-compat aliases — map to new brand tones
+  navy: "bg-ink text-paper",
+  sand: "bg-fog text-ink ring-1 ring-mist",
+  donate: "bg-red text-paper",
 };
 
 export function Badge({
@@ -22,7 +26,7 @@ export function Badge({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-pill px-3 py-1 text-eyebrow uppercase font-medium tracking-wider",
+        "inline-flex items-center gap-1 rounded-pill px-3 py-1 text-eyebrow uppercase font-mono font-medium",
         toneStyles[tone],
         className,
       )}

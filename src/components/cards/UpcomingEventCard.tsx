@@ -1,6 +1,5 @@
 import { MapPin, Trophy } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
-import { Card } from "@/components/ui/Card";
 import type { ConsolidatedEvent } from "@/lib/coachaible";
 
 const dateFmt = new Intl.DateTimeFormat("en-CA", {
@@ -17,7 +16,15 @@ const TYPE_LABEL: Record<ConsolidatedEvent["eventType"], string> = {
   other: "Camp",
 };
 
-export function UpcomingEventCard({ event }: { event: ConsolidatedEvent }) {
+export function UpcomingEventCard({
+  event,
+  destinationImageUrl,
+  city,
+}: {
+  event: ConsolidatedEvent;
+  destinationImageUrl?: string | null;
+  city?: string | null;
+}) {
   const start = dateFmt.format(new Date(`${event.startDate}T00:00:00`));
   const end =
     event.endDate && event.endDate !== event.startDate
@@ -28,25 +35,40 @@ export function UpcomingEventCard({ event }: { event: ConsolidatedEvent }) {
     event.racePriority && /^(A|priority|priority-?A)/i.test(event.racePriority);
 
   return (
-    <Card className="flex flex-col gap-3 shadow-none">
-      <div className="flex items-start justify-between gap-2">
-        <Badge tone="navy">Upcoming</Badge>
-        {isPriority ? (
-          <Badge tone="donate">
-            <Trophy size={12} /> Priority
-          </Badge>
+    <div className="rounded-2xl overflow-hidden ring-1 ring-mist bg-paper shadow-soft transition-shadow duration-200 flex flex-col">
+      {/* Image slot — always rendered so all cards share the same height */}
+      <div className="h-28 flex-shrink-0 overflow-hidden bg-fog">
+        {destinationImageUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={destinationImageUrl}
+            alt={event.title}
+            loading="lazy"
+            decoding="async"
+            className="w-full h-full object-cover"
+          />
         ) : null}
       </div>
-      <p className="text-caption uppercase tracking-wider text-ink-3">
-        {TYPE_LABEL[event.eventType]} · {range}
-      </p>
-      <h3 className="font-display text-h3 text-ink">{event.title}</h3>
-      {event.country ? (
-        <p className="text-body text-ink/70 inline-flex items-start gap-1.5">
-          <MapPin size={14} className="mt-1 flex-shrink-0 text-ink-3" aria-hidden />
-          <span>{event.country}</span>
+      <div className="flex flex-col gap-2 p-4">
+        <div className="flex items-start justify-between gap-2">
+          <Badge tone="navy">Upcoming</Badge>
+          {isPriority ? (
+            <Badge tone="donate">
+              <Trophy size={12} /> Priority
+            </Badge>
+          ) : null}
+        </div>
+        <p className="text-caption uppercase tracking-wider text-ink-3">
+          {TYPE_LABEL[event.eventType]} · {range}
         </p>
-      ) : null}
-    </Card>
+        <h3 className="font-display text-h3 text-ink">{event.title}</h3>
+        {(city ?? event.country) ? (
+          <p className="text-body text-ink/70 inline-flex items-start gap-1.5">
+            <MapPin size={14} className="mt-1 flex-shrink-0 text-ink-3" aria-hidden />
+            <span>{city ?? event.country}</span>
+          </p>
+        ) : null}
+      </div>
+    </div>
   );
 }

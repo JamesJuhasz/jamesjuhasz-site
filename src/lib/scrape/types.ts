@@ -75,6 +75,15 @@ export type VerifiedResult = {
   needsReview: boolean;
   /** Machine-readable flags: ["position-disagrees-with-ws", ...] */
   reviewReasons: string[];
+  /**
+   * Human-set override: when true, the public results card uses
+   * `externalPosition` instead of the federation's `row.position` for this
+   * one entry. Used for the rare case where WS itself recorded the wrong
+   * position (e.g. 2016 Cork OCR — WS says 22 but the cork.org final
+   * standings show 12 of 17). Defaults to false; the federation remains
+   * canonical for everything else.
+   */
+  overrideWsPosition?: boolean;
 };
 
 /** Entry stored in results-rejected.json for retry scheduling. */

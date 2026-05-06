@@ -12,7 +12,12 @@
     "import:full": "tsx scripts/import-from-export.ts",
     "backfill:covers": "tsx scripts/backfill-covers.ts",
     "press:fetch": "tsx scripts/fetch-press.ts",
-    "results:fetch": "tsx scripts/fetch-results.ts"
+    "results:fetch": "tsx scripts/fetch-results.ts",
+    "results:verify": "tsx --env-file=.env.local scripts/verify-results.ts",
+    "ws:fetch": "tsx scripts/fetch-world-sailing.ts",
+    "ws:enrich": "tsx --env-file=.env.local scripts/enrich-world-sailing.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@next/third-parties": "^16.2.4",
@@ -44,13 +49,16 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitest/coverage-v8": "^4.1.5",
     "dotenv": "^17.4.2",
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
     "jsdom": "^29.1.1",
+    "pdfjs-dist": "^5.7.284",
     "playwright": "^1.59.1",
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.5"
   }
 }

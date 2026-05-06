@@ -25,32 +25,32 @@ const SLOT_META: Record<
 > = {
   hero: {
     label: "Hero",
-    tone: "ring-1 ring-line text-navy bg-foam hover:bg-foam-deep",
-    activeTone: "bg-donate text-white ring-donate shadow-soft",
+    tone: "ring-1 ring-mist text-ink bg-paper hover:bg-fog",
+    activeTone: "bg-red text-paper ring-red shadow-soft",
     description: "Home page background — pick one.",
   },
   portrait: {
     label: "Portrait",
-    tone: "ring-1 ring-line text-navy bg-foam hover:bg-foam-deep",
-    activeTone: "bg-navy text-foam ring-navy shadow-soft",
+    tone: "ring-1 ring-mist text-ink bg-paper hover:bg-fog",
+    activeTone: "bg-ink text-paper ring-ink shadow-soft",
     description: "About page hero — pick one.",
   },
   event: {
     label: "Event",
-    tone: "ring-1 ring-line text-navy bg-foam hover:bg-foam-deep",
-    activeTone: "bg-sand-warm text-navy ring-sand-warm shadow-soft",
+    tone: "ring-1 ring-mist text-ink bg-paper hover:bg-fog",
+    activeTone: "bg-red-deep text-ink ring-mist-warm shadow-soft",
     description: "Featured event card on home — pick one.",
   },
   "section-bg": {
     label: "Section bg",
-    tone: "ring-1 ring-line text-navy bg-foam hover:bg-foam-deep",
-    activeTone: "bg-navy-soft text-foam ring-navy-soft shadow-soft",
+    tone: "ring-1 ring-mist text-ink bg-paper hover:bg-fog",
+    activeTone: "bg-ink-3 text-paper ring-ink-soft shadow-soft",
     description: "Section / card backgrounds — pick any number.",
   },
   skip: {
     label: "Skip",
-    tone: "ring-1 ring-line text-mist bg-foam hover:bg-foam-deep",
-    activeTone: "bg-mist text-foam ring-mist",
+    tone: "ring-1 ring-mist text-ink-3 bg-paper hover:bg-fog",
+    activeTone: "bg-ink-3 text-paper ring-mist",
     description: "Hide from layout (still visible here).",
   },
 };
@@ -164,7 +164,7 @@ export function HeroPickerClient({ candidates }: { candidates: string[] }) {
   return (
     <>
       {/* Sticky summary panel */}
-      <div className="sticky top-20 z-20 mt-8 -mx-container-x px-container-x py-4 bg-foam/85 backdrop-blur-md ring-1 ring-line rounded-2xl">
+      <div className="sticky top-20 z-20 mt-8 -mx-container-x px-container-x py-4 bg-paper/85 backdrop-blur-md ring-1 ring-mist rounded-2xl">
         <div className="flex flex-wrap gap-x-6 gap-y-3 items-center">
           <SummaryItem label="Hero" filename={summary.hero[0]} />
           <SummaryItem label="Portrait" filename={summary.portrait[0]} />
@@ -179,7 +179,7 @@ export function HeroPickerClient({ candidates }: { candidates: string[] }) {
             type="button"
             onClick={clearAll}
             disabled={totalAssigned === 0 && summary.skip.length === 0}
-            className="text-caption text-mist hover:text-donate disabled:opacity-40"
+            className="text-caption text-ink-3 hover:text-red disabled:opacity-40"
           >
             Clear all
           </button>
@@ -190,8 +190,8 @@ export function HeroPickerClient({ candidates }: { candidates: string[] }) {
             className={cn(
               "inline-flex items-center gap-2 rounded-pill px-4 py-2 text-caption font-medium transition-colors",
               saveState === "saved"
-                ? "bg-navy text-foam"
-                : "bg-donate text-white hover:bg-donate-hover disabled:opacity-60",
+                ? "bg-ink text-paper"
+                : "bg-red text-paper hover:bg-red-deep disabled:opacity-60",
             )}
           >
             {saveState === "saved" ? (
@@ -208,7 +208,7 @@ export function HeroPickerClient({ candidates }: { candidates: string[] }) {
           </button>
         </div>
         {saveState === "error" ? (
-          <p className="mt-2 text-caption text-donate">
+          <p className="mt-2 text-caption text-red">
             Save failed. Dev server still running? Picks remain in browser
             storage either way.
           </p>
@@ -217,7 +217,7 @@ export function HeroPickerClient({ candidates }: { candidates: string[] }) {
 
       {/* Slot legend */}
       <details className="mt-6 group">
-        <summary className="cursor-pointer text-caption text-mist hover:text-navy">
+        <summary className="cursor-pointer text-caption text-ink-3 hover:text-ink">
           What do the slots mean?
         </summary>
         <ul className="mt-3 grid sm:grid-cols-2 gap-2 text-caption text-ink/75">
@@ -239,10 +239,10 @@ export function HeroPickerClient({ candidates }: { candidates: string[] }) {
 
       {/* Grid */}
       {candidates.length === 0 ? (
-        <div className="mt-12 rounded-2xl bg-foam-deep ring-1 ring-line p-6">
-          <p className="text-body text-mist">
+        <div className="mt-12 rounded-2xl bg-fog ring-1 ring-mist p-6">
+          <p className="text-body text-ink-3">
             No candidates found. Drop image files into{" "}
-            <code className="bg-white px-1.5 py-0.5 rounded text-caption">
+            <code className="bg-paper px-1.5 py-0.5 rounded text-caption">
               public/images/hero-candidates/
             </code>
             .
@@ -257,16 +257,16 @@ export function HeroPickerClient({ candidates }: { candidates: string[] }) {
               <li
                 key={file}
                 className={cn(
-                  "rounded-2xl overflow-hidden ring-1 bg-white transition-all",
-                  slot === "hero" && "ring-2 ring-donate shadow-lift",
-                  slot === "portrait" && "ring-2 ring-navy shadow-lift",
-                  slot === "event" && "ring-2 ring-sand-warm shadow-lift",
-                  slot === "section-bg" && "ring-1 ring-navy-soft",
-                  !slot && "ring-line",
-                  isSkipped && "opacity-40 ring-line",
+                  "rounded-2xl overflow-hidden ring-1 bg-paper transition-all",
+                  slot === "hero" && "ring-2 ring-red shadow-lift",
+                  slot === "portrait" && "ring-2 ring-ink shadow-lift",
+                  slot === "event" && "ring-2 ring-mist-warm shadow-lift",
+                  slot === "section-bg" && "ring-1 ring-ink-soft",
+                  !slot && "ring-mist",
+                  isSkipped && "opacity-40 ring-mist",
                 )}
               >
-                <div className="relative aspect-[3/2] bg-foam-deep">
+                <div className="relative aspect-[3/2] bg-fog">
                   <Image
                     src={`/images/hero-candidates/${file}`}
                     alt={file}
@@ -292,7 +292,7 @@ export function HeroPickerClient({ candidates }: { candidates: string[] }) {
                 <div className="p-3 flex flex-col gap-2.5">
                   <div className="flex items-center justify-between gap-2">
                     <p
-                      className="font-mono text-caption text-mist truncate flex-1"
+                      className="font-mono text-caption text-ink-3 truncate flex-1"
                       title={file}
                     >
                       {file}
@@ -301,7 +301,7 @@ export function HeroPickerClient({ candidates }: { candidates: string[] }) {
                       href={`/images/hero-candidates/${file}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-mist hover:text-navy"
+                      className="text-ink-3 hover:text-ink"
                       aria-label="Open full size"
                     >
                       <ExternalLink size={14} />
@@ -334,7 +334,7 @@ export function HeroPickerClient({ candidates }: { candidates: string[] }) {
                         "ml-auto inline-flex items-center justify-center h-7 w-7 rounded-pill transition-all",
                         slot === "skip"
                           ? SLOT_META.skip.activeTone
-                          : "ring-1 ring-line text-mist bg-foam hover:bg-foam-deep hover:text-donate",
+                          : "ring-1 ring-mist text-ink-3 bg-paper hover:bg-fog hover:text-red",
                       )}
                       aria-label="Skip"
                       title="Skip"
@@ -349,12 +349,12 @@ export function HeroPickerClient({ candidates }: { candidates: string[] }) {
         </ul>
       )}
 
-      <div className="mt-16 rounded-2xl bg-foam-deep ring-1 ring-line p-6">
-        <h2 className="font-serif text-h3 text-navy">When you're done</h2>
+      <div className="mt-16 rounded-2xl bg-fog ring-1 ring-mist p-6">
+        <h2 className="font-display text-h3 text-ink">When you're done</h2>
         <ol className="mt-4 list-decimal list-inside space-y-2 text-body text-ink/80">
           <li>
             Hit <strong>Save picks</strong>. Writes to{" "}
-            <code className="bg-white px-1.5 py-0.5 rounded text-caption">
+            <code className="bg-paper px-1.5 py-0.5 rounded text-caption">
               .picks.json
             </code>{" "}
             at the project root (gitignored).
@@ -386,8 +386,8 @@ function SummaryItem({
     <div
       className={cn(
         "flex items-center gap-2",
-        empty && "text-mist",
-        muted && "text-mist",
+        empty && "text-ink-3",
+        muted && "text-ink-3",
       )}
     >
       <span className="text-eyebrow uppercase tracking-wider">{label}</span>

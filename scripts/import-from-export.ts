@@ -187,54 +187,72 @@ async function uploadImageBySrc(
   return { _type: "reference", _ref: asset._id };
 }
 
-async function htmlToPortableText(html: string): Promise<unknown[]> {
-  // Strip Squarespace [caption] shortcodes — they are not real HTML.
+async function htmlToPortableText(
+  html: string,
+): Promise<{ blocks: unknown[]; firstImageRef?: string }> {
   const cleaned = html
     .replace(/\[caption[^\]]*\]/g, "<figure>")
     .replace(/\[\/caption\]/g, "</figure>");
 
   const dom = new JSDOM(`<body>${cleaned}</body>`);
-  return htmlToBlocks(dom.window.document.body.innerHTML, postBodyType, {
-    parseHtml: (h) => new JSDOM(h).window.document,
-    rules: [
-      {
-        deserialize(node, _next, block) {
-          if (node.nodeName === "IMG") {
-            const src = (node as HTMLImageElement).getAttribute("src");
-            if (!src) return undefined;
-            // Mark for second-pass replacement with uploaded asset.
-            return block({
-              _type: "image",
-              _sanityAsset: src,
-              alt: (node as HTMLImageElement).getAttribute("alt") ?? "",
-            } as unknown as never);
-          }
-          return undefined;
-        },
-      },
-    ],
-  });
-}
+  const imgEls = Array.from(
+    dom.window.document.body.querySelectorAll("img"),
+  ) as HTMLImageElement[];
+  const srcToRef = new Map<string, string>();
+  for (const img of imgEls) {
+    const src = img.getAttribute("src");
+    if (!src || srcToRef.has(src)) continue;
+    const ref = await uploadImageBySrc(src);
+    if (ref) srcToRef.set(src, ref._ref);
+  }
 
-async function processBlocks(blocks: unknown[]): Promise<unknown[]> {
-  const out: unknown[] = [];
-  for (const block of blocks) {
-    const b = block as { _type: string; _sanityAsset?: string };
-    if (b._type === "image" && b._sanityAsset) {
-      const ref = await uploadImageBySrc(b._sanityAsset);
-      if (ref) {
-        out.push({ ...b, asset: ref, _sanityAsset: undefined });
-      }
+  let firstImageRef: string | undefined;
+  const parts = cleaned.split(/(<img[^>]*\/?>)/i);
+  const blocks: unknown[] = [];
+  for (const part of parts) {
+    if (/^<img/i.test(part)) {
+      const srcMatch = part.match(/src=["']([^"']+)["']/);
+      const altMatch = part.match(/alt=["']([^"']*)["']/);
+      if (!srcMatch) continue;
+      const ref = srcToRef.get(srcMatch[1]);
+      if (!ref) continue;
+      if (!firstImageRef) firstImageRef = ref;
+      blocks.push({
+        _type: "image",
+        _key: cryptoKey(),
+        asset: { _type: "reference", _ref: ref },
+        alt: altMatch?.[1] ?? "",
+      });
       continue;
     }
-    out.push(block);
+    const trimmed = part.trim();
+    if (!trimmed) continue;
+    const sub = htmlToBlocks(trimmed, postBodyType, {
+      parseHtml: (h) => new JSDOM(h).window.document,
+    });
+    for (const b of sub) {
+      const block = b as unknown as Record<string, unknown>;
+      if (!block._key) block._key = cryptoKey();
+      blocks.push(block);
+    }
   }
-  return out;
+  return { blocks, firstImageRef };
+}
+
+function cryptoKey(): string {
+  return Math.random().toString(36).slice(2, 14);
 }
 
 async function importItem(item: ImportItem) {
-  const blocks = await htmlToPortableText(item.contentHtml);
-  const body = await processBlocks(blocks);
+  const { blocks: body, firstImageRef } = await htmlToPortableText(
+    item.contentHtml,
+  );
+  const coverImage = firstImageRef
+    ? {
+        _type: "image",
+        asset: { _type: "reference", _ref: firstImageRef },
+      }
+    : undefined;
 
   if (item.type === "post") {
     const id = `post-${item.slug}`;
@@ -245,16 +263,21 @@ async function importItem(item: ImportItem) {
       slug: { current: item.slug, _type: "slug" },
       publishedAt: item.publishedAt,
       excerpt: deriveExcerpt(item.contentHtml),
+      coverImage,
       body,
       tags: [],
       featured: false,
     };
     if (args.dry) {
-      console.log(`  [dry] post-${item.slug} (${(body.length)} blocks)`);
+      console.log(
+        `  [dry] post-${item.slug} (${body.length} blocks, cover: ${firstImageRef ? "yes" : "no"})`,
+      );
       return;
     }
     await client.createOrReplace(doc);
-    console.log(`  ✓ post-${item.slug}`);
+    console.log(
+      `  ✓ post-${item.slug}${firstImageRef ? " (with cover)" : ""}`,
+    );
     return;
   }
 
@@ -268,10 +291,11 @@ async function importItem(item: ImportItem) {
       eventDate: item.publishedAt.slice(0, 10),
       location: deriveLocation(item.contentHtml) ?? "—",
       category: detectCategory(item),
+      coverImage,
       body,
     };
     if (args.dry) {
-      console.log(`  [dry] event-${item.slug} (${(body.length)} blocks)`);
+      console.log(`  [dry] event-${item.slug} (${body.length} blocks)`);
       return;
     }
     await client.createOrReplace(doc);

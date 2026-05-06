@@ -1,0 +1,7 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- App Icon — Dark variant (use on dark backgrounds) -->
+  <text x="14" y="34" font-family="Sora, sans-serif" font-weight="900" font-size="34" fill="#F8FAFC" text-anchor="middle" letter-spacing="-2">C</text>
+  <polyline points="24,22 28,16 32,6 36,16 40,20" stroke="#00D4FF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="32" cy="5" r="2.5" fill="#00D4FF"/>
+  <text x="38" y="30" font-family="Sora, sans-serif" font-weight="300" font-size="12" fill="#00D4FF" text-anchor="middle">Ai</text>
+</svg>

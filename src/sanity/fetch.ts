@@ -11,7 +11,6 @@ import { sanityClient } from "./client";
 import { isSanityConfigured } from "./env";
 import {
   recentPosts,
-  allEvents,
   pressEntries,
   givingLevels,
   type SeedPost,
@@ -19,6 +18,8 @@ import {
   type SeedPress,
   type GivingLevel,
 } from "@/lib/seed-data";
+import { getWorldSailingPastEvents } from "@/lib/world-sailing";
+import pressAuto from "@/data/press-auto.json";
 import { SITE } from "@/lib/site";
 import {
   POSTS_INDEX,
@@ -82,11 +83,13 @@ export async function getFeaturedPosts(): Promise<SeedPost[]> {
 }
 
 export async function getEventsIndex(): Promise<SeedEvent[]> {
-  return fetchOrFallback<SeedEvent[]>(EVENTS_INDEX, {}, allEvents);
+  // Fallback is verified World Sailing data. Upcoming events come from
+  // CoachAible at the page level — the WS feed is past-only.
+  return fetchOrFallback<SeedEvent[]>(EVENTS_INDEX, {}, getWorldSailingPastEvents());
 }
 
 export async function getEventBySlug(slug: string): Promise<FetchedEvent | null> {
-  const fallback = allEvents.find((e) => e.slug === slug);
+  const fallback = getWorldSailingPastEvents().find((e) => e.slug === slug);
   return fetchOrFallback<FetchedEvent | null>(
     EVENT_BY_SLUG,
     { slug },
@@ -95,7 +98,18 @@ export async function getEventBySlug(slug: string): Promise<FetchedEvent | null>
 }
 
 export async function getPressMentions(): Promise<SeedPress[]> {
-  return fetchOrFallback<SeedPress[]>(PRESS_MENTIONS, {}, pressEntries);
+  const manual = await fetchOrFallback<SeedPress[]>(
+    PRESS_MENTIONS,
+    {},
+    pressEntries,
+  );
+  const auto = (pressAuto.items ?? []) as SeedPress[];
+  const map = new Map<string, SeedPress>();
+  for (const entry of auto) map.set(entry.externalUrl, entry);
+  for (const entry of manual) map.set(entry.externalUrl, entry);
+  return Array.from(map.values()).sort((a, b) =>
+    a.publishedAt < b.publishedAt ? 1 : a.publishedAt > b.publishedAt ? -1 : 0,
+  );
 }
 
 export async function getSupporters() {

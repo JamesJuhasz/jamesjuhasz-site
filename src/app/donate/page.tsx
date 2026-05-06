@@ -1,20 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Compass, Plane, Wrench, Ship, Award, ShieldCheck, Sparkles, Receipt } from "lucide-react";
+import { Compass, Plane, Wrench, Ship, Award, ShieldCheck, Sparkles, Receipt, Utensils, Building2, Package, Flag } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { Reveal } from "@/components/ui/Reveal";
 import { DonorboxEmbed } from "@/components/sections/DonorboxEmbed";
-import { GivingTiers } from "@/components/sections/GivingTiers";
+import { DonorboxGoalMeter } from "@/components/sections/DonorboxGoalMeter";
 import { FAQ } from "@/components/sections/FAQ";
 import { HeroParallax } from "@/components/sections/HeroParallax";
 import { SectionNav } from "@/components/layout/SectionNav";
 import { JsonLd } from "@/components/JsonLd";
 import { donateActionJsonLd } from "@/lib/json-ld";
-import { pressEntries } from "@/lib/seed-data";
 import { SITE } from "@/lib/site";
 
 export const metadata = {
@@ -30,36 +28,95 @@ export const metadata = {
   },
 };
 
+const DONATE_COLORS = [
+  "#0D1014",
+  "#1A2430",
+  "#2A3848",
+  "#3D5060",
+  "#556878",
+  "#6E8290",
+  "#90A8B4",
+  "#BECDD6",
+] as const;
+
 const budgetCategories = [
   {
-    icon: Plane,
-    label: "Travel",
-    pct: 25,
-    dollars: 9000,
-    body: "Three trips to Europe ($1,500 each), one to Australia ($3,000), three to the US ($500 each). Flights + ground travel.",
-  },
-  {
-    icon: Ship,
-    label: "Regatta entries + housing",
-    pct: 30,
-    dollars: 14000,
-    body: "5–6 regattas a year ($350–$650 each), club dues, team fees, $800/month rent on the road.",
-  },
-  {
     icon: Compass,
-    label: "Coaching + boat",
-    pct: 30,
-    dollars: 18000,
-    body: "On-water coach time, RIB fuel, launch fees, boat charter and transport between continents.",
+    label: "Coaching fees",
+    pct: 25,
+    dollars: 16600,
+    body: "Professional coach on the water, RIB fuel, and real-time feedback throughout the season.",
+  },
+  {
+    icon: Utensils,
+    label: "Food",
+    pct: 16,
+    dollars: 10800,
+    body: "Meals while on the road — roughly $30/day across 11 months of international travel.",
+  },
+  {
+    icon: Building2,
+    label: "Accommodation",
+    pct: 15,
+    dollars: 10000,
+    body: "Rentals and hotels across Malta, Europe, North America, and Australia.",
+  },
+  {
+    icon: Plane,
+    label: "Flights + transport",
+    pct: 14,
+    dollars: 9549,
+    body: "Flights across three continents — Europe, Australia, and North America — plus ground transport.",
+  },
+  {
+    icon: Package,
+    label: "Other",
+    pct: 9,
+    dollars: 6000,
+    body: "Miscellaneous campaign costs — visas, kit, admin, and expenses that don't fit a neat category.",
   },
   {
     icon: Wrench,
     label: "Equipment",
-    pct: 15,
-    dollars: 9000,
-    body: "Four sails a year ($850 each), two wetsuits ($350 each), lines, electronics, and a food budget of $30/day on the road.",
+    pct: 9,
+    dollars: 6057,
+    body: "Competition sails ($2,478), boat transport ($1,500), launching fees ($1,359), and gym membership ($720).",
+  },
+  {
+    icon: Ship,
+    label: "Boat charter",
+    pct: 8,
+    dollars: 5706,
+    body: "Chartered ILCA 7 in Europe — cheaper than shipping my own boat across the Atlantic.",
+  },
+  {
+    icon: Flag,
+    label: "Regatta entries",
+    pct: 4,
+    dollars: 2654,
+    body: "Entry fees for 5–6 regattas a year — World Cup, continental championships, and selection events.",
   },
 ];
+
+function DonatePieChart() {
+  let cumulative = 0;
+  const stops = budgetCategories
+    .map((c, i) => {
+      const start = cumulative;
+      cumulative += c.pct;
+      return `${DONATE_COLORS[i]} ${start}% ${cumulative}%`;
+    })
+    .join(", ");
+  return (
+    <div className="relative flex-shrink-0" style={{ width: 150, height: 150 }}>
+      <div className="rounded-full w-full h-full" style={{ background: `conic-gradient(${stops})` }} role="img" aria-label="Budget breakdown pie chart" />
+      <div className="absolute rounded-full bg-paper flex flex-col items-center justify-center gap-0.5" style={{ width: "50%", height: "50%", top: "25%", left: "25%" }}>
+        <span className="font-display text-h3 text-ink leading-none">$67k</span>
+        <span className="text-caption text-ink-3">CAD/yr</span>
+      </div>
+    </div>
+  );
+}
 
 const trustSignals = [
   {
@@ -80,10 +137,19 @@ const trustSignals = [
   {
     icon: Receipt,
     label: "Tax status",
-    // NOTE: PLACEHOLDER COPY — confirm legal status of the campaign before
-    // shipping. If a registered athlete-trust or charity is in place,
-    // donations may be tax-deductible and this should be updated.
-    body: "Direct campaign — donations are not tax-deductible. Every dollar funds training, travel, and equipment for the LA 2028 cycle.",
+    body: (
+      <>
+        Donations through Wind Athletes Canada are tax-deductible.{" "}
+        <a
+          href="https://www.windathletes.ca/athletes/james-juhasz"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline"
+        >
+          windathletes.ca/athletes/james-juhasz
+        </a>
+      </>
+    ),
   },
 ];
 
@@ -93,7 +159,7 @@ const faqItems = [
     answer: (
       <p>
         Directly to campaign costs — coaching, travel, entry fees, and
-        equipment. The campaign runs at roughly $60,000 CAD/year; about half is
+        equipment. The campaign runs at roughly $67,000 CAD/year; about half is
         covered by Canadian Sailing Team support, and donations close the gap.
       </p>
     ),
@@ -112,9 +178,17 @@ const faqItems = [
     question: "Is my donation tax-deductible?",
     answer: (
       <p>
-        Tax-receipt status is in progress. Once finalized I'll update this
-        section and email past supporters. Until then, donations are personal
-        contributions to the campaign.
+        Yes — donations made through Wind Athletes Canada are tax-deductible.
+        See{" "}
+        <a
+          href="https://www.windathletes.ca/athletes/james-juhasz"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-ink underline"
+        >
+          windathletes.ca/athletes/james-juhasz
+        </a>{" "}
+        for details and to donate through that channel.
       </p>
     ),
   },
@@ -160,7 +234,8 @@ export default async function DonatePage({
   const sp = await searchParams;
   const raw = Array.isArray(sp.amount) ? sp.amount[0] : sp.amount;
   const amount = raw && /^\d+$/.test(raw) ? Number(raw) : null;
-  const featuredPress = pressEntries[0];
+  const rawInterval = Array.isArray(sp.interval) ? sp.interval[0] : sp.interval;
+  const interval = rawInterval === "m" || rawInterval === "y" ? rawInterval : null;
   // Site (used in OG image fallback)
   void SITE;
 
@@ -170,7 +245,6 @@ export default async function DonatePage({
       <SectionNav
         sections={[
           { id: "give", label: "Give" },
-          { id: "levels", label: "Levels" },
           { id: "where", label: "Where it goes" },
           { id: "trust", label: "Trust" },
           { id: "faq", label: "FAQ" },
@@ -178,30 +252,54 @@ export default async function DonatePage({
       />
       {/* HERO — half-viewport, embed above the fold */}
       <section className="relative isolate overflow-hidden">
-        <HeroParallax src="/images/section/02.jpg" priority amount={0.1} />
+        <HeroParallax src="/images/hero-candidates/img_8434.jpg" priority amount={0.1} />
         <div
           aria-hidden
           className="absolute inset-0 -z-10 bg-gradient-to-b from-ink/40 to-ink/85"
         />
         <Container width="wide" className="pt-section-y pb-section-y">
-          <div className="grid lg:grid-cols-12 gap-12 items-start">
-            <div className="lg:col-span-5 text-paper">
+          <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 lg:items-stretch">
+            <div className="lg:col-span-7 text-paper flex flex-col">
               <Badge tone="donate">Donate</Badge>
               <h1 className="mt-4 font-display text-display text-paper max-w-[16ch]">
                 Help me get to LA 2028.
               </h1>
               <p className="mt-6 max-w-prose text-body-lg text-paper/85">
-                A full year on the campaign costs around $60,000 CAD. National
-                team funding covers about half — donations and sponsorship close
-                the gap. Recurring monthly support is the most useful thing,
-                because it lets me plan a season instead of a regatta.
+                A full year on campaign costs $67,000 CAD. National funding
+                covers part — donations and sponsorship close the $39,000 gap.
+                Recurring monthly support is the most useful as it allows me to
+                plan out my entire season.
               </p>
               <p className="mt-3 text-caption text-paper/60">
                 Stripe + PayPal via Donorbox · Secure · Cancel anytime
               </p>
+              <div id="where" className="mt-5">
+                <p className="font-display text-h3 text-paper mb-3">Where your support goes</p>
+                <div className="rounded-2xl bg-paper ring-1 ring-mist p-5">
+                  <div className="flex flex-col sm:flex-row gap-5 sm:items-start items-center">
+                    <DonatePieChart />
+                    <ul className="flex-1 divide-y divide-mist min-w-0">
+                      {budgetCategories.map(({ icon: Icon, ...c }, i) => (
+                        <li key={c.label} className="flex items-start gap-2 py-2">
+                          <span aria-hidden className="mt-1.5 h-2 w-2 rounded-full flex-shrink-0" style={{ background: DONATE_COLORS[i] }} />
+                          <Icon size={13} className="mt-1.5 text-ink-3 flex-shrink-0" aria-hidden />
+                          <div className="flex-1 min-w-0">
+                            <span className="text-caption font-medium text-ink">{c.label}</span>
+                            <p className="text-[11px] text-ink-3 leading-snug">{c.body}</p>
+                          </div>
+                          <div className="text-right flex-shrink-0 pl-2">
+                            <div className="text-caption font-semibold text-ink">{c.pct}%</div>
+                            <div className="text-[11px] text-ink-3">~{fmtCurrency.format(c.dollars)}</div>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="lg:col-span-7" id="give">
-              <DonorboxEmbed amount={amount} />
+            <div className="lg:col-span-5 lg:flex lg:flex-col" id="give">
+              <DonorboxEmbed amount={amount} interval={interval} className="lg:flex-1" />
               {amount ? (
                 <p className="mt-3 text-caption text-paper/70">
                   Pre-filled with {fmtCurrency.format(amount)}. Adjust the
@@ -213,99 +311,35 @@ export default async function DonatePage({
         </Container>
       </section>
 
-      {/* GIVING LEVELS */}
-      <section id="levels" className="py-section-y">
-        <Container width="wide">
-          <SectionHeader
-            eyebrow="Giving levels"
-            title="Pick a tier — or set your own."
-            lede="Each level maps to something specific the campaign actually needs. Click a tier to pre-fill the form above."
-          />
-          <Reveal>
-            <div className="mt-12">
-              <GivingTiers />
+      {/* SEASON GOAL */}
+      <section className="py-section-y bg-paper border-b border-mist">
+        <Container width="default">
+          <div className="max-w-3xl mx-auto">
+            <p className="text-eyebrow uppercase tracking-wider text-ink-3">
+              Season goal
+            </p>
+            <p className="mt-2 font-display text-h3 text-ink">
+              Closing the gap on a $39,000 season.
+            </p>
+            <div className="mt-6 flex flex-col items-start gap-6">
+              <DonorboxGoalMeter className="w-full" />
+              <Button
+                href="#give"
+                variant="donate"
+                size="md"
+                data-cta-location="donate_progress"
+              >
+                Donate now
+              </Button>
             </div>
-          </Reveal>
-          <p className="mt-6 text-caption text-ink-3">
-            Most supporters give monthly — recurring support is the most useful kind.
-          </p>
-        </Container>
-      </section>
-
-      {/* WHERE YOUR SUPPORT GOES */}
-      <section id="where" className="py-section-y bg-fog border-y border-mist">
-        <Container width="wide">
-          <SectionHeader
-            eyebrow="Transparency"
-            title="Where your support goes"
-            lede="A 12-month campaign runs around $60,000 CAD. Here's where it lands."
-          />
-          <Reveal>
-            <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-              {budgetCategories.map(({ icon: Icon, ...c }) => (
-                <Card key={c.label} className="flex flex-col gap-3">
-                  <div className="inline-flex h-10 w-10 items-center justify-center rounded-pill bg-ink text-paper">
-                    <Icon size={18} aria-hidden />
-                  </div>
-                  <p className="font-display text-h3 text-ink">{c.label}</p>
-                  <p className="text-body text-ink/75">{c.body}</p>
-                  <div className="mt-auto pt-2 flex items-baseline justify-between border-t border-mist">
-                    <span className="text-body-lg font-medium text-ink">
-                      {c.pct}%
-                    </span>
-                    <span className="text-caption text-ink-3">
-                      ~{fmtCurrency.format(c.dollars)}/yr
-                    </span>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          </Reveal>
-          {/* Bar chart */}
-          <Reveal delay={0.1}>
-            <div className="mt-12 rounded-2xl bg-white ring-1 ring-mist p-6">
-              <p className="text-eyebrow uppercase tracking-wider text-ink-3 mb-4">
-                Annual budget split
-              </p>
-              <div className="flex h-10 w-full overflow-hidden rounded-pill ring-1 ring-mist">
-                {budgetCategories.map((c, i) => (
-                  <div
-                    key={c.label}
-                    className="flex items-center justify-center text-caption text-paper font-medium"
-                    style={{
-                      width: `${c.pct}%`,
-                      background: ["#0E1116", "#2A2F36", "#5A6068", "#C8CDD3"][i % 4],
-                      color: i < 2 ? "#FFFFFF" : "#0E1116",
-                    }}
-                    title={`${c.label}: ${c.pct}%`}
-                  >
-                    {c.pct}%
-                  </div>
-                ))}
-              </div>
-              <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-caption text-ink-3">
-                {budgetCategories.map((c, i) => (
-                  <span key={c.label} className="inline-flex items-center gap-2">
-                    <span
-                      aria-hidden
-                      className="h-2.5 w-2.5 rounded-full"
-                      style={{
-                        background: ["#0E1116", "#2A2F36", "#5A6068", "#C8CDD3"][i % 4],
-                      }}
-                    />
-                    {c.label}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </Reveal>
+          </div>
         </Container>
       </section>
 
       {/* PHOTOGRAPHIC BREAK */}
       <section aria-hidden className="relative h-[42vh] min-h-[280px] overflow-hidden">
         <Image
-          src="/images/section/04.jpg"
+          src="/images/hero-candidates/img_8859.jpg"
           alt=""
           fill
           sizes="100vw"
@@ -341,66 +375,6 @@ export default async function DonatePage({
                   </li>
                 ))}
               </ul>
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* SOCIAL PROOF */}
-      <section className="py-section-y bg-fog border-y border-mist">
-        <Container width="wide">
-          <SectionHeader
-            eyebrow="Voices"
-            title="Why people support the campaign"
-          />
-          <div className="mt-10 grid lg:grid-cols-12 gap-8">
-            <div className="lg:col-span-5">
-              <Card tone="navy" className="h-full flex flex-col gap-4">
-                <p className="text-eyebrow uppercase tracking-wider text-red">
-                  From a supporter
-                </p>
-                <p className="font-display text-h3 text-paper leading-snug">
-                  "James turned up to every regatta last year better prepared
-                  than the year before. That's the campaign in one sentence —
-                  and that's what supporting him gets you."
-                </p>
-                <div className="mt-auto flex items-center gap-3">
-                  {/* PLACEHOLDER initials — supporter is anonymous; "FS" = Founding Supporter. Replace when a named quote is available. */}
-                  <span
-                    aria-hidden
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-fog text-ink text-eyebrow uppercase tracking-wider flex-shrink-0"
-                  >
-                    FS
-                  </span>
-                  <p className="text-caption text-paper/70">
-                    — Founding supporter, Oakville
-                  </p>
-                </div>
-              </Card>
-            </div>
-            <div className="lg:col-span-7">
-              <Card className="flex flex-col gap-4">
-                <p className="text-eyebrow uppercase tracking-wider text-ink-3">
-                  From the press
-                </p>
-                <p className="font-display text-h3 text-ink leading-snug">
-                  "{featuredPress.articleTitle}"
-                </p>
-                {featuredPress.excerpt ? (
-                  <p className="text-body text-ink/75">
-                    {featuredPress.excerpt}
-                  </p>
-                ) : null}
-                <p className="text-caption text-ink-3">
-                  — {featuredPress.publication}
-                </p>
-                <Link
-                  href="/press"
-                  className="text-caption text-ink underline mt-auto"
-                >
-                  Read all coverage →
-                </Link>
-              </Card>
             </div>
           </div>
         </Container>

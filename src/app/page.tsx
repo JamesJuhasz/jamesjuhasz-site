@@ -4,17 +4,64 @@ import { Card } from "@/components/ui/Card";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { StatNumber } from "@/components/ui/StatNumber";
 import { Reveal } from "@/components/ui/Reveal";
-import { Badge } from "@/components/ui/Badge";
 import { HomeHero } from "@/components/sections/HomeHero";
 import { GivingTiers } from "@/components/sections/GivingTiers";
 import { PostCard } from "@/components/cards/PostCard";
 import { EventCard } from "@/components/cards/EventCard";
 import { DonateCTAInline } from "@/components/cta/DonateCTA";
-import { trainingStats } from "@/lib/seed-data";
-import { getPostsIndex, getEventsIndex } from "@/sanity/fetch";
+import { deriveStats, fetchTrainingStats } from "@/lib/coachaible";
+import { getPostsIndex, getEventsIndex, getPressMentions } from "@/sanity/fetch";
+import { Badge } from "@/components/ui/Badge";
 import { SITE } from "@/lib/site";
 
 export const revalidate = 60;
+
+const HOME_BUDGET_COLORS = ["#0E1116", "#2A2F36", "#5A6068", "#C8CDD3"] as const;
+const HOME_BUDGET = [
+  { label: "Coaching + boat", pct: 35, amt: "~$23,500", desc: "Coach fees, charter & freight" },
+  { label: "Regattas + housing", pct: 35, amt: "~$23,500", desc: "Entry fees, accommodation" },
+  { label: "Travel", pct: 16, amt: "~$10,700", desc: "Flights, transport to venues" },
+  { label: "Equipment + other", pct: 14, amt: "~$9,300", desc: "Sails, gear, admin" },
+];
+
+function BudgetDonut() {
+  let cumulative = 0;
+  const stops = HOME_BUDGET.map((c, i) => {
+    const start = cumulative;
+    cumulative += c.pct;
+    return `${HOME_BUDGET_COLORS[i]} ${start}% ${cumulative}%`;
+  }).join(", ");
+  return (
+    <div className="relative flex-shrink-0" style={{ width: 96, height: 96 }}>
+      <div className="rounded-full w-full h-full" style={{ background: `conic-gradient(${stops})` }} role="img" aria-label="Budget breakdown" />
+      <div className="absolute rounded-full bg-paper inset-0 m-auto" style={{ width: "50%", height: "50%", top: "25%", left: "25%" }} />
+    </div>
+  );
+}
+
+function StatOrDash({
+  value,
+  label,
+  suffix,
+}: {
+  value: number | null;
+  label: string;
+  suffix?: string;
+}) {
+  if (value === null) {
+    return (
+      <div className="flex flex-col items-start">
+        <span className="font-display text-display leading-none tracking-tight text-ink/40">
+          —
+        </span>
+        <span className="mt-2 text-caption uppercase tracking-wider text-ink-3">
+          {label}
+        </span>
+      </div>
+    );
+  }
+  return <StatNumber value={value} label={label} suffix={suffix} />;
+}
 
 export const metadata = {
   title: `${SITE.name} — ${SITE.tagline}`,
@@ -22,11 +69,17 @@ export const metadata = {
 };
 
 export default async function HomePage() {
-  const [allPosts, events] = await Promise.all([
+  const [allPosts, events, statsApi, allPress] = await Promise.all([
     getPostsIndex(),
     getEventsIndex(),
+    fetchTrainingStats(365),
+    getPressMentions(),
   ]);
+  const stats = statsApi ? deriveStats(statsApi) : null;
   const recentPosts = allPosts.slice(0, 3);
+  const featuredPress = allPress
+    .filter((p) => (p as any).featured)
+    .slice(0, 3);
   const featuredEvent =
     events.find((e) => e.status === "upcoming") ?? events[0];
 
@@ -37,42 +90,57 @@ export default async function HomePage() {
       {/* SOCIAL PROOF BAR */}
       <section className="bg-fog border-y border-mist">
         <Container width="wide" className="py-12">
-          <p className="text-eyebrow uppercase tracking-wider text-ink-3 mb-6">
+          <p className="font-mono font-bold text-[10px] uppercase tracking-[0.2em] text-ink-3 mb-3">
             Backed by
           </p>
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 mb-12">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-y-8 gap-x-12 lg:gap-x-24 mb-11">
             {SITE.supporterGroups.map((group) => (
               <div key={group.label}>
-                <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-ink-3 mb-3">
+                <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-ink-3 mb-3">
                   {group.label}
                 </p>
-                <ul className="flex flex-col gap-1.5">
+                <ul className="flex flex-wrap items-center gap-x-6 sm:gap-x-8 lg:gap-x-12 gap-y-4">
                   {group.items.map((s) => (
-                    <li
-                      key={s.name}
-                      className="text-body-lg font-display text-ink/80"
-                    >
-                      {s.name}
+                    <li key={s.name}>
+                      <a
+                        href={s.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex flex-col items-center gap-1.5 transition hover:opacity-80"
+                      >
+                        <img
+                          src={s.logo}
+                          alt={s.name}
+                          loading="lazy"
+                          className="w-auto object-contain"
+                          style={{ height: '48px', maxWidth: '180px' }}
+                        />
+                        <span className="font-mono uppercase text-ink-3 text-center leading-tight" style={{ fontSize: '9px', letterSpacing: '0.15em' }}>
+                          {s.name}
+                        </span>
+                      </a>
                     </li>
                   ))}
                 </ul>
               </div>
             ))}
           </div>
-          <Reveal>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
-              {trainingStats.map((s) => (
-                <StatNumber
-                  key={s.label}
-                  value={s.value}
-                  label={s.label}
-                />
-              ))}
-            </div>
-          </Reveal>
-          <p className="mt-6 text-caption text-ink-3 max-w-prose">
-            Training summary, last 12 months — full-time campaign on the road.
-          </p>
+        </Container>
+      </section>
+
+      {/* CAMPAIGN STATS */}
+      <section className="py-8 border-b border-mist">
+        <Container width="wide">
+          <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-6">
+            <h2 className="font-display text-h3 text-ink">The campaign so far</h2>
+            <p className="text-caption uppercase tracking-wider text-ink-3">Last 365 days</p>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <StatOrDash value={stats?.trainingDays ?? null} label="Training Days" />
+            <StatOrDash value={stats?.eventsCompleted ?? null} label="Events completed" />
+            <StatOrDash value={stats?.kmCycled ?? null} label="KM cycled" />
+            <StatOrDash value={stats?.countriesTraveled ?? null} label="Countries Visited" />
+          </div>
         </Container>
       </section>
 
@@ -85,10 +153,24 @@ export default async function HomePage() {
                 <SectionHeader
                   eyebrow="Why this matters"
                   title="Most Olympic campaigns don't make it. The ones that do, do it on the back of supporters."
-                  lede="A full year on the campaign costs around $60,000 CAD. National team funding covers about half. The rest is coaching, regatta entries, travel, and the boat itself — and that's what every donation goes toward."
+                  lede="A full year on campaign costs $67,000 CAD. National funding covers part — donations and sponsorship close the $39,000 gap. Recurring monthly support is the most useful as it allows me to plan out my entire season."
                 />
+                <dl className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-4 border-t border-mist pt-5">
+                  <div>
+                    <dt className="font-display text-xl font-bold text-ink leading-none">~$39,000</dt>
+                    <dd className="text-caption text-ink-3 mt-1 leading-tight">Annual supporter gap</dd>
+                  </div>
+                  <div>
+                    <dt className="font-display text-xl font-bold text-ink leading-none">4 pillars</dt>
+                    <dd className="text-caption text-ink-3 mt-1 leading-tight">Coaching · regattas · travel · equipment</dd>
+                  </div>
+                  <div>
+                    <dt className="font-display text-xl font-bold text-ink leading-none">LA 2028</dt>
+                    <dd className="text-caption text-ink-3 mt-1 leading-tight">Olympic Games target</dd>
+                  </div>
+                </dl>
               </Reveal>
-              <div className="mt-8 flex flex-wrap items-center gap-3">
+              <div className="mt-6 flex flex-wrap items-center gap-3">
                 <Button href="/donate" variant="donate" size="lg" data-cta-location="home_stakes">
                   Make it possible
                 </Button>
@@ -99,17 +181,27 @@ export default async function HomePage() {
             </div>
             <div className="lg:col-span-5">
               <Reveal delay={0.15}>
-                <Card tone="navy" className="flex flex-col gap-3">
-                  <Badge tone="sand">Anchor</Badge>
-                  <StatNumber
-                    prefix="$"
-                    value={50}
-                    label="funds one full day of training in Europe"
-                  />
-                  <p className="text-body text-paper/80">
-                    Coaching time, RIB fuel, launch fees, food on the road —
-                    the cost of one race day in a real fleet.
-                  </p>
+                <Card className="flex flex-col gap-5 p-6">
+                  <p className="text-eyebrow uppercase tracking-wider text-ink-3">Where your support goes</p>
+                  <div className="flex flex-col sm:flex-row gap-5 w-full sm:items-start items-center">
+                    <BudgetDonut />
+                    <div className="flex flex-col gap-3 flex-1 min-w-0">
+                      {HOME_BUDGET.map((c, i) => (
+                        <div key={c.label} className="flex items-start gap-2">
+                          <span aria-hidden className="h-2 w-2 rounded-full flex-shrink-0 mt-1.5" style={{ background: HOME_BUDGET_COLORS[i] }} />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-caption text-ink leading-tight">{c.label}</p>
+                            <p className="text-[10px] text-ink-3 leading-tight mt-0.5">{c.desc}</p>
+                          </div>
+                          <div className="text-right flex-shrink-0">
+                            <p className="text-caption font-semibold text-ink leading-tight">{c.pct}%</p>
+                            <p className="text-[10px] text-ink-3 leading-tight mt-0.5">{c.amt}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <p className="text-caption text-ink-3">$67k CAD/yr — <a href="/donate#where" className="underline">see the full breakdown</a></p>
                 </Card>
               </Reveal>
             </div>
@@ -139,6 +231,48 @@ export default async function HomePage() {
           </div>
         </Container>
       </section>
+
+      {/* IN THE NEWS */}
+      {featuredPress.length > 0 && (
+        <section className="py-16">
+          <Container width="wide">
+            <div className="flex flex-wrap items-end justify-between gap-6 mb-8">
+              <SectionHeader
+                eyebrow="Press"
+                title="In the news"
+                lede="Selected coverage of the campaign."
+              />
+              <Button href="/press" variant="secondary" size="md">
+                All press →
+              </Button>
+            </div>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {featuredPress.map((p, i) => (
+                <Reveal key={p.externalUrl} delay={i * 0.08}>
+                  <a
+                    href={p.externalUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group block h-full"
+                  >
+                    <Card className="h-full flex flex-col gap-3 p-6 transition hover:shadow-lift">
+                      <Badge>{p.publication}</Badge>
+                      <h3 className="font-display text-h3 text-ink group-hover:text-ink-2 transition-colors">
+                        {p.articleTitle.replace(/\s+-\s+\S.*$/, "").trim()}
+                      </h3>
+                      {p.excerpt && (
+                        <p className="text-body text-ink/70 line-clamp-3">
+                          {p.excerpt.replace(/\s+\S+\.\S+$/, "").trim()}
+                        </p>
+                      )}
+                    </Card>
+                  </a>
+                </Reveal>
+              ))}
+            </div>
+          </Container>
+        </section>
+      )}
 
       {/* UPCOMING / RECENT EVENT */}
       {featuredEvent ? (

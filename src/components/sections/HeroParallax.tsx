@@ -3,6 +3,7 @@
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import { useRef } from "react";
+import { useIsTouch } from "@/hooks/useIsTouch";
 
 type Props = {
   src: string;
@@ -35,15 +36,14 @@ export function HeroParallax({
 }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
+  const isTouch = useIsTouch();
+  // Touch devices stutter on scroll-bound transforms (mobile Safari especially).
+  const disableParallax = reduce || isTouch;
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
-  // Translate within an over-sized inner container so the bottom edge of
-  // the image never lifts above the section. Range: 0% → -amount*100%.
   const y = useTransform(scrollYProgress, [0, 1], ["0%", `-${amount * 100}%`]);
-  // Inner container is taller than its parent by the parallax amount,
-  // anchored at top:0 so the translate consumes the extra height.
   const oversize = `${100 + amount * 100}%`;
 
   return (
@@ -54,7 +54,7 @@ export function HeroParallax({
       <motion.div
         className="absolute top-0 left-0 right-0"
         style={
-          reduce
+          disableParallax
             ? { height: oversize }
             : { height: oversize, y }
         }
@@ -64,7 +64,7 @@ export function HeroParallax({
           alt={alt}
           fill
           priority={priority}
-          quality={90}
+          unoptimized
           sizes="100vw"
           className="object-cover"
           style={{ objectPosition }}

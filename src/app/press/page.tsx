@@ -1,13 +1,12 @@
 import { ExternalLink } from "lucide-react";
 import { Container } from "@/components/ui/Container";
-import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Card } from "@/components/ui/Card";
+import { HeroParallax } from "@/components/sections/HeroParallax";
 import { Badge } from "@/components/ui/Badge";
 import { Reveal } from "@/components/ui/Reveal";
 import { Button } from "@/components/ui/Button";
 import { DonateCTAInline } from "@/components/cta/DonateCTA";
 import { getPressMentions } from "@/sanity/fetch";
-import type { SeedPress } from "@/lib/seed-data";
 
 export const revalidate = 60;
 
@@ -21,26 +20,6 @@ const dateFmt = new Intl.DateTimeFormat("en-CA", {
   month: "long",
   year: "numeric",
 });
-
-/**
- * Hand-curated URLs for articles where James is the primary subject but the
- * title/excerpt don't contain "Juhasz" explicitly. Auto-discovered entries
- * matching one of these are surfaced as featured.
- */
-const featuredUrlMatchers: RegExp[] = [
-  // Toronto Guardian: "Canadian sailor James Juhasz eyes post-pandemic competition"
-  /toronto-guardian/i,
-  // Sail Canada: "Juhasz named to Canadian Sailing Team for 2026 cycle"
-  /juhasz-named/i,
-];
-
-function isJamesFeatured(p: SeedPress): boolean {
-  if (p.featured) return true;
-  const haystack = `${p.articleTitle} ${p.excerpt ?? ""}`.toLowerCase();
-  if (haystack.includes("juhasz") || haystack.includes("james juhasz")) return true;
-  if (featuredUrlMatchers.some((re) => re.test(p.externalUrl))) return true;
-  return false;
-}
 
 /**
  * Hand-mapped monograms for known publications. Falls back to the first 1-2
@@ -83,33 +62,66 @@ function getMonogram(publication: string): string {
   return stripped.slice(0, 2).toUpperCase() || "··";
 }
 
+function normalizeTitle(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/\s+-\s+\S.*$/, "") // strip " - Publication Name" suffix
+    .trim();
+}
+
 export default async function PressPage() {
   const press = await getPressMentions();
   const sorted = [...press].sort(
     (a, b) =>
       new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
   );
-  const featured = sorted.filter(isJamesFeatured);
-  const others = sorted.filter((p) => !isJamesFeatured(p));
-  const publications = Array.from(
-    new Set(featured.map((p) => p.publication)),
+
+  // Deduplicate same-story articles from different publications, keeping the
+  // entry with an image where one exists.
+  const byTitle = new Map<string, (typeof sorted)[0]>();
+  for (const p of sorted) {
+    const key = normalizeTitle(p.articleTitle);
+    const existing = byTitle.get(key);
+    if (!existing || (!existing.imageUrl && p.imageUrl)) {
+      byTitle.set(key, p);
+    }
+  }
+  const deduped = Array.from(byTitle.values()).sort(
+    (a, b) =>
+      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
   );
+
+  const publications = Array.from(new Set(deduped.map((p) => p.publication)));
 
   return (
     <>
-      <section className="py-section-y bg-fog border-b border-mist">
-        <Container width="wide">
-          <SectionHeader
-            eyebrow="Press"
-            title="Media & recognition"
-            lede="Selected coverage of the campaign — published articles, profiles, and results coverage."
-          />
+      <section className="relative isolate overflow-hidden min-h-[55svh] flex items-end">
+        <HeroParallax
+          src="/images/hero-candidates/dsc_1946.jpg"
+          alt="Action photographed on the racecourse"
+          priority
+          amount={0.1}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 h-3/4 -z-10 bg-gradient-to-t from-ink/85 via-ink/45 to-transparent"
+        />
+        <Container width="wide" className="pt-section-y pb-section-y">
+          <p className="text-eyebrow uppercase font-medium text-paper/70 mb-3">
+            Press
+          </p>
+          <h1 className="font-display text-display text-paper max-w-[20ch]">
+            Media & recognition
+          </h1>
+          <p className="mt-6 max-w-prose text-body-lg text-paper/85">
+            Selected coverage of the campaign — published articles, profiles, and results coverage.
+          </p>
           {publications.length > 1 ? (
             <ul className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3">
               {publications.map((p) => (
                 <li
                   key={p}
-                  className="text-body-lg font-display text-ink/70"
+                  className="text-body-lg font-display text-paper/75"
                 >
                   {p}
                 </li>
@@ -123,7 +135,7 @@ export default async function PressPage() {
         <Container width="default">
           <Reveal>
             <ul className="flex flex-col divide-y divide-mist">
-              {featured.map((p) => (
+              {deduped.map((p) => (
                 <li key={p.externalUrl} className="py-6 first:pt-0 last:pb-0">
                   <a
                     href={p.externalUrl}
@@ -173,48 +185,6 @@ export default async function PressPage() {
           </Reveal>
         </Container>
       </section>
-
-      {others.length > 0 ? (
-        <section className="py-section-y bg-fog border-t border-mist">
-          <Container width="default">
-            <SectionHeader
-              eyebrow="Context"
-              title="Canadian sailing in the news"
-              lede="Coverage of the broader Canadian Olympic-class sailing scene — fellow teammates, fleet results, and program announcements."
-            />
-            <Reveal>
-              <ul className="mt-10 flex flex-col divide-y divide-mist">
-                {others.map((p) => (
-                  <li
-                    key={p.externalUrl}
-                    className="py-4 first:pt-0 last:pb-0"
-                  >
-                    <a
-                      href={p.externalUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group grid md:grid-cols-12 gap-3 items-baseline"
-                    >
-                      <p className="md:col-span-2 text-caption text-ink-3 font-mono">
-                        {dateFmt.format(new Date(p.publishedAt))}
-                      </p>
-                      <p className="md:col-span-2 text-caption text-ink-3">
-                        {p.publication}
-                      </p>
-                      <h4 className="md:col-span-7 text-body text-ink group-hover:text-ink-2 transition-colors">
-                        {p.articleTitle}
-                      </h4>
-                      <span className="md:col-span-1 inline-flex items-center md:justify-end text-ink-3 group-hover:text-ink">
-                        <ExternalLink size={14} />
-                      </span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
-          </Container>
-        </section>
-      ) : null}
 
       <section className="py-section-y bg-fog border-y border-mist">
         <Container width="default">

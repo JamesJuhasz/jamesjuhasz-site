@@ -13,6 +13,13 @@ export async function GET(req: NextRequest) {
   const title = searchParams.get("title") ?? SITE.name;
   const subtitle = searchParams.get("subtitle") ?? SITE.tagline;
 
+  const eyebrow =
+    variant === "post"
+      ? "Journal · Newsletter"
+      : variant === "event"
+        ? "Race · Event"
+        : "ILCA 7 · CAN 217718 · LA28";
+
   return new ImageResponse(
     (
       <div
@@ -23,11 +30,13 @@ export async function GET(req: NextRequest) {
           flexDirection: "column",
           justifyContent: "flex-end",
           padding: 80,
-          background:
-            "radial-gradient(120% 80% at 30% 30%, #1F365A 0%, #0E2240 50%, #061122 100%)",
-          fontFamily: "Georgia, serif",
+          background: "#FFFFFF",
+          fontFamily: "system-ui, sans-serif",
+          color: "#0E1116",
+          position: "relative",
         }}
       >
+        {/* Top eyebrow — mono-style red */}
         <div
           style={{
             position: "absolute",
@@ -35,63 +44,104 @@ export async function GET(req: NextRequest) {
             left: 80,
             display: "flex",
             alignItems: "center",
-            color: "#D8C4A6",
-            letterSpacing: 3,
+            color: "#D52B1E",
+            letterSpacing: 6,
             textTransform: "uppercase",
-            fontSize: 22,
-            fontFamily: "system-ui",
+            fontSize: 18,
+            fontWeight: 500,
           }}
         >
-          {variant === "post"
-            ? "Newsletter"
-            : variant === "event"
-              ? "Event"
-              : "Olympic ILCA 7 — LA 2028"}
+          {eyebrow}
         </div>
+
+        {/* Sail number watermark — top right */}
         <div
           style={{
-            color: "#F6F2EA",
-            fontSize: 80,
-            lineHeight: 1.1,
-            maxWidth: 980,
+            position: "absolute",
+            top: 56,
+            right: 80,
             display: "flex",
-            fontWeight: 500,
-            letterSpacing: -2,
+            flexDirection: "column",
+            alignItems: "flex-end",
+          }}
+        >
+          <div
+            style={{
+              color: "#D52B1E",
+              fontSize: 14,
+              letterSpacing: 8,
+              textTransform: "uppercase",
+              fontWeight: 600,
+              display: "flex",
+            }}
+          >
+            CAN
+          </div>
+          <div
+            style={{
+              color: "#0E1116",
+              fontSize: 56,
+              fontWeight: 700,
+              letterSpacing: 2,
+              lineHeight: 1,
+              display: "flex",
+              marginTop: 4,
+            }}
+          >
+            217718
+          </div>
+        </div>
+
+        {/* Headline */}
+        <div
+          style={{
+            color: "#0E1116",
+            fontSize: 92,
+            lineHeight: 0.95,
+            maxWidth: 1000,
+            display: "flex",
+            fontWeight: 700,
+            letterSpacing: -3,
           }}
         >
           {title}
         </div>
+
+        {/* Subtitle */}
         <div
           style={{
             marginTop: 24,
-            color: "rgba(246, 242, 234, 0.8)",
-            fontSize: 28,
-            fontFamily: "system-ui",
+            color: "#5A6068",
+            fontSize: 24,
             display: "flex",
             maxWidth: 900,
           }}
         >
           {subtitle}
         </div>
+
+        {/* Footer dot + url */}
         <div
           style={{
             position: "absolute",
             bottom: 60,
             right: 80,
-            color: "#F6F2EA",
-            fontSize: 22,
-            fontFamily: "system-ui",
+            color: "#0E1116",
+            fontSize: 18,
             display: "flex",
             alignItems: "center",
             gap: 12,
+            letterSpacing: 2,
+            textTransform: "uppercase",
+            fontWeight: 500,
           }}
         >
           <div
             style={{
-              width: 12,
-              height: 12,
+              width: 10,
+              height: 10,
               borderRadius: "50%",
-              background: "#E04E2A",
+              background: "#D52B1E",
               display: "flex",
             }}
           />

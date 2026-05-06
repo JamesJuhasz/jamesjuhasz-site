@@ -40,7 +40,8 @@ export function Footer() {
   const year = new Date().getFullYear();
   const showSocial = Boolean(SITE.social.instagram || SITE.social.youtube);
   return (
-    <footer className="mt-section-y bg-ink text-paper">
+    <>
+    <footer className="bg-ink text-paper">
       <Container className="py-section-y">
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-5 flex flex-col">
@@ -55,12 +56,22 @@ export function Footer() {
                 {SITE.social.instagram ? (
                   <a
                     href={SITE.social.instagram}
-                    aria-label="Instagram"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-pill ring-1 ring-paper/30 text-paper hover:bg-paper hover:text-ink transition-colors"
+                    aria-label="Follow on Instagram"
+                    className="flex flex-col items-center gap-1.5 transition-opacity hover:opacity-80 min-h-[44px] justify-center px-2"
                   >
-                    <InstagramGlyph />
+                    <img
+                      src="/images/brand/instagram-logo.svg"
+                      alt=""
+                      style={{ width: "2.25rem", height: "2.25rem", objectFit: "contain" }}
+                    />
+                    <span
+                      className="font-mono font-bold uppercase text-paper"
+                      style={{ fontSize: "0.6rem", letterSpacing: "0.22em" }}
+                    >
+                      Follow on Instagram
+                    </span>
                   </a>
                 ) : null}
                 {SITE.social.youtube ? (
@@ -69,7 +80,7 @@ export function Footer() {
                     aria-label="YouTube"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-pill ring-1 ring-paper/30 text-paper hover:bg-paper hover:text-ink transition-colors"
+                    className="inline-flex h-11 w-11 items-center justify-center rounded-pill ring-1 ring-paper/30 text-paper hover:bg-paper hover:text-ink transition-colors"
                   >
                     <YoutubeGlyph />
                   </a>
@@ -113,27 +124,6 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Sponsor strip */}
-        <div className="mt-section-y-lg border-t border-paper/15 pt-8">
-          <p className="text-eyebrow uppercase tracking-wider text-paper/60 mb-4">
-            Backed by
-          </p>
-          <ul className="flex flex-wrap gap-x-8 gap-y-3">
-            {SITE.supporters.map((s) => (
-              <li key={s.name}>
-                <a
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-body text-paper/80 hover:text-paper transition-colors"
-                >
-                  {s.name}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-
         <div className="mt-12 flex flex-col gap-6 md:flex-row md:items-center md:justify-between md:gap-8 text-caption text-paper/60">
           <p>
             © {year} {SITE.name}. All rights reserved. Built by James.
@@ -152,5 +142,39 @@ export function Footer() {
         </div>
       </Container>
     </footer>
+    <section className="bg-paper border-t border-ink/10">
+      <Container className="py-10">
+        <p className="text-eyebrow uppercase tracking-wider text-ink/40 mb-6">
+          Backed by
+        </p>
+        <ul className="flex flex-wrap items-center gap-x-10 gap-y-6">
+          {SITE.supporters.map((s) => (
+            <li key={s.name}>
+              <a
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex flex-col items-center gap-1.5"
+              >
+                <img
+                  src={s.logo}
+                  alt={s.name}
+                  loading="lazy"
+                  className="w-auto object-contain"
+                  style={{ height: "36px", maxWidth: "140px" }}
+                />
+                <span
+                  className="font-mono uppercase text-ink/40 text-center leading-tight"
+                  style={{ fontSize: "8px", letterSpacing: "0.15em" }}
+                >
+                  {s.name}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </Container>
+    </section>
+    </>
   );
 }

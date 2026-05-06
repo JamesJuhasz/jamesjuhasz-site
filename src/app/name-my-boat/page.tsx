@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { HeroParallax } from "@/components/sections/HeroParallax";
 import { DonateCTAInline } from "@/components/cta/DonateCTA";
 import { trackFormSubmitted } from "@/lib/gtag";
 
@@ -51,16 +52,26 @@ export default function NameMyBoatPage() {
 
   return (
     <>
-      <section className="py-section-y bg-fog border-b border-mist">
-        <Container width="default">
+      <section className="relative isolate overflow-hidden min-h-[55svh] flex items-end">
+        <HeroParallax
+          src="/images/hero-candidates/dsc08950.jpg"
+          alt="The ILCA 7 on the water"
+          priority
+          amount={0.1}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 h-3/4 -z-10 bg-gradient-to-t from-ink/85 via-ink/45 to-transparent"
+        />
+        <Container width="default" className="pt-section-y pb-section-y">
           <Badge tone="sand">Community</Badge>
-          <h1 className="mt-4 font-display text-display text-ink max-w-[18ch]">
-            Help name James' boat.
+          <h1 className="mt-4 font-display text-display text-paper max-w-[18ch]">
+            Help name James&apos; boat.
           </h1>
-          <p className="mt-6 max-w-prose text-body-lg text-ink/80">
+          <p className="mt-6 max-w-prose text-body-lg text-paper/85">
             Every time I get a new hull, monthly contributors are entered into a
             draw to name the boat. Every $1 over $10/month counts as an extra
-            entry — and every contributor's name goes on the hull, monthly or
+            entry — and every contributor&apos;s name goes on the hull, monthly or
             one-time.
           </p>
         </Container>

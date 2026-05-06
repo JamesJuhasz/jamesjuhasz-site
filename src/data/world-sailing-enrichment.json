@@ -1,0 +1,429 @@
+{
+  "generatedAt": "2026-05-05T09:48:28.693Z",
+  "_format": "Keyed by World Sailing event UUID. Each value: { countryCode, location, totalCompetitors, resultsUrl, _locked, notes }. _locked: true means the enrich script will not overwrite — set this on hand-curated entries.",
+  "entries": {
+    "6fc594e8-37bc-4bf3-92a0-5ee9a95361fe": {
+      "totalCompetitors": 136,
+      "resultsUrl": "https://sof.ffvoile.fr",
+      "location": "Hyères, France",
+      "countryCode": "FRA",
+      "diaryExcerpt": "Sailing Grand Slam No. The Hyeres event is the second event (of five) of the 2026 Sailing Grand Slam series and will have competitors from more than 50 nations, competing across the ten Olympic disciplines. Following closely on the Trofeo Princesa Sofía Mallorca event, the British entry is considerably less for the Hyeres event, with 19 entries, just ten of them British Sailing Team (BST) members. British Sailing Team members expected to compete in Hyeres: The Mallorca event saw Britain win the most medals, three silver and two bronze but no gold, placing them tenth on the final medal leaderboard. Last year the only British medal winners at Hyeres were John Gimson and Anna Burnet with a Gold in the Nacra17 class.",
+      "diarySourceUrl": "https://www.sailweb.co.uk/2026/04/15/sailing-grand-slam-no-2-semaine-olympique-francaise-2026",
+      "diarySourceName": "sailweb.co.uk",
+      "coverImageUrl": "/images/regattas/6fc594e8-37bc-4bf3-92a0-5ee9a95361fe.jpg",
+      "coverImageSourceUrl": "https://www.sailweb.co.uk/wp-content/uploads/2026/04/Hyeres-Week-Poster-2026-14042026.jpg"
+    },
+    "8103bded-2503-4bc6-b350-e2faca94ff99": {
+      "totalCompetitors": 199,
+      "resultsUrl": "https://www.trofeoprincesasofia.org/en/default/races/race-resultsall",
+      "coverImageUrl": "/images/regattas/8103bded-2503-4bc6-b350-e2faca94ff99.jpg",
+      "coverImageSourceUrl": "https://ilcasailing.org/wp-content/uploads/2026/03/81b573a368d6872c05527328e6870077_photo_750x1000.jpg",
+      "location": "Palma de Mallorca, Spain",
+      "countryCode": "ESP",
+      "diaryExcerpt": "As the first major Olympic classes regatta of the year, the 55th Trofeo S.A.R. Princesa Sofía is just about to get underway in Palma de Mallorca, running from 27 March to 4 April and opening the 2026 Sailing Grand Slam season. The event brings together all ten Olympic sailing classes on the Bay of Palma, with both the ILCA 7 and ILCA 6 among the headline classes. 342 ILCA sailors from across all continents are expected on the start line, making it the largest single-handed fleet at the event and one of the strongest early-season gatherings of the year. The Sofía has also been chosen to test several format changes proposed by World Sailing ahead of Los Angeles 2028.",
+      "diarySourceUrl": "https://ilcasailing.org/ilca-takes-centre-stage-at-the-trofeo-princesa-sofia/",
+      "diarySourceName": "ilcasailing.org"
+    },
+    "08060cbb-0e95-4873-b73a-7d597950e4cd": {
+      "countryCode": "PRT",
+      "location": "Vilamoura, Portugal",
+      "diaryExcerpt": "Vilamoura, Portugal – 25 February 2026 – The 8th Portugal Grand Prix Round 2 opened today in Vilamoura with a record fleet of 416 sailors from 44 countries competing across five Olympic classes: 49er, 49erFX, 470, ILCA 6 and ILCA 7. The event brings together 316 boats and 108 coaches, marking the highest participation in the history of the regatta. After a delayed start due to light and unstable morning conditions, racing began once a consistent southerly breeze established itself during the afternoon. Wind from 160 to 170 degrees at approximately 7 knots allowed the race committee to complete the first races of the competition. Two races were completed for the 49er fleet on the opening day. All other fleets — 49erFX, 470, ILCA 6 Women, ILCA 6 Men and ILCA 7 — each concluded one race.",
+      "diarySourceUrl": "https://49er.org/record-416-sailors-compete-at-portugal-grand-prix-in-vilamoura/",
+      "diarySourceName": "49er.org",
+      "totalCompetitors": 316,
+      "coverImageUrl": "/images/regattas/08060cbb-0e95-4873-b73a-7d597950e4cd.jpg",
+      "coverImageSourceUrl": "https://49er.org/wp-content/uploads/2026/02/101-25022026-5P7A4147.jpg"
+    },
+    "700500a7-5948-4d42-ac6d-463ed768cfcb": {
+      "coverImageUrl": "/images/regattas/700500a7-5948-4d42-ac6d-463ed768cfcb.jpg",
+      "coverImageSourceUrl": "https://eurilca.org/wp-content/uploads/2025/12/ECupMLT2025_feat.jpg",
+      "location": "Marsamxett Harbour, Malta",
+      "countryCode": "MLT",
+      "totalCompetitors": 111,
+      "diaryExcerpt": "The 2025 EurILCA Europa Cup MLT concluded yesterday in Mellieha Bay, Malta, with a record-breaking 111 competitors. Weather conditions on the final day proved challenging, with heavy rain and very light winds preventing racing from taking place on Sunday. However, the programme of races completed over the preceding days provided sufficient results to conclude the regatta. In the ILCA 4 Class, the final standings remained unchanged, with Tiago Cheng De Villemor Salgado HKG claiming overall victory with a comfortable margin. Host club sailor Timothy De Cesare MLT finished second, just one point ahead of Oleksandr Bolsunovskyi CYP in third. The ILCA 6 Class also saw no changes to the podium.",
+      "diarySourceUrl": "https://eurilca.org/final-results-2025-eurilca-europa-cup-mlt/",
+      "diarySourceName": "eurilca.org"
+    },
+    "817cb9a5-9c2f-4fe4-8625-a93bb441072d": {
+      "location": "Palermo, Italy",
+      "countryCode": "ITA",
+      "diaryExcerpt": "Dopo tre giornate di regate con vento medio leggero e condizioni meteo perturbate che hanno reso difficile il lavoro per i Comitati di Regata e per gli stessi equipaggi in gara, si attendeva un’ultima giornata di fuoco, perché quasi tutte le classi presentavano classifiche con distacchi minimi e ribaltabili. Il CICO Edison Next 2025 va in archivio con questi numeri: 8 regate per il catamarano Nacra 17 misto foiling; 7 per le classi 49er e 49er FX, nonché per i Formula Kite; 6 regate completate per la classe 470 mista; 5 per le classi singolo ILCA 6 femminile e ILCA 7 maschile; 4 infine per i windsurf iQFOiL maschile e femminile.",
+      "diarySourceUrl": "https://www.velablog.it/regate/derive/classifiche-campionati-italiani-delle-classi-olimpiche-2025/",
+      "diarySourceName": "velablog.it",
+      "coverImageUrl": "/images/regattas/817cb9a5-9c2f-4fe4-8625-a93bb441072d.jpg",
+      "coverImageSourceUrl": "https://www.velablog.it/wp-content/uploads/2025/11/Classifiche-Campionati-Italiani-delle-Classi-Olimpiche-2025.jpg"
+    },
+    "b17f3241-3ee4-4e17-892a-dd6348f11473": {
+      "resultsUrl": "https://eurilca.eu/documents/340/results/ilca7.htm",
+      "coverImageUrl": "/images/regattas/b17f3241-3ee4-4e17-892a-dd6348f11473.jpg",
+      "coverImageSourceUrl": "https://eurilca.org/wp-content/uploads/2025/08/SeniorEU-RD6_feat.jpg",
+      "location": "Marstrand, Sweden",
+      "countryCode": "SWE",
+      "diaryExcerpt": "The 2025 ILCA Senior European Championships & Open European Trophy came to a close today in spectacular fashion, as the new European champions were crowned across all three fleets. A sunny sky and classic Marstrand conditions — with the wind building from 8 knots in the morning to 15 knots in the afternoon, and the swell rising from 0.5 to 1.5 metres — provided a fitting backdrop for the final battles on the water. Both racecourses delivered challenging but fair racing, rewarding consistency and composure under pressure. With the medals on the line, the atmosphere was tense but electric, and the fleets rose to the occasion.",
+      "diarySourceUrl": "https://eurilca.org/2025-ilca-senior-european-championships-final-results/",
+      "diarySourceName": "eurilca.org"
+    },
+    "80da7af9-f1eb-4357-acd8-84c7e7c9823a": {
+      "diaryExcerpt": "The highly anticipated 2025 Long Beach Olympic Classes Regatta officially commenced on Saturday, 12 July, marking the beginning of Olympic campaigns since the venues were announced. The first week of the OCR includes five Olympic classes: Mixed 470s, ILCA 6, ILCA 7, Women’s Formula Kite, and Men’s Formula Kite. Many competitors, coaches and support staffs have been in Long Beach since May, using the time to set up training camps to train on potential venues in conditions they anticipate for the 2028 Olympics. On Day One they experienced an early Catalina eddy, with the wind direction clocking from 125 to 235. The sun came out and the winds eventually began to fill in.",
+      "diarySourceUrl": "https://www.livesaildie.com/classic-long-beach-conditions-return-for-day-two-of-lb-olympic-classes-regatta/",
+      "diarySourceName": "livesaildie.com",
+      "coverImageUrl": "/images/regattas/80da7af9-f1eb-4357-acd8-84c7e7c9823a.jpg",
+      "coverImageSourceUrl": "https://www.livesaildie.com/wp-content/uploads/2025/07/LBOCR_5.jpg",
+      "location": "Long Beach, CA, USA",
+      "countryCode": "USA"
+    },
+    "3271f57a-2594-405b-b1d2-6fdcef1e0284": {
+      "totalCompetitors": 87,
+      "resultsUrl": "https://www.kieler-woche.de/en/sailing/",
+      "location": "Kiel, Germany",
+      "countryCode": "DEU",
+      "diaryExcerpt": "Day 1: Kiel-Schilksee, Germany – The 2025 edition of Kieler Woche began under beautiful summer skies, but light and highly variable winds forced organizers to scale back the opening day’s sailing program.\n\nDay 3: by Editor &middot; Published June 27, 2025 &middot; Updated March 18, 2026 Hi breeze today for the small Nacra 17 fleet which are participating at Kiel this year.",
+      "diarySourceUrl": "https://search.brave.com/search?q=%22Kieler%20Woche%22%202025",
+      "diarySourceName": "Multiple sources (Brave Search)",
+      "coverImageUrl": "/images/regattas/3271f57a-2594-405b-b1d2-6fdcef1e0284.jpg",
+      "coverImageSourceUrl": "https://ilcasailing.org/wp-content/uploads/2025/06/ILCA6_WM_KLAHN_21.06.25_1143045.jpg"
+    },
+    "607a272d-10b4-420b-80cc-3b981a0dea34": {
+      "totalCompetitors": 138,
+      "resultsUrl": "https://2025ilcaolympic.ilca-worlds.org",
+      "diaryExcerpt": "The 2025 ILCA 7 Men's & ILCA 6 Women's World Championships was held in Qingdao, CHINA at the QIngdao Olympic Sailing Center. This was a restricted entry allocated championship. Sailors wishing to enter must first complete an application form, accessible through the menu above. Total entry for this event was limited to 140 sailors in Men's fleet and to 100 sailors in Women's fleet. Details about charter equipment is specified in the Notice of Race and the Charter Terms and Conditions. Pre-Regatta Training (5 May – 9 May): EUR €495 Regatta (10 May – 17 May): EUR €1045 Refundable Damage Deposit: EUR €450 &copy; 2026 International Laser Class Association | www.ilcasailing.org | Privacy | Disclaimer",
+      "diarySourceUrl": "https://events.ilcasailing.org/site/event-site/166",
+      "diarySourceName": "events.ilcasailing.org",
+      "location": "Qingdao, China",
+      "countryCode": "CHN"
+    },
+    "20276179-977e-41e9-b213-675a2cf7a1ac": {
+      "totalCompetitors": 124,
+      "coverImageUrl": "/images/regattas/20276179-977e-41e9-b213-675a2cf7a1ac.jpg",
+      "coverImageSourceUrl": "https://ilcasailing.org/wp-content/uploads/2025/04/P4050537ME-LResNoWM-Large.jpeg",
+      "location": "Palma de Mallorca, Spain",
+      "countryCode": "ESP",
+      "diaryExcerpt": "The 2025 Trofeo Princesa Sofía, the first regatta of this year’s Sailing Grand Slam, concluded today in Palma de Mallorca after six days of competition and all scheduled races successfully completed. The top 10 sailors from the Qualifying and Final Series competed this morning in the decisive Medal Race to determine the podiums in both the ILCA 6 and ILCA 7 Olympic classes. Sunny weather graced the final day of competition, with a shifty breeze ranging from 10 to 12 knots. The women’s Medal Race began at 11:00, followed by the men’s race 45 minutes later on the same course. Overnight ILCA 6 leader Zoe Thomson AUS secured the gold medal by finishing second in today’s single race. The silver went to rising Italian talent Emma Mattivi ITA, who won the Medal Race.",
+      "diarySourceUrl": "https://ilcasailing.org/meet-the-winners-of-the-2025-trofeo-princesa-sofia-in-palma-copy/",
+      "diarySourceName": "ilcasailing.org"
+    },
+    "615f8b90-15ce-4edd-a162-1cd636d58eda": {
+      "location": "Vilamoura, Portugal",
+      "countryCode": "PRT",
+      "diaryExcerpt": "7th Portugal Grand Prix – Round 2 - 49er fleet - Photo Credit ProwMedia 7th Portugal Grand Prix – Round 2 - ILCA 6 start line - Photo Credit ProwMedia Vilamoura, Portugal – The 7th Portugal Grand Prix – Round 2 has ended, marking another successful edition of this growing event. With a 100-point ranking from World Sailing, the competition continues to attract an increasing number of top sailors each year, solidifying its position as a key regatta on the international sailing calendar. Over the past days, Vilamoura has once again proven to be the ideal stage for high-level sailing, bringing together elite athletes, including Olympic contenders, in a highly competitive environment. Sailors demonstrated exceptional skill and resilience, making for an exciting and memorable event.",
+      "diarySourceUrl": "https://www.mysailing.com.au/vilamoura-wraps-up-a-spectacular-week-of-sailing/",
+      "diarySourceName": "mysailing.com.au",
+      "coverImageUrl": "/images/regattas/615f8b90-15ce-4edd-a162-1cd636d58eda.jpg",
+      "coverImageSourceUrl": "https://cdn.mysailing.com.au/wp-content/uploads/2025/02/23095934/Vilamoura-1200.jpg"
+    },
+    "104e108a-374b-462b-83ed-d1c21ad41bae": {
+      "countryCode": "MLT",
+      "location": "Marsamxett Harbour, Malta",
+      "diaryExcerpt": "The 2024 EurILCA Europa Cup Malta wrapped up yesterday after four days of racing in the ILCA 4, ILCA 6, and ILCA 7 classes. The event, hosted by the Malta Young Sailors Club, saw 79 sailors from 18 countries competing. After all eight scheduled races for the three fleets, the winners in each category were as follows: The 2024 EurILCA Europa Cup Trophy will conclude next weekend with the last event in Croatia. All info here: Report by Agustín Argüelles – EurILCA | Photos by Deea Buzdugan | Video by Karl Miggiani. Facebook LinkedIn X Email Print Previous Post Next Post Instagram Facebook YouTube Flickr TikTok SearchSearch EurILCA 2026 Calendar 1 file(s) 157.21 KB Download Private File - Access Forbidden",
+      "diarySourceUrl": "https://eurilca.org/final-results-2024-eurilca-europa-cup-mlt/",
+      "diarySourceName": "eurilca.org",
+      "coverImageUrl": "/images/regattas/104e108a-374b-462b-83ed-d1c21ad41bae.jpg",
+      "coverImageSourceUrl": "https://eurilca.org/wp-content/uploads/2024/12/ECupMLT24-final_feat.jpg"
+    },
+    "4163ae5a-f14f-4849-b887-c9d778a5b1a2": {
+      "location": "Kingston, ON, Canada",
+      "countryCode": "CAN",
+      "diaryExcerpt": "The unofficial site for the Racing Rules of Sailing which links definitions, cases, calls, and provides tools for sailors and race officials for a better understanding of how the rules are applied.",
+      "diarySourceUrl": "https://www.racingrulesofsailing.org/decisions/7990/event?name=2024+CORK+International+Regatta+/+CORK+Olympic+Classes+Regatta+&+Sail+Canada+Youth+and+Senior+Championships+=&page=4",
+      "diarySourceName": "racingrulesofsailing.org",
+      "coverImageUrl": "/images/regattas/4163ae5a-f14f-4849-b887-c9d778a5b1a2.png",
+      "coverImageSourceUrl": "https://www.racingrulesofsailing.org/assetz/new-logo-d26b7f423aaee56e392b06e962ac998f897c1e1e6975f819bddaf8e28bea0ab6.png"
+    },
+    "c666a2d6-3af7-4375-8ff6-cba47d7fff14": {
+      "coverImageUrl": "/images/regattas/c666a2d6-3af7-4375-8ff6-cba47d7fff14.jpg",
+      "coverImageSourceUrl": "https://www.trofeoprincesasofia.org/uploaded_files/photos/cca300cbbd5d0c1e80aede995c9eab69_photo_750x1000.JPG",
+      "location": "Palma de Mallorca, Spain",
+      "countryCode": "ESP",
+      "totalCompetitors": 130,
+      "diaryExcerpt": "The 2024 Trofeo Princesa Sofía was the 53rd edition of the Trofeo Princesa Sofía, an international sailing regatta for the 10 Olympic sailing events, that took place from 29 March to 6 April 2024 in a variety of clubs around Mallorca, Spain, namely Club Marítimo San Antonio de la Playa, Club Nàutic S'Arenal, and Playa de Palma.",
+      "diarySourceUrl": "https://en.wikipedia.org/wiki/2024_Trofeo_Princesa_Sof%C3%ADa",
+      "diarySourceName": "en.wikipedia.org"
+    },
+    "a98657c6-24c4-4a39-b63d-10cd684048f7": {
+      "countryCode": "ESP",
+      "location": "Spain",
+      "diaryExcerpt": "The 2024 EurILCA Europa Cup ESP concluded today in Mallorca’s island, Spain, organised by Reial Club Nàutic Port de Pollença. Challenging wind conditions ranging from 15 to +30 knots prevailed throughout the three-day competition, putting all competitors to the test. The event set a historic participation record for a Europa Cup in Spain, with 334 sailors registered. For many participants, the event served as valuable preparation for the upcoming 2024 ILCA Under 21 European Championships & Open European Trophy, scheduled to take place at the same club from March 16th to 23rd. The event also saw the presence of several top Olympic sailors who used the occasion to train in the island, as part of their preparations for Paris 2024.",
+      "diarySourceUrl": "https://eurilca.org/final-results-2024-eurilca-europa-cup-esp/",
+      "diarySourceName": "eurilca.org",
+      "coverImageUrl": "/images/regattas/a98657c6-24c4-4a39-b63d-10cd684048f7.jpg",
+      "coverImageSourceUrl": "https://eurilca.org/wp-content/uploads/2024/03/2024-ECup-ESP-final_feat.jpg"
+    },
+    "c47015f7-14a1-4711-8e0e-ea63e3c2edf5": {
+      "totalCompetitors": 130,
+      "diaryExcerpt": "The 2024 ILCA 7 Men's World Championship will be held in in Adelaide, AUSTRALIA at the Adelaide Sailing Club. This is a restricted entry allocated championship. Sailors wishing to enter must first complete an application form, accessible through the menu above. Total entry for this event is limited to 160 sailors. On 1 March 2022, World Sailing published the following recommendations in reaction to the situation in Ukraine: https://www.sailing.org/2022/03/01/world-sailing-statement-6/.",
+      "diarySourceUrl": "https://events.ilcasailing.org/site/event-site/159",
+      "diarySourceName": "events.ilcasailing.org",
+      "location": "Adelaide, Australia",
+      "countryCode": "AUS"
+    },
+    "06fdf478-9ff6-45da-9939-9804dc1697c7": {
+      "location": "Vilamoura, Portugal",
+      "countryCode": "PRT"
+    },
+    "1717a706-5422-406a-861a-e8d23c2f5ede": {
+      "countryCode": "NLD",
+      "location": "Scheveningen, The Hague, Netherlands",
+      "totalCompetitors": 120,
+      "diaryExcerpt": "Day 2: The Hague, Netherlands – Two races were completed today in the ILCA 6 fleets at the 2023 Allianz Sailing World Championships, in about 10 knots of shifty breeze with gusts up to 14 knots.\n\nDay 3: The Hague, Netherlands – Two races were completed today in the ILCA 7 fleets at the 2023 Allianz Sailing World Championships, in about 8–10 knots of wind with about 3 knots of current.\n\nDay 4: The Hague, Netherlands – Three races were completed today in both ILCA 7 and ILCA 6 fleets at the 2023 Allianz Sailing World Championships, in about 10–13 knots of wind with gusts up to 15 knots.\n\nDay 5: The Hague, Netherlands – Two races were completed today at the 2023 Allianz Sailing World Championships.\n\nDay 6: The Hague, Netherlands – No races were completed today at the 2023 Allianz Sailing World Championships, due to lack of wind. The AP flag went up at 13:00 and the race committee called it a day at 15:40.",
+      "diarySourceUrl": "https://search.brave.com/search?q=%22Allianz%20Sailing%20World%20Championships%22%202023",
+      "diarySourceName": "Multiple sources (Brave Search)",
+      "coverImageUrl": "/images/regattas/1717a706-5422-406a-861a-e8d23c2f5ede.webp",
+      "coverImageSourceUrl": "https://ilcasailing.org/wp-content/uploads/2023/08/230814_ASWC_THEHAGUE_SE_6000_0742-jpg.webp"
+    },
+    "25019285-7ccb-4a4b-b9ad-0c13e375e0aa": {
+      "countryCode": "USA",
+      "location": "Long Beach, CA, USA"
+    },
+    "8f80efad-2187-4593-89d2-5e6e6c5edb1d": {
+      "coverImageUrl": "/images/regattas/8f80efad-2187-4593-89d2-5e6e6c5edb1d.jpg",
+      "coverImageSourceUrl": "https://49er.org/wp-content/uploads/2025/01/240405_SE_SOFIA-24_3955_2521-610x407.jpg",
+      "location": "Palma de Mallorca, Spain",
+      "countryCode": "ESP",
+      "totalCompetitors": 132,
+      "diaryExcerpt": "For all the talk of Olympic sailing falling apart, Palma showed otherwise with a full bay and a very healthy-looking [&hellip;] With the 52 Trofeo Princesa Sofía Mallorca by Iberostar moving into the decisive Finals phase on the Bay of Palma, leading contenders today finally got their first real feel for how much the level has moved up since last season. Gold fleet racing is always the real acid test. Leads earned through the initial Qualifying [&hellip;] The frenzied lead-up to Paris 2024 is upon us as the 2023 Princess Sofia Trophy regatta begins in Palma de Majorca, Spain. Each of the 10 Olympic events is at capacity with full boat parks and eight race courses running simultaneously for the week.",
+      "diarySourceUrl": "https://49er.org/events/princesa-sofia-regatta-2023/",
+      "diarySourceName": "49er.org"
+    },
+    "825f8561-120b-4bc1-8edb-321e4b54dcbf": {
+      "totalCompetitors": 120,
+      "location": "Athens, Greece",
+      "countryCode": "GRC",
+      "diaryExcerpt": "Exciting fourth day of competition at the 2023 ILCA Senior European Championships & Open European Trophy in Andora, Italy. Winds of 18-25 knots and big waves brightened up the today’s racing. The day started with 1 hour postponement on shore, so sailors were only allowed to launch their boats at 09:00. Strong wind and waves were already there waiting for the joy of the participants. The ILCA 6 Women Gold and Silver fleets set off immediately when they arrived on course, followed by the ILCA 6 Men. On the ILCA 7 course, the Gold fleet had their first start right away, but Silver and Bronze fleets starts were delayed around an hour for the RC to anchor their boat and pin end boats correctly to set the line.",
+      "diarySourceUrl": "https://eurilca.org/day-4-results-2023-ilca-senior-european-championships/",
+      "diarySourceName": "eurilca.org",
+      "coverImageUrl": "/images/regattas/825f8561-120b-4bc1-8edb-321e4b54dcbf.jpg",
+      "coverImageSourceUrl": "https://eurilca.org/wp-content/uploads/2023/03/2023-ILCA-Senior-EU-RD4_feat.jpg"
+    },
+    "5cac81d0-5c9f-48a5-a5ce-b99d3e4a80aa": {
+      "location": "Vilamoura, Portugal",
+      "countryCode": "PRT",
+      "diaryExcerpt": "From the 14th to 18th December 2022 Home Entry list Results Notice board Links Sailor account View all results Results Loading results ... Home Results Calendar News Multimedia MAIN PARTNERS INSTITUTIONAL PARTNERS Vilamourasailing Marina de Vilamoura - http://www.vilamourasailing.com - vilamourasailing@prowgroup.com",
+      "diarySourceUrl": "https://vilamourasailing.sailti.com/en/default/races/race/text/5PGPR1-en",
+      "diarySourceName": "vilamourasailing.sailti.com"
+    },
+    "2cbc46c7-8b41-4f92-8716-d311df06bfa5": {
+      "countryCode": "PRT",
+      "location": "Vilamoura, Portugal",
+      "diaryExcerpt": "Day 1: The 2022 EurILCA Senior European Championships & Open European Trophy started today at Cercle d’Organisation du Yachting de Compétition Hyèrois (COYCH) in Hyeres, France.\n\nDay 2: Second day of racing at the 2022 EurILCA Senior European Championships & Open European Trophy in Hyeres, France, with fantastic sailing conditions and winds of 15 to 20 knots, dropping then to 12 at the end.\n\nDay 3: The third day of racing concluded with only 1 race per fleet today at the 2022 EurILCA Senior European Championships & Open European Trophy in Hyeres, France.\n\nDay 4: The Final series started today at the 2022 EurILCA Senior European Championships & Open European Trophy in Hyeres, France.\n\nDay 5: We had a fantastic fifth day of racing at the 2022 EurILCA Senior European Championships & Open European Trophy in Hyeres, France.",
+      "diarySourceUrl": "https://search.brave.com/search?q=%22EurILCA%20Senior%20European%20Championships%22%202022",
+      "diarySourceName": "Multiple sources (Brave Search)",
+      "coverImageUrl": "/images/regattas/2cbc46c7-8b41-4f92-8716-d311df06bfa5.jpg",
+      "coverImageSourceUrl": "https://eurilca.org/wp-content/uploads/2022/11/2022-ESE-RD1_feat.jpg"
+    },
+    "922ef876-ae39-4386-83c0-94d236df59a8": {
+      "countryCode": "CAN",
+      "location": "Kingston, Ontario, Canada",
+      "_locked": true,
+      "notes": "CORK — confirmed 2022 ILCA North American Championship venue"
+    },
+    "4f42b3d8-3e9f-4bf5-b99c-db26c3908092": {
+      "location": "Kiel, Germany",
+      "countryCode": "DEU",
+      "diaryExcerpt": "Kieler Woche 2018 closed today in Kiel, Germany, for the Laser Standard and Laser Radial Women’s fleets. After 7 races and a Medal Race, German sailor Philipp Buhl GER and Danish Anne-Marie Rindom DEN were the champions. Medal Race was determinant to decide the Laser Standard champion in Kiel, where Philipp Buhl (7th on Medal) could overtake British sailor Elliot Hanson GBR (9th on Medal) on lead and finish competition 1 point in front of him. Third place overall was for Medal Race winner Filip Jurisic CRO. The Laser Radial Women’s championship was for also winner of Medal Race Anne-Marie Rindom, followed by Line Flem Host NOR and Josefin Olsson SWE.",
+      "diarySourceUrl": "https://eurilca.org/kieler-woche-2018-laser-standard-radial-women-final-results/",
+      "diarySourceName": "eurilca.org",
+      "coverImageUrl": "/images/regattas/4f42b3d8-3e9f-4bf5-b99c-db26c3908092.jpg",
+      "coverImageSourceUrl": "https://eurilca.org/wp-content/uploads/2018/06/Kieler-Woche-2018-STA-RADW-final-results.jpg"
+    },
+    "6a89cc47-c1cf-428a-874f-4d9de1a4b0ce": {
+      "totalCompetitors": 154,
+      "diaryExcerpt": "Sail World - The world's largest sailing news network; sail and sailing, cruising, boating news",
+      "diarySourceUrl": "https://www.sail-world.com/news/249435/2022-ILCA-7-Mens-Worlds-at-Vallarta-Mexico-day-1",
+      "diarySourceName": "sail-world.com",
+      "location": "Mexico",
+      "countryCode": "MEX",
+      "coverImageUrl": "/images/regattas/6a89cc47-c1cf-428a-874f-4d9de1a4b0ce.jpg",
+      "coverImageSourceUrl": "https://www.sail-world.com/photos/laser/yysw360670.jpg"
+    },
+    "2fa85ceb-d79e-4bbc-8453-4836140ebed9": {
+      "location": "Hyères, France",
+      "countryCode": "FRA",
+      "diaryExcerpt": "Les séries ILCA (ex-Laser) masculines et féminines sont les plus fournies de ces JO avec 45 nations attendues sur la ligne de départ. En ILCA 6 (ex-Laser féminin), la seconde série dite traditionnelle, la Française Louise Cervera apportera toute la fraîcheur de ses 26 ans pour tenter d’accrocher un podium. A bord d’un dériveur issu d’une pure monotypie – les ILCA seront livrés par l’organisation des JO seulement quelques jours avant le début des épreuves après un tirage au sort –, les places seront chères et les erreurs risquent de se payer cash. Des conditions de navigation toujours exigeantes entre thermique, vent de mer, effet de relief qui ne me font pas peur, bien au contraire !",
+      "diarySourceUrl": "https://www.voileetmoteur.com/voiliers/actualite-voile/regates-courses/xxxxx-jo-ilca/185177",
+      "diarySourceName": "voileetmoteur.com",
+      "coverImageUrl": "/images/regattas/2fa85ceb-d79e-4bbc-8453-4836140ebed9.jpg",
+      "coverImageSourceUrl": "https://www.voileetmoteur.com/wp/wp-content/uploads/2024/07/VEM0724_actu_jo2024_icla_00.jpg"
+    },
+    "9d6080d2-4537-4f3e-a367-a82ef56c2bdb": {
+      "coverImageUrl": "/images/regattas/9d6080d2-4537-4f3e-a367-a82ef56c2bdb.jpg",
+      "coverImageSourceUrl": "https://www.trofeoprincesasofia.org/uploaded_files/photos/cca300cbbd5d0c1e80aede995c9eab69_photo_750x1000.JPG",
+      "location": "Palma de Mallorca, Spain",
+      "countryCode": "ESP",
+      "totalCompetitors": 132,
+      "diaryExcerpt": "When racing starts Monday on Mallorca’s famous Bay of Palma at the giant 51 Trofeo Sofia Mallorca, the first Hempel World Cup Series regatta will usher in a whole new era for Olympic classes sailing. Of the ten classes set to race this week, five are new to the roster of classes which will race at the Paris 2024 Olympics. It is an appropriately big stage, an exciting return as the first major Olympic classes regatta since 2019 welcomes the debut of the high speed, high octane iQFOiL, men’s and women’s foiling windsurfing fleets, the men’s and women’s foiling Formula Kite fleets and, for the first time, the mixed 470 two person dinghy.",
+      "diarySourceUrl": "https://www.sailing.org/2022/04/04/princess-sofia-regatta-preview/",
+      "diarySourceName": "sailing.org"
+    },
+    "b005e357-062a-4626-85df-07bf96e62967": {
+      "location": "Fort Lauderdale, FL, USA",
+      "countryCode": "USA",
+      "diaryExcerpt": "The first event of the West Marine US Open Sailing Series wrapped today, completing six races in a wide range of conditions. Lauderdale Yacht Club welcomed 135 sailors in the three ILCA classes - ILCA 4, 6, and 7.",
+      "diarySourceUrl": "https://www.sail-world.com/news/245542/2022-West-Marine-US-Open-Sailing-Series-overall",
+      "diarySourceName": "sail-world.com",
+      "coverImageUrl": "/images/regattas/b005e357-062a-4626-85df-07bf96e62967.jpg",
+      "coverImageSourceUrl": "https://www.sail-world.com/photos/laser/yysw345661.jpg"
+    },
+    "003fa627-e99e-4bfa-9631-be3588af0dcc": {
+      "totalCompetitors": 142,
+      "location": "Barcelona, Spain",
+      "countryCode": "ESP",
+      "diaryExcerpt": "The 2026 ILCA Under-21 World Championship will be held in Playa Blanca, Lanzarote, SPAIN at the Club Nautico Castillo del Aguilla. The LA28 Olympic Games ILCA Racing Format Test Event will be held in Vilamoura, PORTUGAL at the Marina Vilamoura hosted by the Capable Planet Club Nautico between 7-12 October 2025.EVENT WEBSITE The 2025 ILCA 6 & ILCA 7 Masters World Championship will be held in Formia, ITALY at the Circolo Nautico Caposele. The 2025 ILCA Under-21 World Championship will be held in Dun Laoghaire, IRELAND at the National Yacht Club & Royal St George Yacht Club. The 2025 ILCA 6 Youth World Championship will be held in San Pedro, California, USA at the Cabrillo Beach Yacht Club.",
+      "diarySourceUrl": "https://events.ilcasailing.org/site/event-list/1",
+      "diarySourceName": "events.ilcasailing.org"
+    },
+    "5827a81f-20be-47cf-bd76-bc0a81919b5b": {
+      "countryCode": "POL",
+      "location": "Gdynia, Poland",
+      "diaryExcerpt": "Day 1: The 2021 EurILCA Senior European Championships & Open European Trophy started today in Varna with the first two races for all the three classes.\n\nDay 4: Varna continued to deliver fantastic sailing conditions for the fourth consecutive day on this 2021 EurILCA Senior European Championships & Open European Trophy.",
+      "diarySourceUrl": "https://search.brave.com/search?q=%222021%20EurILCA%20Senior%20European%20Championships%22%202021",
+      "diarySourceName": "Multiple sources (Brave Search)",
+      "coverImageUrl": "/images/regattas/5827a81f-20be-47cf-bd76-bc0a81919b5b.jpg",
+      "coverImageSourceUrl": "https://eurilca.org/wp-content/uploads/2021/10/2021-Senior-Euros-RD4_feat.jpg"
+    },
+    "132a965a-d53a-4aa8-814d-953f3ea2c4a4": {
+      "location": "Medemblik, Netherlands",
+      "countryCode": "NLD",
+      "diaryExcerpt": "SUBSCRIBE ➡️ http://bit.ly/wsnsubscribeFirst day down at the Hempel World Cup Series - Allianz Regatta! Catch up on the ILCA 6 and 7 fleets and the RS:X Men ...",
+      "diarySourceUrl": "https://www.youtube.com/watch?v=jA5ZIuuPUrA",
+      "diarySourceName": "youtube.com",
+      "coverImageUrl": "/images/regattas/132a965a-d53a-4aa8-814d-953f3ea2c4a4.jpg",
+      "coverImageSourceUrl": "https://i.ytimg.com/vi/jA5ZIuuPUrA/maxresdefault.jpg"
+    },
+    "bbfdbb60-1d40-4b5e-b164-d9f7cdd46615": {
+      "countryCode": "PRT",
+      "location": "Vilamoura, Portugal",
+      "diaryExcerpt": "2021 European Continental Qualification Event for the Men’s and Women’s One Person Dinghy From 17th to 24th of April 2021 ILCA 7 ILCA 6 Home Entry list Results Notice board News Links Sailor account View all results Results Loading results ... Home Results Calendar News Multimedia MAIN PARTNERS INSTITUTIONAL PARTNERS Vilamourasailing Marina de Vilamoura - http://www.vilamourasailing.com - vilamourasailing@prowgroup.com",
+      "diarySourceUrl": "https://vilamourasailing.sailti.com/en/default/races/race/text/2021-ilca-vilamoura-european-continental-qualification-en",
+      "diarySourceName": "vilamourasailing.sailti.com"
+    },
+    "830ba4cd-0efd-418b-9e0d-77ed5ba0895d": {
+      "totalCompetitors": 99,
+      "diaryExcerpt": "Day 3: Light wind conditions for the first time today at the 2020 Laser Senior European Championships & Open European Trophy in Gdansk, Poland.\n\nDay 6: And finally we have our new 2020 Laser Senior European champions! The 2020 Laser Senior European Championships & Open European Trophy concluded today in Gdansk, Poland, with some last minute surprises!",
+      "diarySourceUrl": "https://search.brave.com/search?q=%22Laser%20Senior%20European%20Championship%22%202020",
+      "diarySourceName": "Multiple sources (Brave Search)",
+      "coverImageUrl": "/images/regattas/830ba4cd-0efd-418b-9e0d-77ed5ba0895d.png",
+      "coverImageSourceUrl": "https://eurilca.org/wp-content/uploads/2020/09/pion.png",
+      "location": "Gdynia, Poland",
+      "countryCode": "POL"
+    },
+    "ab85c5aa-5547-4f87-a92b-72b4ae7815fc": {
+      "totalCompetitors": 156,
+      "diaryExcerpt": "The 2020 ILCA Laser Standard Men's World Championship will be held in Melbourne, Australia. This is a restricted entry allocated championship. Sailors wishing to enter must first complete an application form, accessible through the menu above. Total entry for this event is limited to 160 sailors. Charter Boat Fees: OPTIONAL Pre-Regatta Training (4 February – 8 February): $450 USD Regatta (9 February – 16 February): $975 USD Refundable Damage Deposit: $500 USD &copy; 2026 International Laser Class Association | www.ilcasailing.org | Privacy | Disclaimer",
+      "diarySourceUrl": "https://events.ilcasailing.org/site/event-site/109",
+      "diarySourceName": "events.ilcasailing.org",
+      "location": "Melbourne, Australia",
+      "countryCode": "AUS"
+    },
+    "5b685ab0-5ea3-4867-b76e-a72200c24467": {
+      "location": "Miami, FL, USA",
+      "countryCode": "USA",
+      "diaryExcerpt": "Miami got a taste of Olympic class sailing at the highest level this week, and on Saturday champions were crowned at the 2020 Hempel World Cup Series Miami.",
+      "diarySourceUrl": "https://www.sail-world.com/news/225992/Hempel-World-Cup-Series-Miami-overall",
+      "diarySourceName": "sail-world.com",
+      "coverImageUrl": "/images/regattas/5b685ab0-5ea3-4867-b76e-a72200c24467.jpg",
+      "coverImageSourceUrl": "https://www.sail-world.com/photos/laser/yysw278972.jpg"
+    },
+    "7819ecae-a4aa-4d00-acb7-7c170fcc2d04": {
+      "totalCompetitors": 105,
+      "diaryExcerpt": "The 2026 ILCA Under-21 World Championship will be held in Playa Blanca, Lanzarote, SPAIN at the Club Nautico Castillo del Aguilla. The LA28 Olympic Games ILCA Racing Format Test Event will be held in Vilamoura, PORTUGAL at the Marina Vilamoura hosted by the Capable Planet Club Nautico between 7-12 October 2025.EVENT WEBSITE The 2025 ILCA 6 & ILCA 7 Masters World Championship will be held in Formia, ITALY at the Circolo Nautico Caposele. The 2025 ILCA Under-21 World Championship will be held in Dun Laoghaire, IRELAND at the National Yacht Club & Royal St George Yacht Club. The 2025 ILCA 6 Youth World Championship will be held in San Pedro, California, USA at the Cabrillo Beach Yacht Club.",
+      "diarySourceUrl": "https://events.ilcasailing.org/site/event-list/1",
+      "diarySourceName": "events.ilcasailing.org",
+      "location": "Gdynia, Poland",
+      "countryCode": "POL"
+    },
+    "c8450a7d-38a2-43e2-95b8-ae4a252d613d": {
+      "location": "Kingston, ON, Canada",
+      "countryCode": "CAN",
+      "diaryExcerpt": "L'international laser Class Association a décerné à CORK (Canadian Olympic Training Regatta Kingston) à la fois le 2019 international laser Class Association ILCA Laser radial Youth Championship et 2019 ILCA laser 4,7 Championnats du monde jeunesse. «L'international laser Class Association est ravie de retourner à Kingston en 2019. CORK a déjà accueilli plusieurs championnats du monde pour la classe laser, plus récemment en 2015, et nous savons qu'ils peuvent être comptés pour rassembler un événement bien organisé à la fois sur l'eau et sur le rivage. Randolph Bertin, Association internationale de classe laser ILCA laser 4,7 jeunesse Championnat du monde événement site Web est ici Il s'agit d'une entrée restreinte de championnat alloué.",
+      "diarySourceUrl": "http://www.cork.org/news/ilca-laser-4-7-jeunesse-championnats-du-monde-2019/",
+      "diarySourceName": "cork.org"
+    },
+    "89e5dde8-fc23-41e5-85f0-1f5e1be07ecb": {
+      "countryCode": "USA",
+      "location": "Brant Beach, NJ, USA"
+    },
+    "e71b367f-1b37-46a5-80a2-a30820b863be": {
+      "location": "Kiel, Germany",
+      "countryCode": "DEU"
+    },
+    "5b3eb40f-e609-412e-b9bd-91a278db390d": {
+      "countryCode": "PRT",
+      "location": "Porto, Portugal",
+      "totalCompetitors": 152,
+      "diaryExcerpt": "Day 1: The 2019 Laser Senior European Championships & Open European Trophy started today in Porto, Portugal, with very light wind. After completing the two first scheduled races, this are the provisional results.\n\nDay 2: Second day of races at the 2019 Laser Senior European Championships & Open European Trophy in Porto, Portugal. Breeze was on today and all 323 sailors could complete two more scheduled races, being now four in total.\n\nDay 3: Third day of races at the 2019 Laser Senior European Championships & Open European Trophy in Porto, Portugal.\n\nDay 6: And finally we have our new 2020 Laser Senior European champions! The 2020 Laser Senior European Championships & Open European Trophy concluded today in Gdansk, Poland, with some last minute surprises!",
+      "diarySourceUrl": "https://search.brave.com/search?q=%22Laser%20Senior%20European%20Championship%22%202019",
+      "diarySourceName": "Multiple sources (Brave Search)",
+      "coverImageUrl": "/images/regattas/5b3eb40f-e609-412e-b9bd-91a278db390d.png",
+      "coverImageSourceUrl": "https://eurilca.org/wp-content/uploads/2019/02/Senior-Europeans-2019-logo.png"
+    },
+    "08bae423-8290-4090-b81b-bbde4fb93d0a": {
+      "location": "Miami, FL, USA",
+      "countryCode": "USA",
+      "diaryExcerpt": "Sail World - The world's largest sailing news network; sail and sailing, cruising, boating news",
+      "diarySourceUrl": "https://www.sail-world.com/news/214093/Hempel-World-Cup-Series-the-first-test-of-2019",
+      "diarySourceName": "sail-world.com",
+      "coverImageUrl": "/images/regattas/08bae423-8290-4090-b81b-bbde4fb93d0a.jpg",
+      "coverImageSourceUrl": "https://www.sail-world.com/photos/laser/yysw236161.jpg"
+    },
+    "18b9b50f-f3ee-42eb-94db-3d99ef0a1cfc": {
+      "location": "Kingston, ON, Canada",
+      "countryCode": "CAN",
+      "diaryExcerpt": "Portsmouth Olympic Harbour is bustling this weekend with the CORK Fall Regatta. 350 athletes, coaches and volunteers from 4 countries are participating in the final regatta of the season. The first day of the Fall regatta felt like fall! The day with the wind from the ENE then shifted to the NW in the mid afternoon. The 505s, 49er FX and the 29ers completed 3 races today. The Optimist, C 420 completed 2 races. The Laser 4.7 , Radial and Laser Standard fleets completed 2 races. Hat’s off to the best team in sailing!",
+      "diarySourceUrl": "http://www.cork.org/uncategorized-en/fall-regatta-day-1/",
+      "diarySourceName": "cork.org"
+    },
+    "66bb5e74-ccc5-4d9b-9af6-3e8193904071": {
+      "location": "Kingston, ON, Canada",
+      "countryCode": "CAN"
+    },
+    "3b7cb4b2-450a-4329-bfeb-29d87dfc5dee": {
+      "diaryExcerpt": "Kieler Woche 2018 closed today in Kiel, Germany, for the Laser Standard and Laser Radial Women’s fleets. After 7 races and a Medal Race, German sailor Philipp Buhl GER and Danish Anne-Marie Rindom DEN were the champions. Medal Race was determinant to decide the Laser Standard champion in Kiel, where Philipp Buhl (7th on Medal) could overtake British sailor Elliot Hanson GBR (9th on Medal) on lead and finish competition 1 point in front of him. Third place overall was for Medal Race winner Filip Jurisic CRO. The Laser Radial Women’s championship was for also winner of Medal Race Anne-Marie Rindom, followed by Line Flem Host NOR and Josefin Olsson SWE.",
+      "diarySourceUrl": "https://eurilca.org/kieler-woche-2018-laser-standard-radial-women-final-results/",
+      "diarySourceName": "eurilca.org",
+      "location": "Kiel, Germany",
+      "countryCode": "DEU",
+      "coverImageUrl": "/images/regattas/3b7cb4b2-450a-4329-bfeb-29d87dfc5dee.jpg",
+      "coverImageSourceUrl": "https://eurilca.org/wp-content/uploads/2018/06/Kieler-Woche-2018-STA-RADW-final-results.jpg"
+    },
+    "f27840fa-2867-4393-bc92-a4c9226bc03c": {
+      "location": "Clearwater, FL, USA",
+      "countryCode": "USA",
+      "totalCompetitors": 269,
+      "diaryExcerpt": "National and International Laser Event Welcome to Racing in the wide open clean waters of the Gulf of Mexico. We expect 200 competitors primarily the Laser and Laser Radial Fleets. We invite experienced non-competitors who will be in Clearwater to volunteer to serve as a member our regatta team. Tackle Shack (727-546-5080) will be on site at CCSC for parts and has Lasers available to reserve for charter___________ IRBchBoat Rental has Spectator Boats available for charter 727-432-9600 -------We look forward to seeing you in sunny Clearwater, Florida. Dick Boblenz, Event Chair [email protected] 727-515-5704 National and International Laser Event Welcome to Racing in the wide open clean waters of the Gulf of Mexico. We expect 200 competitors primarily the Laser and Laser Radial Fleets.",
+      "diarySourceUrl": "https://www.regattanetwork.com/event/15457",
+      "diarySourceName": "regattanetwork.com"
+    },
+    "a043a81f-7ea0-404f-9de6-9a836ad26b40": {
+      "location": "Kingston, ON, Canada",
+      "countryCode": "CAN"
+    },
+    "4352a988-77f2-4ded-8bca-1744ab9c9ec4": {
+      "location": "Hubbards, NS, Canada",
+      "countryCode": "CAN",
+      "diaryExcerpt": "The 2017 Laser Radial Men's World Championships will be held in Medemblik, Netherlands. This is a restricted entry allocated championship. Sailors wishing to enter must first complete an application form, accessible through the menu above. Total entry for this event is limited to 120 sailors. A limited number of charter boats will be made available for charter through the ILCA entry system. The composite top mast would be available as an OPTIONAL add-on for a fee of €50 for the regatta, which would include any pre-regatta charter use. Sailors with a charter boat offer will be able to select the composite top mast during checkout.",
+      "diarySourceUrl": "https://events.ilcasailing.org/site/event-site/72",
+      "diarySourceName": "events.ilcasailing.org"
+    },
+    "bc8bbdb2-3698-4593-8833-8acde959fe71": {
+      "countryCode": "CAN",
+      "location": "Vancouver, BC, Canada",
+      "diaryExcerpt": "The RC Laser North American Championship ventured out of the continental United States for the first time. One sailor came from Sweden and one arrived by sailboat. 8 sailors from the U.S. The rest were local Abaco sailors. The sailors visited Hope Town, Man-O-War, and Guana Cay. Racing started at 10:00 am sharp with Tim Sands running the show. It was a beautiful sunny day with NW winds and everyone sailing B-rigs. We scored 6 races and split the fleets into gold and silver during lunch. Jim Kaighin led the gold fleet by one point over Dave Ramos and he was one point ahead of Dwayne Wallas. The points were 6, 7 and 8 respectively. The odd-even format with split fleets kept the scoring close after 6 races and one drop.",
+      "diarySourceUrl": "https://rclaser.org/regatta-reports/2017-rc-laser-north-american-championship-2/",
+      "diarySourceName": "rclaser.org",
+      "coverImageUrl": "/images/regattas/bc8bbdb2-3698-4593-8833-8acde959fe71.png",
+      "coverImageSourceUrl": "https://rclaser.org/app/wp-content/uploads/2015/01/rclaser_logo.png"
+    },
+    "1980f04c-99c7-462e-a64a-6bd0255e169b": {
+      "location": "Clearwater, FL, USA",
+      "countryCode": "USA",
+      "diaryExcerpt": "National and International Laser Event Welcome to Racing in the wide open clean waters of the Gulf of Mexico. We expect 200 competitors primarily the Laser and Laser Radial Fleets. We invite experienced non-competitors who will be in Clearwater to volunteer to serve as a member our regatta team. If interested please email me your race management experience.____________ Tackle Shack (727-546-5080) will be on site at CCSC for parts and has Lasers available to reserve for charter___________ IRBchBoat Rental has Spectator Boats available for charter 727-432-9600 -------We look forward to seeing you in sunny Clearwater, Florida. Dick Boblenz, Event Chair [email protected] 727-515-5704 National and International Laser Event Welcome to Racing in the wide open clean waters of the Gulf of Mexico.",
+      "diarySourceUrl": "https://www.regattanetwork.com/event/13207",
+      "diarySourceName": "regattanetwork.com",
+      "totalCompetitors": 200
+    },
+    "89b835dd-84c1-4672-a883-6d528be2152c": {
+      "location": "Kingston, ON, Canada",
+      "countryCode": "CAN"
+    }
+  }
+}

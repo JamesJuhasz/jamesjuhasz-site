@@ -1,0 +1,57 @@
+name: Verify results
+
+on:
+  schedule:
+    - cron: "0 14 * * *"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Ignore retry backoff (--force)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      BRAVE_SEARCH_API_KEY: ${{ secrets.BRAVE_SEARCH_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Install Playwright chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Refresh World Sailing fixture
+        run: npm run ws:fetch
+
+      - name: Verify results
+        run: |
+          if [ "${{ inputs.force }}" = "true" ]; then
+            npx tsx scripts/verify-results.ts --force
+          else
+            npx tsx scripts/verify-results.ts
+          fi
+
+      - name: Commit changes if any
+        run: |
+          CHANGED_FILES="src/data/world-sailing-events.json src/data/results-verified.json src/data/results-review.json src/data/results-rejected.json"
+          if [ -n "$(git status --porcelain $CHANGED_FILES)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add $CHANGED_FILES
+            git commit -m "results: verified $(date -u +%F)"
+            git push
+          else
+            echo "No changes to results data."
+          fi

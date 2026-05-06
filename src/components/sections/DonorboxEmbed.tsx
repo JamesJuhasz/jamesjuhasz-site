@@ -4,27 +4,40 @@ import { useEffect, useRef, useState } from "react";
 import Script from "next/script";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import { cn } from "@/lib/cn";
 
 /*
-  Donorbox embed wrapper. Renders the iframe with optional ?amount= prefill,
-  fires an intersection-observer event when visible (GA4 funnel — Day 6),
-  and falls back gracefully when envs aren't set yet.
+  Donorbox <dbox-widget> embed.
 
-  Env vars (set on Railway, see .env.local.example):
-  - NEXT_PUBLIC_DONORBOX_CAMPAIGN_URL — e.g. https://donorbox.org/your-campaign
-  - NEXT_PUBLIC_DONORBOX_EMBED_ID    — the campaign id (slug) for the embed iframe
+  React's createElement path triggers the Custom Elements spec error
+  "A newly constructed custom element must not have attributes" when it
+  constructs <dbox-widget> and then sets attributes. Injecting the markup
+  via dangerouslySetInnerHTML lets the HTML parser create the element with
+  its attributes already in place — that's the upgrade path web components
+  are designed for, and it avoids the error.
+
+  Env vars:
+  - NEXT_PUBLIC_DONORBOX_EMBED_ID — campaign slug, e.g. "james-juhasz-sailing"
+    (also accepts NEXT_PUBLIC_DONORBOX_CAMPAIGN for compatibility)
 */
 
 type Props = {
   amount?: number | null;
+  interval?: string | null;
+  className?: string;
 };
 
-export function DonorboxEmbed({ amount }: Props) {
+function escapeAttr(value: string): string {
+  return value.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+}
+
+export function DonorboxEmbed({ amount, className }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [seen, setSeen] = useState(false);
 
-  const campaignUrl = process.env.NEXT_PUBLIC_DONORBOX_CAMPAIGN_URL;
-  const embedId = process.env.NEXT_PUBLIC_DONORBOX_EMBED_ID;
+  const campaign =
+    process.env.NEXT_PUBLIC_DONORBOX_EMBED_ID ??
+    process.env.NEXT_PUBLIC_DONORBOX_CAMPAIGN;
 
   useEffect(() => {
     if (!ref.current || seen) return;
@@ -35,9 +48,7 @@ export function DonorboxEmbed({ amount }: Props) {
           setSeen(true);
           if (typeof window !== "undefined" && "gtag" in window) {
             const gtag = (window as unknown as { gtag: (...args: unknown[]) => void }).gtag;
-            gtag("event", "donorbox_visible", {
-              embed_id: embedId ?? "stub",
-            });
+            gtag("event", "donorbox_visible", { campaign });
           }
           obs.disconnect();
         }
@@ -46,47 +57,35 @@ export function DonorboxEmbed({ amount }: Props) {
     );
     obs.observe(node);
     return () => obs.disconnect();
-  }, [embedId, seen]);
+  }, [campaign, seen]);
 
-  if (!embedId || !campaignUrl) {
+  if (!campaign) {
     return <DonorboxFallback />;
   }
 
-  // currency=CAD asks Donorbox to render the form in Canadian dollars.
-  // NOTE: this URL param may be ignored if the Donorbox campaign itself is
-  // configured to a different default currency; the campaign settings on
-  // donorbox.org are the source of truth. Flag if the embed still shows USD.
-  const iframeSrc =
-    `https://donorbox.org/embed/${embedId}` +
-    (amount
-      ? `?default_interval=o&amount=${amount}&currency=CAD`
-      : "?default_interval=m&currency=CAD");
+  const attrs = [
+    `campaign="${escapeAttr(campaign)}"`,
+    `type="donation_form"`,
+    `enable-auto-scroll="true"`,
+    ...(amount ? [`amount="${escapeAttr(String(amount))}"`] : []),
+  ].join(" ");
 
   return (
-    <div
-      ref={ref}
-      className="w-full max-w-[420px] ml-auto rounded-3xl overflow-hidden shadow-lift"
-    >
-      <iframe
-        src={iframeSrc}
-        title="Donorbox campaign"
-        name="donorbox"
-        seamless={true}
-        scrolling="no"
-        height="900px"
-        width="100%"
-        style={{
-          maxWidth: "100%",
-          minWidth: "250px",
-          maxHeight: "none",
-        }}
-        allow="payment"
+    <>
+      <div
+        ref={ref}
+        className={cn(
+          "w-full bg-white shadow-lift sm:max-w-[420px] sm:ml-auto",
+          className,
+        )}
+        dangerouslySetInnerHTML={{ __html: `<dbox-widget ${attrs}></dbox-widget>` }}
       />
       <Script
-        src="https://donorbox.org/widget.js"
-        strategy="lazyOnload"
+        type="module"
+        src="https://donorbox.org/widgets.js"
+        strategy="afterInteractive"
       />
-    </div>
+    </>
   );
 }
 

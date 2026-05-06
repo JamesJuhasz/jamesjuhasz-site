@@ -1,26 +1,34 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingDonateCTA } from "@/components/cta/DonateCTA";
+import { DonatePopup } from "@/components/cta/DonatePopup";
 import { AnalyticsBridge } from "@/components/AnalyticsBridge";
 import { JsonLd } from "@/components/JsonLd";
 import { personJsonLd } from "@/lib/json-ld";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
   display: "swap",
-  axes: ["opsz", "SOFT"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500"],
 });
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
@@ -51,7 +59,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0E2240",
+  themeColor: "#0E1116",
   width: "device-width",
   initialScale: 1,
 };
@@ -64,13 +72,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${inter.variable} h-full antialiased`}
+      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-foam text-ink">
+      <body className="min-h-full flex flex-col bg-paper text-ink">
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
         <FloatingDonateCTA />
+        <DonatePopup />
         <AnalyticsBridge />
         <JsonLd data={personJsonLd} />
         {GA_ID ? <GoogleAnalytics gaId={GA_ID} /> : null}

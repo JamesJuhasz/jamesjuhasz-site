@@ -48,18 +48,27 @@ export default function HeroPickerPage() {
     <div className="py-section-y">
       <Container width="wide">
         <Badge tone="donate">Internal — remove before launch</Badge>
-        <h1 className="mt-4 font-serif text-display text-navy">
+        <h1 className="mt-4 font-display text-display text-ink">
           Pick the hero photos
         </h1>
         <p className="mt-4 max-w-prose text-body-lg text-ink/75">
           {candidates.length} candidates from{" "}
-          <code className="bg-foam-deep px-1.5 py-0.5 rounded text-caption">
+          <code className="bg-fog px-1.5 py-0.5 rounded text-caption">
             public/images/hero-candidates/
           </code>
           . Newest first. Tap a section pill on each photo to assign it. Tap
           again to clear.
         </p>
-        <HeroPickerClient candidates={candidates} />
+        <div className="md:hidden mt-6 rounded-2xl bg-fog ring-1 ring-mist p-5">
+          <p className="font-display text-h3 text-ink">Best on desktop</p>
+          <p className="mt-2 text-body text-ink/75">
+            This is an internal curation tool — open it on a wider screen for
+            the full grid and per-image controls.
+          </p>
+        </div>
+        <div className="hidden md:block">
+          <HeroPickerClient candidates={candidates} />
+        </div>
       </Container>
     </div>
   );

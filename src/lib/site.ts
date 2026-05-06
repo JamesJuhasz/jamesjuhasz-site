@@ -13,7 +13,7 @@ export const SITE = {
   },
   social: {
     // Set to a real URL to render the icon button. Leave undefined to hide it.
-    instagram: undefined as string | undefined,
+    instagram: "https://www.instagram.com/james.juhasz/",
     youtube: undefined as string | undefined,
   },
   nav: [
@@ -30,36 +30,31 @@ export const SITE = {
     {
       label: "Program",
       items: [
-        { name: "Sport Canada", href: "https://www.canada.ca/en/canadian-heritage/services/sport.html" },
-        { name: "Canadian Sailing Team", href: "https://www.sailing.ca" },
-        { name: "Ontario Quest for Gold", href: "https://www.coachingathletes.org" },
+        { name: "Sport Canada", href: "https://www.canada.ca/en/canadian-heritage/services/sport.html", logo: "/images/supporters/sport-canada.svg" },
+        { name: "Canadian Sailing Team", href: "https://www.sailing.ca", logo: "/images/supporters/canadian-sailing-team.png" },
+        { name: "Ontario Quest for Gold", href: "https://www.coachingathletes.org", logo: "/images/supporters/ontario-quest-for-gold-dark.svg" },
+        { name: "CoachAible.fit", href: "https://www.coachaible.fit", logo: "/images/supporters/coachaible-dark.svg" },
+        { name: "SailCoach", href: "https://sailcoach.com", logo: "/images/supporters/sailcoach.png" },
       ],
     },
     {
       label: "Equipment",
       items: [
-        { name: "Devoti Sailing", href: "https://devoti-sailing.com" },
-        { name: "Allen Sailing Hardware", href: "https://www.allenbrothers.co.uk" },
-        { name: "Helly Hansen", href: "https://www.hellyhansen.com" },
-        { name: "Maurten", href: "https://www.maurten.com" },
-      ],
-    },
-    {
-      label: "Club",
-      items: [
-        { name: "Oakville Yacht Squadron", href: "https://www.oys.ca" },
+        { name: "Covey Watersport", href: "https://covywatersport.com", logo: "/images/supporters/covey-watersport.png" },
+        { name: "Allen Sailing Hardware", href: "https://www.allenbrothers.co.uk", logo: "/images/supporters/allen-sailing-hardware.png" },
+        { name: "Helly Hansen", href: "https://www.hellyhansen.com", logo: "/images/supporters/helly-hansen.png" },
       ],
     },
   ],
   /** Flat list retained for any consumer that needs the unstructured roster. */
   supporters: [
-    { name: "Sport Canada", href: "https://www.canada.ca/en/canadian-heritage/services/sport.html" },
-    { name: "Canadian Sailing Team", href: "https://www.sailing.ca" },
-    { name: "Oakville Yacht Squadron", href: "https://www.oys.ca" },
-    { name: "Devoti Sailing", href: "https://devoti-sailing.com" },
-    { name: "Ontario Quest for Gold", href: "https://www.coachingathletes.org" },
-    { name: "Allen Sailing Hardware", href: "https://www.allenbrothers.co.uk" },
-    { name: "Helly Hansen", href: "https://www.hellyhansen.com" },
-    { name: "Maurten", href: "https://www.maurten.com" },
+    { name: "Sport Canada", href: "https://www.canada.ca/en/canadian-heritage/services/sport.html", logo: "/images/supporters/sport-canada.svg" },
+    { name: "Canadian Sailing Team", href: "https://www.sailing.ca", logo: "/images/supporters/canadian-sailing-team.png" },
+    { name: "Ontario Quest for Gold", href: "https://www.coachingathletes.org", logo: "/images/supporters/ontario-quest-for-gold-dark.svg" },
+    { name: "CoachAible.fit", href: "https://www.coachaible.fit", logo: "/images/supporters/coachaible-dark.svg" },
+    { name: "SailCoach", href: "https://sailcoach.com", logo: "/images/supporters/sailcoach.png" },
+    { name: "Covey Watersport", href: "https://covywatersport.com", logo: "/images/supporters/covey-watersport.png" },
+    { name: "Allen Sailing Hardware", href: "https://www.allenbrothers.co.uk", logo: "/images/supporters/allen-sailing-hardware.png" },
+    { name: "Helly Hansen", href: "https://www.hellyhansen.com", logo: "/images/supporters/helly-hansen.png" },
   ],
 } as const;

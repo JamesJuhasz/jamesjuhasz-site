@@ -1,55 +1,58 @@
 @import "tailwindcss";
 
+/* v2 — brand rebrand */
 /*
-  Design system: jamesjuhasz.com
-  Inspired by sailing photography — deep navy water, warm foam off-white,
-  sand accent, with a single reserved CTA color (donate) for conversion.
-  Restraint converts; the donate color is used sparingly so it pops.
+  James Juhasz Sailing — Brand tokens (LA28 ILCA 7 campaign)
+  Canadian Red as singular signal (≤10% surface) on an ink/paper foundation.
+  Space Grotesk display + Inter text + JetBrains Mono for data/labels.
+  Photography is the hero; red punctuates, never fills.
 */
 
 @theme {
-  /* Colors */
-  --color-navy: #0E2240;
-  --color-navy-deep: #061122;
-  --color-navy-soft: #1F365A;
-  --color-foam: #F6F2EA;
-  --color-foam-deep: #EAE3D5;
-  --color-sand: #D8C4A6;
-  --color-sand-warm: #B89878;
-  --color-donate: #E04E2A;
-  --color-donate-hover: #C53C1B;
-  --color-ink: #0A1628;
-  --color-mist: #6F7B8E;
-  --color-line: #D6DBE3;
+  /* Colors — brand */
+  --color-red: #D52B1E;        /* Canadian flag red — primary signal */
+  --color-red-deep: #A6160C;   /* Pressed / hover */
+  --color-ink: #0E1116;        /* Primary type, deep ink */
+  --color-ink-2: #2A2F36;      /* Secondary type */
+  --color-ink-3: #5A6068;      /* Tertiary / captions */
+  --color-paper: #FFFFFF;      /* Pure white */
+  --color-fog: #F5F2ED;        /* Warm off-white surface */
+  --color-mist: #E8E5DF;       /* Hairlines, dividers */
+  --color-haze: #C8CDD3;       /* Cool gray, ocean fog */
+  --color-sea: #0B1E2E;        /* Deep ocean (dark inversions) */
 
   /* Type families (variables wired in layout.tsx) */
-  --font-serif: var(--font-fraunces);
+  --font-display: var(--font-space-grotesk);
   --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
 
-  /* Type scale (size / line-height) */
-  --text-display: 4.25rem;
-  --text-display--line-height: 1.05;
-  --text-display--letter-spacing: -0.025em;
-  --text-h1: 3rem;
-  --text-h1--line-height: 1.1;
-  --text-h1--letter-spacing: -0.02em;
+  /* Type scale (size / line-height / letter-spacing) */
+  --text-display-xl: 6rem;
+  --text-display-xl--line-height: 0.92;
+  --text-display-xl--letter-spacing: -0.04em;
+  --text-display: 3.5rem;
+  --text-display--line-height: 1;
+  --text-display--letter-spacing: -0.035em;
+  --text-h1: 2.5rem;
+  --text-h1--line-height: 1.05;
+  --text-h1--letter-spacing: -0.03em;
   --text-h2: 2.25rem;
-  --text-h2--line-height: 1.15;
-  --text-h2--letter-spacing: -0.015em;
+  --text-h2--line-height: 1.1;
+  --text-h2--letter-spacing: -0.025em;
   --text-h3: 1.5rem;
-  --text-h3--line-height: 1.3;
-  --text-h3--letter-spacing: -0.01em;
+  --text-h3--line-height: 1.25;
+  --text-h3--letter-spacing: -0.02em;
   --text-body-lg: 1.125rem;
-  --text-body-lg--line-height: 1.7;
+  --text-body-lg--line-height: 1.6;
   --text-body: 1rem;
-  --text-body--line-height: 1.65;
+  --text-body--line-height: 1.6;
   --text-caption: 0.8125rem;
   --text-caption--line-height: 1.5;
-  --text-eyebrow: 0.75rem;
+  --text-eyebrow: 0.6875rem;
   --text-eyebrow--line-height: 1.2;
-  --text-eyebrow--letter-spacing: 0.12em;
+  --text-eyebrow--letter-spacing: 0.22em;
 
-  /* Semantic spacing */
+  /* Semantic spacing — 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 96 brand scale */
   --spacing-section-y: 6rem;
   --spacing-section-y-lg: 8rem;
   --spacing-container-x: 1.5rem;
@@ -63,44 +66,55 @@
   --container-default: 72rem;
   --container-wide: 84rem;
 
-  /* Radius */
+  /* Radius — brand prefers sharp; pill kept for buttons */
   --radius-pill: 999px;
 
-  /* Shadows */
-  --shadow-soft: 0 1px 2px rgba(10, 22, 40, 0.04), 0 4px 16px rgba(10, 22, 40, 0.06);
-  --shadow-lift: 0 8px 30px rgba(10, 22, 40, 0.12);
+  /* Shadows — used minimally per brand (no drops on type/marks) */
+  --shadow-soft: 0 1px 2px rgba(14, 17, 22, 0.04), 0 4px 16px rgba(14, 17, 22, 0.06);
+  --shadow-lift: 0 8px 30px rgba(14, 17, 22, 0.10);
 }
 
-/* Base */
-html {
-  background: var(--color-foam);
-  color: var(--color-ink);
-}
+/* Base — wrapped in @layer base so utilities (text-*, font-*) override correctly. */
+@layer base {
+  html {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    /* Decorative absolute children (donate-button fireworks canvas, hero
+       parallax oversize) can extend past the viewport on narrow phones.
+       Clip horizontally to prevent page scroll without breaking sticky. */
+    overflow-x: clip;
+  }
 
-body {
-  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
-  font-size: var(--text-body);
-  line-height: var(--text-body--line-height);
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
+  body {
+    font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    /* Decorative absolute children (e.g. donate-button fireworks canvas, hero
+       parallax oversize) can extend past the viewport on narrow phones. Clip
+       horizontally to prevent unwanted page scroll without breaking sticky. */
+    overflow-x: clip;
+  }
 
-/* Headings default to serif. Override per-component if needed. */
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-serif), Georgia, serif;
-  font-weight: 500;
-  color: var(--color-navy);
+  /* Headings default to display sans (Space Grotesk). */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+  }
 }
 
 /* Selection */
 ::selection {
-  background: var(--color-navy);
-  color: var(--color-foam);
+  background: var(--color-ink);
+  color: var(--color-paper);
 }
 
-/* Focus rings — deliberate, athletic, not browser default */
+/* Focus rings — Canadian Red, deliberate */
 :focus-visible {
-  outline: 2px solid var(--color-donate);
+  outline: 2px solid var(--color-red);
   outline-offset: 2px;
   border-radius: 2px;
 }
@@ -112,14 +126,36 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* Anchored sections clear the sticky header on landing */
+section[id] {
+  scroll-margin-top: 5rem;
+}
+
 /* Utility: drop cap for editorial text */
 .drop-cap::first-letter {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 4.25rem;
   line-height: 0.85;
-  font-weight: 500;
+  font-weight: 700;
+  letter-spacing: -0.03em;
   float: left;
   padding-right: 0.75rem;
   padding-top: 0.5rem;
-  color: var(--color-navy);
+  color: var(--color-ink);
+}
+
+/* Brand utility: technical mono tag (eyebrows, sail-number labels) */
+.jj-tag {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-ink-3);
+}
+
+/* Brand utility: hairline divider */
+.jj-rule {
+  height: 1px;
+  background: var(--color-mist);
+  width: 100%;
 }

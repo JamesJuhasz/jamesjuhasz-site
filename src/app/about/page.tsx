@@ -20,8 +20,6 @@ export const metadata = {
 
 export default function AboutPage() {
   const daysToLA = daysToLA2028();
-  // Replace the placeholder "2028 / LA Olympics" stat (which animated through
-  // intermediate values like 1,222 mid-count) with a live countdown.
   const stats = aboutStats.map((s) =>
     s.label === "LA Olympics"
       ? { value: daysToLA, suffix: undefined, label: "Days till LA 2028" }
@@ -30,8 +28,12 @@ export default function AboutPage() {
   return (
     <>
       {/* EDITORIAL HERO */}
-      <section className="relative isolate min-h-[80svh] flex items-end overflow-hidden [&_img]:object-[50%_15%]">
-        <HeroParallax src="/images/about-portrait.jpg" priority />
+      <section className="relative isolate min-h-[80svh] flex items-end overflow-hidden">
+        <HeroParallax
+          src="/images/hero-candidates/260326_sailingenergy_trofeo-sofia_pm1_1927-edit-2_(2).jpg"
+          priority
+          objectPosition="50% 15%"
+        />
         <div
           aria-hidden
           className="absolute inset-x-0 bottom-0 h-3/4 -z-10 bg-gradient-to-t from-ink/85 via-ink/45 to-transparent"
@@ -57,21 +59,205 @@ export default function AboutPage() {
           </p>
           <h2 className="font-display text-h1 text-ink">James' story</h2>
 
+          {/* ── Chapter 1: The beginning ── */}
           <div className="mt-10 space-y-6 text-body-lg text-ink/80 leading-relaxed">
             <p className="drop-cap">
-              It all started one summer on my parents' boat. Every weekend we
+              It all started one summer on my parents&apos; boat. Every weekend we
               were on the lake, my sister and I exploring the shoreline, the
               wind doing more of the steering than we did. By the time I could
-              hold a tiller properly, sailing wasn't a hobby — it was the only
+              hold a tiller properly, sailing wasn&apos;t a hobby — it was the only
               thing that felt like the right shape.
             </p>
+          </div>
+
+          {/* Childhood 3-photo grid */}
+          <figure className="my-12">
+            <div className="grid grid-cols-3 gap-3">
+              <div className="relative aspect-[3/4] rounded-xl overflow-hidden bg-fog">
+                <Image
+                  src="/images/about/childhood-steering-sister.jpg"
+                  alt="James and his sister at the helm on Lake Ontario"
+                  fill
+                  sizes="(min-width: 1024px) 23ch, 33vw"
+                  className="object-cover"
+                />
+              </div>
+              <div className="relative aspect-[3/4] rounded-xl overflow-hidden bg-fog">
+                <Image
+                  src="/images/about/childhood-steering-solo.jpg"
+                  alt="Young James steering the family boat"
+                  fill
+                  sizes="(min-width: 1024px) 23ch, 33vw"
+                  className="object-cover"
+                />
+              </div>
+              <div className="relative aspect-[3/4] rounded-xl overflow-hidden bg-fog">
+                <Image
+                  src="/images/about/childhood-thumbs-up.jpg"
+                  alt="Young James on Lake Ontario, thumbs up"
+                  fill
+                  sizes="(min-width: 1024px) 23ch, 33vw"
+                  className="object-cover"
+                />
+              </div>
+            </div>
+            <figcaption className="mt-3 text-sm text-ink-3 text-center">
+              Lake Ontario — age 6
+            </figcaption>
+          </figure>
+
+          {/* ── Chapter 2: Junior sailing ── */}
+          <h3 className="font-display text-h2 mt-16 text-ink">
+            The junior years
+          </h3>
+          <div className="mt-6 space-y-6 text-body-lg text-ink/80 leading-relaxed">
             <p>
-              Junior fleets at the Oakville Yacht Squadron came next. Optimist,
-              then ILCA 4. Regional regattas, one trip to a North American
-              championship that I don't remember winning anything at — but the
-              flight home, sitting next to athletes who'd just made the podium,
+              At 7, I started sailing school at Bronte Harbour Yacht Club —
+              single-handed dinghies, race starts, capsize drills. By 12, I had
+              joined the Bronte Harbour Laser Race Team and was racing proper
+              ILCA fleets. Regional regattas, one trip to a North American
+              championship that I don&apos;t remember winning anything at — but the
+              flight home, sitting next to athletes who&apos;d just made the podium,
               was the moment something locked in. I wanted to be on that side of
               the conversation.
+            </p>
+          </div>
+
+          {/* Sailing school + laser team 2-photo */}
+          <figure className="my-12">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <div className="relative aspect-square rounded-xl overflow-hidden bg-fog">
+                  <Image
+                    src="/images/about/junior-sailing-school.jpg"
+                    alt="Sailing school at Bronte Harbour YC, age 7"
+                    fill
+                    sizes="(min-width: 1024px) 33ch, 50vw"
+                    className="object-cover object-[50%_30%]"
+                  />
+                </div>
+                <p className="mt-2 text-sm text-ink-3">Sailing school, age 7</p>
+              </div>
+              <div>
+                <div className="relative aspect-square rounded-xl overflow-hidden bg-fog">
+                  <Image
+                    src="/images/about/junior-laser-team.jpg"
+                    alt="Bronte Harbour Laser Race Team, age 12"
+                    fill
+                    sizes="(min-width: 1024px) 33ch, 50vw"
+                    className="object-cover object-[50%_30%]"
+                  />
+                </div>
+                <p className="mt-2 text-sm text-ink-3">Laser race team, age 12</p>
+              </div>
+            </div>
+          </figure>
+
+          {/* Ontario team */}
+          <div className="space-y-6 text-body-lg text-ink/80 leading-relaxed">
+            <p>
+              At 15, I started racing for the Ontario Sailing Team — my first
+              taste of national-level selection, competing in CAN kit against
+              sailors from every province. The gap between the lake back home
+              and this level was significant, and I was determined to close it.
+            </p>
+          </div>
+
+          <figure className="my-12">
+            <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-fog">
+              <Image
+                src="/images/about/youth-ontario-team.jpg"
+                alt="James racing for the Ontario Sailing Team, age 15"
+                fill
+                sizes="(min-width: 1024px) 70ch, 100vw"
+                className="object-cover object-[50%_30%]"
+              />
+            </div>
+            <figcaption className="mt-3 text-sm text-ink-3">
+              Ontario Sailing Team — age 15
+            </figcaption>
+          </figure>
+
+          {/* ── Chapter 3: Queen's University ── */}
+          <h3 className="font-display text-h2 mt-16 text-ink">
+            Queen&apos;s and Kingston
+          </h3>
+          <div className="mt-6 space-y-6 text-body-lg text-ink/80 leading-relaxed">
+            <p>
+              At 18, I enrolled at Queen&apos;s University in Kingston — partly for
+              the degree, mostly because Kingston puts you on the water that
+              trains Olympic sailors. Sailing for the Gaels while the Great
+              Lakes threw everything at us, I kept training year-round and
+              started racing internationally in the ILCA 7.
+            </p>
+          </div>
+
+          <figure className="my-12">
+            <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-fog">
+              <Image
+                src="/images/about/queens-sailing.jpg"
+                alt="Racing in Queen's University colours, Kingston"
+                fill
+                sizes="(min-width: 1024px) 70ch, 100vw"
+                className="object-cover"
+              />
+            </div>
+            <figcaption className="mt-3 text-sm text-ink-3">
+              Queen&apos;s University sailing — Kingston, Ontario
+            </figcaption>
+          </figure>
+
+          {/* ── Chapter 4: Mediterranean ── */}
+          <h3 className="font-display text-h2 mt-16 text-ink">
+            The Mediterranean move
+          </h3>
+          <div className="mt-6 space-y-6 text-body-lg text-ink/80 leading-relaxed">
+            <p>
+              At 21, mid-pandemic, I packed up and moved to Malta. SailCoach
+              has the deepest international training group in the ILCA 7, and
+              the Mediterranean breeze runs year-round. The first six months
+              were brutal — getting beaten by people I&apos;d never heard of, every
+              single day, for weeks. That&apos;s the thing nobody tells you about
+              sailing at this level: you don&apos;t lose to the equipment, you lose
+              to people who&apos;ve sailed 10,000 hours more than you.
+            </p>
+          </div>
+
+          {/* Malta 2-photo: portrait + racing */}
+          <figure className="my-12">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="relative aspect-[3/4] rounded-xl overflow-hidden bg-fog">
+                <Image
+                  src="/images/about/malta-portrait.jpg"
+                  alt="James in Malta — the Mediterranean training base"
+                  fill
+                  sizes="(min-width: 1024px) 33ch, 50vw"
+                  className="object-cover"
+                />
+              </div>
+              <div className="relative aspect-[3/4] rounded-xl overflow-hidden bg-fog">
+                <Image
+                  src="/images/about/malta-racing.jpg"
+                  alt="Racing with the SailCoach international training group, Malta"
+                  fill
+                  sizes="(min-width: 1024px) 33ch, 50vw"
+                  className="object-cover object-[50%_30%]"
+                />
+              </div>
+            </div>
+            <figcaption className="mt-3 text-sm text-ink-3 text-center">
+              Malta — SailCoach international training group
+            </figcaption>
+          </figure>
+
+          {/* ── Chapter 5: Canadian squad ── */}
+          <div className="space-y-6 text-body-lg text-ink/80 leading-relaxed">
+            <p>
+              I now split my time between Europe and home, training twelve
+              months a year. The Canadian Sailing Team selection in 2022 was the
+              first moment in five years that the campaign felt sustainable —
+              full coaching support, performance science, a real path to the
+              start line at LA 2028.
             </p>
           </div>
 
@@ -79,50 +265,13 @@ export default function AboutPage() {
             <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-fog">
               <Image
                 src="/images/section/01.jpg"
-                alt="On the water — campaign shot"
+                alt="James Juhasz racing for Canada — ILCA 7"
                 fill
                 sizes="(min-width: 1024px) 70ch, 100vw"
                 className="object-cover"
               />
             </div>
           </figure>
-
-          <h3 className="font-display text-h2 mt-16 text-ink">
-            The Mediterranean move
-          </h3>
-          <div className="mt-6 space-y-6 text-body-lg text-ink/80 leading-relaxed">
-            <p>
-              At 21, mid-pandemic, I packed up and moved to Malta. SailCoach has
-              the deepest international training group in the ILCA 7, and the
-              Mediterranean breeze runs year-round. The first six months were
-              brutal — getting beaten by people I'd never heard of, every single
-              day, for weeks. That's the thing nobody tells you about sailing at
-              this level: you don't lose to the equipment, you lose to people
-              who've sailed 10,000 hours more than you.
-            </p>
-          </div>
-
-          <figure className="my-12">
-            <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-fog">
-              <Image
-                src="/images/section/03.jpg"
-                alt="Mediterranean training block"
-                fill
-                sizes="(min-width: 1024px) 70ch, 100vw"
-                className="object-cover"
-              />
-            </div>
-          </figure>
-
-          <div className="space-y-6 text-body-lg text-ink/80 leading-relaxed">
-            <p>
-              I now split my time between Europe and home, training twelve
-              months a year. The Canadian Sailing Team selection in 2024 was the
-              first moment in five years that the campaign felt sustainable —
-              full coaching support, performance science, a real path to the
-              start line at LA 2028.
-            </p>
-          </div>
         </Container>
       </section>
 

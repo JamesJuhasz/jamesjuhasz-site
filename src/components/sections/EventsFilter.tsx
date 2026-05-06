@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { EventCard } from "@/components/cards/EventCard";
+import { Reveal } from "@/components/ui/Reveal";
 import { type SeedEvent } from "@/lib/seed-data";
 import { cn } from "@/lib/cn";
 
@@ -27,26 +28,28 @@ export function EventsFilter({ events }: { events: SeedEvent[] }) {
             className={cn(
               "rounded-pill px-4 py-2 text-caption font-medium transition-colors ring-1",
               filter === f
-                ? "bg-navy text-foam ring-navy"
-                : "bg-foam text-navy ring-line hover:bg-foam-deep",
+                ? "bg-ink text-paper ring-ink"
+                : "bg-paper text-ink ring-mist hover:bg-fog",
             )}
             aria-pressed={filter === f}
           >
             {f}
           </button>
         ))}
-        <span className="ml-auto text-caption text-mist">
+        <span className="ml-auto text-caption text-ink-3">
           {filtered.length} {filtered.length === 1 ? "event" : "events"}
         </span>
       </div>
       {filtered.length === 0 ? (
-        <p className="mt-12 text-body text-mist text-center">
+        <p className="mt-12 text-body text-ink-3 text-center">
           No events match this filter yet.
         </p>
       ) : (
         <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((e) => (
-            <EventCard key={e.slug} event={e} />
+          {filtered.map((e, i) => (
+            <Reveal key={e.slug} delay={Math.min(i * 0.04, 0.28)}>
+              <EventCard event={e} />
+            </Reveal>
           ))}
         </div>
       )}

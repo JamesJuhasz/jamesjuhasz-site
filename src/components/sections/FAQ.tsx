@@ -18,13 +18,13 @@ function FAQItem({
   const ref = useRef<HTMLLIElement>(null);
 
   function handleClick() {
-    if (!isOpen) {
-      // Delay slightly so the item has started expanding before we scroll
-      requestAnimationFrame(() => {
-        ref.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-      });
-    }
     onToggle();
+    if (!isOpen) {
+      // Wait for the 300ms grid transition to finish before measuring
+      setTimeout(() => {
+        ref.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }, 310);
+    }
   }
 
   return (

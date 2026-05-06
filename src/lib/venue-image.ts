@@ -206,7 +206,7 @@ async function imageForVenueHint(hint: VenueHint): Promise<string | null> {
 
 // ── Public API ────────────────────────────────────────────────────────────────
 
-type DestinationInfo = { imageUrl: string | null; city: string | null };
+type DestinationInfo = { imageUrl: string | null; city: string | null; venueCountry: string | null };
 
 async function getDestinationInfo(
   event: ConsolidatedEvent,
@@ -218,21 +218,23 @@ async function getDestinationInfo(
     return {
       imageUrl: img && isPhoto(img) ? img : null,
       city: knownVenue.city,
+      venueCountry: knownVenue.country,
     };
   }
 
   // Step 1: web search → venue name  (needs BRAVE_SEARCH_API_KEY)
   const venueHint = await findVenueFromWebSearch(event.title, event.startDate);
-  if (!venueHint) return { imageUrl: null, city: null };
+  if (!venueHint) return { imageUrl: null, city: null, venueCountry: null };
 
   // Step 2: Wikipedia image for the resolved venue
   const imageUrl = await imageForVenueHint(venueHint);
-  return { imageUrl, city: venueHint.location };
+  return { imageUrl, city: venueHint.location, venueCountry: null };
 }
 
 export type EnrichedEvent = ConsolidatedEvent & {
   destinationImageUrl: string | null;
   city: string | null;
+  venueCountry: string | null;
 };
 
 export async function enrichEventsWithImages(
@@ -243,5 +245,6 @@ export async function enrichEventsWithImages(
     ...e,
     destinationImageUrl: infos[i].imageUrl,
     city: infos[i].city,
+    venueCountry: infos[i].venueCountry,
   }));
 }

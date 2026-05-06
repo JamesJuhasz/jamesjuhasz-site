@@ -146,7 +146,7 @@ export default async function EventsPage() {
             <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {upcomingFromApi.map((e, i) => (
                 <Reveal key={e.id} delay={Math.min(i * 0.06, 0.36)}>
-                  <UpcomingEventCard event={e} destinationImageUrl={e.destinationImageUrl} city={e.city} />
+                  <UpcomingEventCard event={e} destinationImageUrl={e.destinationImageUrl} city={e.city} venueCountry={e.venueCountry} />
                 </Reveal>
               ))}
             </div>

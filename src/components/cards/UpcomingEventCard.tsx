@@ -20,10 +20,12 @@ export function UpcomingEventCard({
   event,
   destinationImageUrl,
   city,
+  venueCountry,
 }: {
   event: ConsolidatedEvent;
   destinationImageUrl?: string | null;
   city?: string | null;
+  venueCountry?: string | null;
 }) {
   const start = dateFmt.format(new Date(`${event.startDate}T00:00:00`));
   const end =
@@ -62,12 +64,16 @@ export function UpcomingEventCard({
           {TYPE_LABEL[event.eventType]} · {range}
         </p>
         <h3 className="font-display text-h3 text-ink">{event.title}</h3>
-        {(city ?? event.country) ? (
-          <p className="text-body text-ink/70 inline-flex items-start gap-1.5">
-            <MapPin size={14} className="mt-1 flex-shrink-0 text-ink-3" aria-hidden />
-            <span>{city ?? event.country}</span>
-          </p>
-        ) : null}
+        {(() => {
+          const country = venueCountry ?? event.country;
+          const location = city && country ? `${city}, ${country}` : city ?? country;
+          return location ? (
+            <p className="text-body text-ink/70 inline-flex items-start gap-1.5">
+              <MapPin size={14} className="mt-1 flex-shrink-0 text-ink-3" aria-hidden />
+              <span>{location}</span>
+            </p>
+          ) : null;
+        })()}
       </div>
     </div>
   );

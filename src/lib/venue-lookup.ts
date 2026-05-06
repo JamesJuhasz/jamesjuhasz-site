@@ -42,7 +42,7 @@ const VENUES: VenuePattern[] = [
   { pattern: /\bCork\b/i, info: { city: "Cork", country: "Ireland", wikiTitle: "Cork, Ireland" } },
 
   // Bermuda
-  { pattern: /\bBermuda\b/i, info: { city: "Hamilton, Bermuda", country: "Bermuda", wikiTitle: "Hamilton, Bermuda" } },
+  { pattern: /\bBermuda\b/i, info: { city: "Hamilton", country: "Bermuda", wikiTitle: "Hamilton, Bermuda" } },
 
   // Spain
   { pattern: /\bPrincess?a?\s+Sof[ií]a\b/i, info: { city: "Palma, Mallorca", country: "Spain", wikiTitle: "Palma, Majorca" } },

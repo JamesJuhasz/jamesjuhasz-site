@@ -253,11 +253,10 @@ export default function AboutPage() {
           {/* ── Chapter 5: Canadian squad ── */}
           <div className="space-y-6 text-body-lg text-ink/80 leading-relaxed">
             <p>
-              I now split my time between Europe and home, training twelve
-              months a year. The Canadian Sailing Team selection in 2022 was the
-              first moment in five years that the campaign felt sustainable —
-              full coaching support, performance science, a real path to the
-              start line at LA 2028.
+              The Canadian Sailing Team selection in 2022 was the first moment
+              in five years that the campaign felt sustainable — full coaching
+              support, performance science, a real path to the start line at LA
+              2028.
             </p>
           </div>
 
@@ -265,12 +264,67 @@ export default function AboutPage() {
             <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-fog">
               <Image
                 src="/images/section/01.jpg"
-                alt="James Juhasz racing for Canada — ILCA 7"
+                alt="James racing for the Canadian Sailing Team — ILCA 7"
                 fill
                 sizes="(min-width: 1024px) 70ch, 100vw"
                 className="object-cover"
               />
             </div>
+          </figure>
+
+          <h3 className="font-display text-h2 mt-16 text-ink">
+            Recent times
+          </h3>
+
+          <div className="mt-6 space-y-6 text-body-lg text-ink/80 leading-relaxed">
+            <p>
+              Now midway through the Olympic Quad, all focus is on LA 2028.
+              I&apos;ve based my winters in Malta, where the conditions and
+              consistency allow for the volume of on-water work, and I train
+              alongside an international squad of Olympic and aspiring Olympic
+              sailors. The program blends long sessions on the water, hundreds
+              of hours of cycling to build my aerobic engine, and plenty of gym
+              work to strengthen my core.
+            </p>
+          </div>
+
+          <figure className="my-12">
+            <div className="relative aspect-[3/4] sm:aspect-[16/10] rounded-2xl overflow-hidden bg-fog">
+              <Image
+                src="/images/section/06.jpg"
+                alt="Racing alongside the international squad in the Mediterranean"
+                fill
+                sizes="(min-width: 1024px) 70ch, 100vw"
+                className="object-cover object-[50%_40%]"
+              />
+            </div>
+
+          </figure>
+
+          <div className="space-y-6 text-body-lg text-ink/80 leading-relaxed">
+            <p>
+              The road to LA28 runs through the World Championships, continental
+              qualifiers, and the Canadian Olympic Trials, with final selection
+              to be completed in the spring of 2028. Every regatta on the
+              calendar is a checkpoint — sharpening the craft, building the
+              engine, and chasing the standard required to make the start line
+              in LA.
+            </p>
+          </div>
+
+          <figure className="my-12">
+            <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-fog">
+              <Image
+                src="/images/section/02.jpg"
+                alt="James Juhasz competing at the 2023 US Open Sailing Series, Long Beach"
+                fill
+                sizes="(min-width: 1024px) 70ch, 100vw"
+                className="object-cover object-[50%_60%]"
+              />
+            </div>
+            <figcaption className="mt-3 text-sm text-ink-3">
+              2023 US Open Sailing Series — Long Beach, CA
+            </figcaption>
           </figure>
         </Container>
       </section>

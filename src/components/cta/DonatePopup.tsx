@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { SITE } from "@/lib/site";
 
 const SESSION_KEY = "donate_popup_seen";
-const DELAY_MS = 1_000;
+const DELAY_MS = 60_000;
 
 const BUDGET_COLORS = ["#0E1116", "#2A2F36", "#5A6068", "#C8CDD3"] as const;
 const BUDGET = [
@@ -122,9 +122,6 @@ export function DonatePopup() {
           <X size={18} aria-hidden />
         </button>
         <div className="p-5 sm:p-6">
-          <p className="text-eyebrow uppercase tracking-wider text-ink-3 mb-3">
-            Why this matters
-          </p>
           <h2
             id="donate-popup-title"
             className="font-display text-h3 text-ink leading-tight pr-8"

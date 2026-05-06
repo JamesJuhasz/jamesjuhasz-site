@@ -1498,9 +1498,9 @@ async function fetchFleetSizeFromUrl(
 
     if (isIlca7Page) {
       // Count rows that look like competitor entries (have a rank column with a number).
-      const tables = Array.from(doc.querySelectorAll("table"));
+      const tables = Array.from<Element>(doc.querySelectorAll("table"));
       for (const table of tables) {
-        const rows = Array.from(table.querySelectorAll("tr")).filter((tr) => {
+        const rows = Array.from<Element>(table.querySelectorAll("tr")).filter((tr) => {
           const cells = tr.querySelectorAll("td");
           if (cells.length < 2) return false;
           const firstCellText = cells[0]?.textContent?.trim() ?? "";
@@ -1515,7 +1515,7 @@ async function fetchFleetSizeFromUrl(
       }
 
       // Fallback: some results pages use an ordered list instead of a table.
-      const lists = Array.from(doc.querySelectorAll("ol"));
+      const lists = Array.from<Element>(doc.querySelectorAll("ol"));
       for (const ol of lists) {
         const items = ol.querySelectorAll("li");
         if (items.length >= 10 && items.length <= 500) {

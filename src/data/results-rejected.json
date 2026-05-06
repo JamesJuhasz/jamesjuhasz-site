@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-05-06T08:59:03.260Z",
+  "entries": [
+    {
+      "worldSailingEventId": "08bae423-8290-4090-b81b-bbde4fb93d0a",
+      "reason": "extraction-failed",
+      "attemptCount": 8,
+      "lastAttemptAt": "2026-05-06T06:37:57.496Z",
+      "nextRetryAt": null,
+      "candidates": []
+    },
+    {
+      "worldSailingEventId": "25019285-7ccb-4a4b-b9ad-0c13e375e0aa",
+      "reason": "no-page-found",
+      "attemptCount": 8,
+      "lastAttemptAt": "2026-05-06T06:15:49.372Z",
+      "nextRetryAt": null,
+      "candidates": []
+    },
+    {
+      "worldSailingEventId": "5b685ab0-5ea3-4867-b76e-a72200c24467",
+      "reason": "extraction-failed",
+      "attemptCount": 8,
+      "lastAttemptAt": "2026-05-06T06:31:43.058Z",
+      "nextRetryAt": null,
+      "candidates": []
+    }
+  ]
+}

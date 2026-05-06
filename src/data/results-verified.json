@@ -1,0 +1,839 @@
+{
+  "generatedAt": "2026-05-06T08:59:03.260Z",
+  "results": [
+    {
+      "worldSailingEventId": "003fa627-e99e-4bfa-9631-be3588af0dcc",
+      "verifiedAt": "2026-05-06T06:25:42.779Z",
+      "confidenceScore": 0.9391891891891893,
+      "confidenceBreakdown": {
+        "nameMatch": 1,
+        "eventNameMatch": 0.5945945945945946,
+        "dateOverlap": 1,
+        "classMatch": 1,
+        "positionAgreement": 1,
+        "sourceTier": 1
+      },
+      "primarySource": {
+        "url": "http://2021-standard-men.laser-worlds.com/wp-content/uploads/sites/24/2021/11/ILCA7M21-Results.pdf",
+        "domain": "2021-standard-men.laser-worlds.com",
+        "tier": "HIGH",
+        "fetchedAt": "2026-05-06T06:25:41.635Z",
+        "contentType": "pdf"
+      },
+      "externalPosition": 87,
+      "totalCompetitors": 135,
+      "fleet": "Class: ILCA 7 RACE POINTS",
+      "candidates": [
+        {
+          "url": "http://2021-standard-men.laser-worlds.com/wp-content/uploads/sites/24/2021/11/ILCA7M21-Results.pdf",
+          "domain": "2021-standard-men.laser-worlds.com",
+          "tier": "HIGH",
+          "contentType": "pdf",
+          "fetchedAt": "2026-05-06T06:25:41.635Z",
+          "confidenceScore": 0.9391891891891893,
+          "confidenceBreakdown": {
+            "nameMatch": 1,
+            "eventNameMatch": 0.5945945945945946,
+            "dateOverlap": 1,
+            "classMatch": 1,
+            "positionAgreement": 1,
+            "sourceTier": 1
+          },
+          "externalPosition": 87,
+          "totalCompetitors": 135,
+          "fleet": "Class: ILCA 7 RACE POINTS",
+          "notes": [
+            "sections: match,match",
+            "hit-section-class=match",
+            "hit-row=\"87 CAN 217718 118 JUHASZ, James 38 8 43 35 2 263 194\""
+          ]
+        },
+        {
+          "url": "https://sailing.laserinternational.org/public/site/event-site/129",
+          "domain": "sailing.laserinternational.org",
+          "tier": "HIGH",
+          "contentType": "playwright-html",
+          "fetchedAt": "2026-05-06T06:25:05.947Z",
+          "confidenceScore": 0,
+          "confidenceBreakdown": {
+            "nameMatch": 0,
+            "eventNameMatch": 0.1568627450980392,
+            "dateOverlap": 1,
+            "classMatch": 0.5,
+            "positionAgreement": 0.5,
+            "sourceTier": 1
+          },
+          "externalPosition": null,
+          "totalCompetitors": null,
+          "fleet": null,
+          "rejectReason": "name-not-found",
+          "notes": [
+            "tables-found=0",
+            "no-row-matched",
+            "via-playwright"
+          ]
+        }
+      ],
+      "needsReview": false,
+      "reviewReasons": []
+    },
+    {
+      "worldSailingEventId": "18b9b50f-f3ee-42eb-94db-3d99ef0a1cfc",
+      "verifiedAt": "2026-05-06T06:38:37.696Z",
+      "confidenceScore": 0.9,
+      "confidenceBreakdown": {
+        "nameMatch": 1,
+        "eventNameMatch": 1,
+        "dateOverlap": 1,
+        "classMatch": 0.5,
+        "positionAgreement": 1,
+        "sourceTier": 1
+      },
+      "primarySource": {
+        "url": "http://www.cork.org/past-results/results2018/fall/laser_results.htm",
+        "domain": "www.cork.org",
+        "tier": "HIGH",
+        "fetchedAt": "2026-05-06T06:38:37.530Z",
+        "contentType": "html"
+      },
+      "externalPosition": 9,
+      "totalCompetitors": 16,
+      "fleet": "Laser Class",
+      "candidates": [
+        {
+          "url": "http://www.cork.org/past-results/results2018/fall/laser_results.htm",
+          "domain": "www.cork.org",
+          "tier": "HIGH",
+          "contentType": "html",
+          "fetchedAt": "2026-05-06T06:38:37.530Z",
+          "confidenceScore": 0.9,
+          "confidenceBreakdown": {
+            "nameMatch": 1,
+            "eventNameMatch": 1,
+            "dateOverlap": 1,
+            "classMatch": 0.5,
+            "positionAgreement": 1,
+            "sourceTier": 1
+          },
+          "externalPosition": 9,
+          "totalCompetitors": 16,
+          "fleet": "Laser Class",
+          "notes": [
+            "tables-found=3",
+            "hit-section=\"Laser Class · Rank\nSailNo\nHelmName\nClub\nProv\nR1\nR2\nR3\nR4\nR5\nTotal\nNet\nCity\""
+          ]
+        },
+        {
+          "url": "http://www.cork.org/past-results/results2018/ocr/laser_results.htm",
+          "domain": "www.cork.org",
+          "tier": "HIGH",
+          "contentType": "html",
+          "fetchedAt": "2026-05-06T06:38:37.227Z",
+          "confidenceScore": 0.6375,
+          "confidenceBreakdown": {
+            "nameMatch": 1,
+            "eventNameMatch": 0.25,
+            "dateOverlap": 1,
+            "classMatch": 0.5,
+            "positionAgreement": 0,
+            "sourceTier": 1
+          },
+          "externalPosition": 23,
+          "totalCompetitors": 30,
+          "fleet": "Laser Class",
+          "notes": [
+            "tables-found=3",
+            "hit-section=\"Laser Class · Nat\nRank\nSailNo\nHelmName\nR1\nR2\nR3\nR4\nR5\nR6\nR7\nR8\nR9\nR10\nTotal\nNet\n\""
+          ]
+        },
+        {
+          "url": "http://www.cork.org/",
+          "domain": "www.cork.org",
+          "tier": "HIGH",
+          "contentType": "playwright-html",
+          "fetchedAt": "2026-05-06T06:37:59.064Z",
+          "confidenceScore": 0,
+          "confidenceBreakdown": {
+            "nameMatch": 0,
+            "eventNameMatch": 0.2727272727272727,
+            "dateOverlap": 0,
+            "classMatch": 0.5,
+            "positionAgreement": 0.5,
+            "sourceTier": 1
+          },
+          "externalPosition": null,
+          "totalCompetitors": null,
+          "fleet": null,
+          "rejectReason": "name-not-found",
+          "notes": [
+            "tables-found=0",
+            "no-row-matched",
+            "via-playwright"
+          ]
+        }
+      ],
+      "needsReview": false,
+      "reviewReasons": [
+        "class-implied-not-confirmed"
+      ]
+    },
+    {
+      "worldSailingEventId": "4163ae5a-f14f-4849-b887-c9d778a5b1a2",
+      "verifiedAt": "2026-05-06T06:09:16.860Z",
+      "confidenceScore": 0.917741935483871,
+      "confidenceBreakdown": {
+        "nameMatch": 1,
+        "eventNameMatch": 0.45161290322580644,
+        "dateOverlap": 1,
+        "classMatch": 1,
+        "positionAgreement": 1,
+        "sourceTier": 1
+      },
+      "primarySource": {
+        "url": "http://www.cork.org/past-results/results2024/CORK-INT-OCR-29erNA/ILCA%204%20and%207.html",
+        "domain": "www.cork.org",
+        "tier": "HIGH",
+        "fetchedAt": "2026-05-06T06:09:16.527Z",
+        "contentType": "html"
+      },
+      "externalPosition": 1,
+      "totalCompetitors": 23,
+      "fleet": "ILCA 7 Fleet",
+      "candidates": [
+        {
+          "url": "http://www.cork.org/past-results/results2024/CORK-INT-OCR-29erNA/ILCA%204%20and%207.html",
+          "domain": "www.cork.org",
+          "tier": "HIGH",
+          "contentType": "html",
+          "fetchedAt": "2026-05-06T06:09:16.527Z",
+          "confidenceScore": 0.917741935483871,
+          "confidenceBreakdown": {
+            "nameMatch": 1,
+            "eventNameMatch": 0.45161290322580644,
+            "dateOverlap": 1,
+            "classMatch": 1,
+            "positionAgreement": 1,
+            "sourceTier": 1
+          },
+          "externalPosition": 1,
+          "totalCompetitors": 23,
+          "fleet": "ILCA 7 Fleet",
+          "notes": [
+            "tables-found=3",
+            "hit-section=\"ILCA 7 Fleet · Rank\nSail#\nHelm\nNat\nProvState\nQ1/R1\nQ2/R2\nQ3/R3\nQ4/R4\nQ5/R5\nF1/R6\""
+          ]
+        },
+        {
+          "url": "https://www.cork.org/",
+          "domain": "www.cork.org",
+          "tier": "HIGH",
+          "contentType": "playwright-html",
+          "fetchedAt": "2026-05-06T06:08:35.780Z",
+          "confidenceScore": 0,
+          "confidenceBreakdown": {
+            "nameMatch": 0,
+            "eventNameMatch": 0.24489795918367346,
+            "dateOverlap": 0,
+            "classMatch": 0.5,
+            "positionAgreement": 0.5,
+            "sourceTier": 1
+          },
+          "externalPosition": null,
+          "totalCompetitors": null,
+          "fleet": null,
+          "rejectReason": "name-not-found",
+          "notes": [
+            "tables-found=0",
+            "no-row-matched",
+            "via-playwright"
+          ]
+        }
+      ],
+      "needsReview": false,
+      "reviewReasons": []
+    },
+    {
+      "worldSailingEventId": "4352a988-77f2-4ded-8bca-1744ab9c9ec4",
+      "verifiedAt": "2026-05-06T06:42:23.563Z",
+      "confidenceScore": 0.9,
+      "confidenceBreakdown": {
+        "nameMatch": 1,
+        "eventNameMatch": 1,
+        "dateOverlap": 1,
+        "classMatch": 0.5,
+        "positionAgreement": 1,
+        "sourceTier": 1
+      },
+      "primarySource": {
+        "url": "http://www.cork.org/past-results/results2017/lasercdns/lasercdns_results.htm",
+        "domain": "www.cork.org",
+        "tier": "HIGH",
+        "fetchedAt": "2026-05-06T06:42:23.254Z",
+        "contentType": "html"
+      },
+      "externalPosition": 17,
+      "totalCompetitors": 46,
+      "fleet": "Laser Class",
+      "candidates": [
+        {
+          "url": "http://www.cork.org/past-results/results2017/lasercdns/lasercdns_results.htm",
+          "domain": "www.cork.org",
+          "tier": "HIGH",
+          "contentType": "html",
+          "fetchedAt": "2026-05-06T06:42:23.254Z",
+          "confidenceScore": 0.9,
+          "confidenceBreakdown": {
+            "nameMatch": 1,
+            "eventNameMatch": 1,
+            "dateOverlap": 1,
+            "classMatch": 0.5,
+            "positionAgreement": 1,
+            "sourceTier": 1
+          },
+          "externalPosition": 17,
+          "totalCompetitors": 46,
+          "fleet": "Laser Class",
+          "notes": [
+            "tables-found=5",
+            "hit-section=\"Laser Class · Rank\nNat\nSailNo\nHelmName\nR1\nR2\nR3\nR4\nR5\nR6\nR7\nR8\nR9\nTotal\nNett\""
+          ]
+        },
+        {
+          "url": "http://www.cork.org/",
+          "domain": "www.cork.org",
+          "tier": "HIGH",
+          "contentType": "playwright-html",
+          "fetchedAt": "2026-05-06T06:41:44.751Z",
+          "confidenceScore": 0,
+          "confidenceBreakdown": {
+            "nameMatch": 0,
+            "eventNameMatch": 0.09090909090909091,
+            "dateOverlap": 0,
+            "classMatch": 0.5,
+            "positionAgreement": 0.5,
+            "sourceTier": 1
+          },
+          "externalPosition": null,
+          "totalCompetitors": null,
+          "fleet": null,
+          "rejectReason": "name-not-found",
+          "notes": [
+            "tables-found=0",
+            "no-row-matched",
+            "via-playwright"
+          ]
+        }
+      ],
+      "needsReview": false,
+      "reviewReasons": [
+        "class-implied-not-confirmed"
+      ]
+    },
+    {
+      "worldSailingEventId": "5827a81f-20be-47cf-bd76-bc0a81919b5b",
+      "verifiedAt": "2026-05-06T06:25:53.700Z",
+      "confidenceScore": 0.9423076923076923,
+      "confidenceBreakdown": {
+        "nameMatch": 1,
+        "eventNameMatch": 0.6153846153846154,
+        "dateOverlap": 1,
+        "classMatch": 1,
+        "positionAgreement": 1,
+        "sourceTier": 1
+      },
+      "primarySource": {
+        "url": "https://eurilca.org/wp-content/uploads/2021/10/GOLD_FINAL_OPEN.pdf",
+        "domain": "eurilca.org",
+        "tier": "HIGH",
+        "fetchedAt": "2026-05-06T06:25:53.639Z",
+        "contentType": "pdf"
+      },
+      "externalPosition": 43,
+      "totalCompetitors": 58,
+      "fleet": "ILCA 7 European Championships & Open European Trophy 2021",
+      "candidates": [
+        {
+          "url": "https://eurilca.org/wp-content/uploads/2021/10/GOLD_FINAL_OPEN.pdf",
+          "domain": "eurilca.org",
+          "tier": "HIGH",
+          "contentType": "pdf",
+          "fetchedAt": "2026-05-06T06:25:53.639Z",
+          "confidenceScore": 0.9423076923076923,
+          "confidenceBreakdown": {
+            "nameMatch": 1,
+            "eventNameMatch": 0.6153846153846154,
+            "dateOverlap": 1,
+            "classMatch": 1,
+            "positionAgreement": 1,
+            "sourceTier": 1
+          },
+          "externalPosition": 43,
+          "totalCompetitors": 58,
+          "fleet": "ILCA 7 European Championships & Open European Trophy 2021",
+          "notes": [
+            "sections: match",
+            "hit-section-class=match",
+            "hit-row=\"43 111 CAN 217718 JUHASZ James (48.0) 37.0 29.0 9.0 17.0 (42.0) 38.0 22.0 27.0 39.0 308.0 218.0\""
+          ]
+        },
+        {
+          "url": "https://eurilca.org/wp-content/uploads/2021/10/GOLD_FINAL_EU.pdf",
+          "domain": "eurilca.org",
+          "tier": "HIGH",
+          "contentType": "pdf",
+          "fetchedAt": "2026-05-06T06:25:53.489Z",
+          "confidenceScore": 0,
+          "confidenceBreakdown": {
+            "nameMatch": 0,
+            "eventNameMatch": 0.6153846153846154,
+            "dateOverlap": 1,
+            "classMatch": 0.5,
+            "positionAgreement": 0.5,
+            "sourceTier": 1
+          },
+          "externalPosition": null,
+          "totalCompetitors": null,
+          "fleet": null,
+          "rejectReason": "name-not-found",
+          "notes": [
+            "sections: match",
+            "no-row-matched-in-acceptable-section"
+          ]
+        },
+        {
+          "url": "https://eurilca.org/wp-content/uploads/2021/10/SILVER_FINAL_EU.pdf",
+          "domain": "eurilca.org",
+          "tier": "HIGH",
+          "contentType": "pdf",
+          "fetchedAt": "2026-05-06T06:25:53.588Z",
+          "confidenceScore": 0,
+          "confidenceBreakdown": {
+            "nameMatch": 0,
+            "eventNameMatch": 0.6153846153846154,
+            "dateOverlap": 1,
+            "classMatch": 0.5,
+            "positionAgreement": 0.5,
+            "sourceTier": 1
+          },
+          "externalPosition": null,
+          "totalCompetitors": null,
+          "fleet": null,
+          "rejectReason": "name-not-found",
+          "notes": [
+            "sections: match",
+            "no-row-matched-in-acceptable-section"
+          ]
+        }
+      ],
+      "needsReview": false,
+      "reviewReasons": []
+    },
+    {
+      "worldSailingEventId": "5cac81d0-5c9f-48a5-a5ce-b99d3e4a80aa",
+      "verifiedAt": "2026-05-06T06:18:57.553Z",
+      "confidenceScore": 0.985,
+      "confidenceBreakdown": {
+        "nameMatch": 1,
+        "eventNameMatch": 1,
+        "dateOverlap": 1,
+        "classMatch": 1,
+        "positionAgreement": 1,
+        "sourceTier": 0.85
+      },
+      "primarySource": {
+        "url": "https://scoring.sailti.com/public/download/overall-datetime-pdf/5850/325/latest",
+        "domain": "scoring.sailti.com",
+        "tier": "MEDIUM",
+        "fetchedAt": "2026-05-06T06:18:57.123Z",
+        "contentType": "pdf"
+      },
+      "externalPosition": 30,
+      "totalCompetitors": 57,
+      "fleet": "Class: ILCA 7 RACE POINTS",
+      "candidates": [
+        {
+          "url": "https://scoring.sailti.com/public/download/overall-datetime-pdf/5850/325/latest",
+          "domain": "scoring.sailti.com",
+          "tier": "MEDIUM",
+          "contentType": "pdf",
+          "fetchedAt": "2026-05-06T06:18:57.123Z",
+          "confidenceScore": 0.985,
+          "confidenceBreakdown": {
+            "nameMatch": 1,
+            "eventNameMatch": 1,
+            "dateOverlap": 1,
+            "classMatch": 1,
+            "positionAgreement": 1,
+            "sourceTier": 0.85
+          },
+          "externalPosition": 30,
+          "totalCompetitors": 57,
+          "fleet": "Class: ILCA 7 RACE POINTS",
+          "notes": [
+            "sections: match,mismatch,mismatch",
+            "hit-section-class=match",
+            "hit-row=\"30 CAN 217718 JUHASZ, James / Canadian Sailing Team u21 36 22 32 14 35 9 210 148\""
+          ]
+        },
+        {
+          "url": "https://www.vilamourasailing.com/events",
+          "domain": "www.vilamourasailing.com",
+          "tier": "HIGH",
+          "contentType": "playwright-html",
+          "fetchedAt": "2026-05-06T06:18:10.927Z",
+          "confidenceScore": 0,
+          "confidenceBreakdown": {
+            "nameMatch": 0,
+            "eventNameMatch": 0.16666666666666666,
+            "dateOverlap": 0,
+            "classMatch": 0.5,
+            "positionAgreement": 0.5,
+            "sourceTier": 1
+          },
+          "externalPosition": null,
+          "totalCompetitors": null,
+          "fleet": null,
+          "rejectReason": "name-not-found",
+          "notes": [
+            "tables-found=0",
+            "no-row-matched",
+            "via-playwright"
+          ]
+        },
+        {
+          "url": "https://vilamourasailing.sailti.com/en/default/races/resultsajax?id=5850&idsc2r=17415&allResults=1&handicap=&docLimit=300",
+          "domain": "vilamourasailing.sailti.com",
+          "tier": "MEDIUM",
+          "contentType": "playwright-html",
+          "fetchedAt": "2026-05-06T06:18:47.865Z",
+          "confidenceScore": 0,
+          "confidenceBreakdown": {
+            "nameMatch": 0,
+            "eventNameMatch": 0,
+            "dateOverlap": 0.7499980709876544,
+            "classMatch": 0.5,
+            "positionAgreement": 0.5,
+            "sourceTier": 0.85
+          },
+          "externalPosition": null,
+          "totalCompetitors": 61,
+          "fleet": null,
+          "rejectReason": "name-not-found",
+          "notes": [
+            "tables-found=1",
+            "hit-section=\"SAIL #\n\n                                                    BOW#\n               \"",
+            "via-playwright"
+          ]
+        }
+      ],
+      "needsReview": false,
+      "reviewReasons": []
+    },
+    {
+      "worldSailingEventId": "607a272d-10b4-420b-80cc-3b981a0dea34",
+      "verifiedAt": "2026-05-06T06:04:01.133Z",
+      "confidenceScore": 0.9,
+      "confidenceBreakdown": {
+        "nameMatch": 1,
+        "eventNameMatch": 1,
+        "dateOverlap": 1,
+        "classMatch": 0.5,
+        "positionAgreement": 1,
+        "sourceTier": 1
+      },
+      "primarySource": {
+        "url": "https://2025ilcaolympic.ilca-worlds.org/wp-content/uploads/sites/28/2025/05/ILCA-7M-2025-CHN-Results.html",
+        "domain": "2025ilcaolympic.ilca-worlds.org",
+        "tier": "HIGH",
+        "fetchedAt": "2026-05-06T06:04:00.214Z",
+        "contentType": "html"
+      },
+      "externalPosition": 37,
+      "totalCompetitors": 138,
+      "fleet": null,
+      "candidates": [
+        {
+          "url": "https://2025ilcaolympic.ilca-worlds.org/wp-content/uploads/sites/28/2025/05/ILCA-7M-2025-CHN-Results.html",
+          "domain": "2025ilcaolympic.ilca-worlds.org",
+          "tier": "HIGH",
+          "contentType": "html",
+          "fetchedAt": "2026-05-06T06:04:00.214Z",
+          "confidenceScore": 0.9,
+          "confidenceBreakdown": {
+            "nameMatch": 1,
+            "eventNameMatch": 1,
+            "dateOverlap": 1,
+            "classMatch": 0.5,
+            "positionAgreement": 1,
+            "sourceTier": 1
+          },
+          "externalPosition": 37,
+          "totalCompetitors": 138,
+          "fleet": null,
+          "notes": [
+            "tables-found=2",
+            "hit-section=\"Overall · Rank\nNat\n­\nSailNo\nHelm\nQ1\nQ2\nQ3\nQ4\nQ5\nTotal\nNett\""
+          ]
+        },
+        {
+          "url": "https://2025ilcaolympic.ilca-worlds.org/",
+          "domain": "2025ilcaolympic.ilca-worlds.org",
+          "tier": "HIGH",
+          "contentType": "playwright-html",
+          "fetchedAt": "2026-05-06T06:02:51.470Z",
+          "confidenceScore": 0,
+          "confidenceBreakdown": {
+            "nameMatch": 0,
+            "eventNameMatch": 0.375,
+            "dateOverlap": 1,
+            "classMatch": 0.5,
+            "positionAgreement": 0.5,
+            "sourceTier": 1
+          },
+          "externalPosition": null,
+          "totalCompetitors": null,
+          "fleet": null,
+          "rejectReason": "name-not-found",
+          "notes": [
+            "tables-found=0",
+            "no-row-matched",
+            "via-playwright"
+          ]
+        },
+        {
+          "url": "https://2025ilcaolympic.ilca-worlds.org/race-results/",
+          "domain": "2025ilcaolympic.ilca-worlds.org",
+          "tier": "HIGH",
+          "contentType": "playwright-html",
+          "fetchedAt": "2026-05-06T06:03:25.393Z",
+          "confidenceScore": 0,
+          "confidenceBreakdown": {
+            "nameMatch": 0,
+            "eventNameMatch": 0,
+            "dateOverlap": 1,
+            "classMatch": 0.5,
+            "positionAgreement": 0.5,
+            "sourceTier": 1
+          },
+          "externalPosition": null,
+          "totalCompetitors": null,
+          "fleet": null,
+          "rejectReason": "name-not-found",
+          "notes": [
+            "tables-found=0",
+            "no-row-matched",
+            "via-playwright"
+          ]
+        }
+      ],
+      "needsReview": false,
+      "reviewReasons": [
+        "class-implied-not-confirmed"
+      ]
+    },
+    {
+      "worldSailingEventId": "6a89cc47-c1cf-428a-874f-4d9de1a4b0ce",
+      "verifiedAt": "2026-05-06T06:23:02.869Z",
+      "confidenceScore": 0.9,
+      "confidenceBreakdown": {
+        "nameMatch": 1,
+        "eventNameMatch": 1,
+        "dateOverlap": 1,
+        "classMatch": 0.5,
+        "positionAgreement": 1,
+        "sourceTier": 1
+      },
+      "primarySource": {
+        "url": "https://2022ilca7men.ilca-worlds.org/wp-content/uploads/sites/2/2022/06/ILCA7Men-FINAL.html",
+        "domain": "2022ilca7men.ilca-worlds.org",
+        "tier": "HIGH",
+        "fetchedAt": "2026-05-06T06:23:01.915Z",
+        "contentType": "html"
+      },
+      "externalPosition": 71,
+      "totalCompetitors": 63,
+      "fleet": "Silver Fleet",
+      "candidates": [
+        {
+          "url": "https://2022ilca7men.ilca-worlds.org/wp-content/uploads/sites/2/2022/06/ILCA7Men-FINAL.html",
+          "domain": "2022ilca7men.ilca-worlds.org",
+          "tier": "HIGH",
+          "contentType": "html",
+          "fetchedAt": "2026-05-06T06:23:01.915Z",
+          "confidenceScore": 0.9,
+          "confidenceBreakdown": {
+            "nameMatch": 1,
+            "eventNameMatch": 1,
+            "dateOverlap": 1,
+            "classMatch": 0.5,
+            "positionAgreement": 1,
+            "sourceTier": 1
+          },
+          "externalPosition": 71,
+          "totalCompetitors": 63,
+          "fleet": "Silver Fleet",
+          "notes": [
+            "tables-found=2",
+            "hit-section=\"Silver Fleet · Rank\nFleet\nHelmName\nMNA\nSail\nISAF ID\nQ1\nQ2\nQ3\nQ4\nQ5\nQ6\nF1\nF2\nF3\nF\""
+          ]
+        },
+        {
+          "url": "https://2022ilca7men.ilca-worlds.org/",
+          "domain": "2022ilca7men.ilca-worlds.org",
+          "tier": "HIGH",
+          "contentType": "playwright-html",
+          "fetchedAt": "2026-05-06T06:22:26.862Z",
+          "confidenceScore": 0,
+          "confidenceBreakdown": {
+            "nameMatch": 0,
+            "eventNameMatch": 1,
+            "dateOverlap": 1,
+            "classMatch": 0.5,
+            "positionAgreement": 0.5,
+            "sourceTier": 1
+          },
+          "externalPosition": null,
+          "totalCompetitors": null,
+          "fleet": null,
+          "rejectReason": "name-not-found",
+          "notes": [
+            "tables-found=0",
+            "no-row-matched",
+            "via-playwright"
+          ]
+        }
+      ],
+      "needsReview": false,
+      "reviewReasons": [
+        "class-implied-not-confirmed"
+      ]
+    },
+    {
+      "worldSailingEventId": "922ef876-ae39-4386-83c0-94d236df59a8",
+      "verifiedAt": "2026-05-06T06:20:46.800Z",
+      "confidenceScore": 1,
+      "confidenceBreakdown": {
+        "nameMatch": 1,
+        "eventNameMatch": 1,
+        "dateOverlap": 1,
+        "classMatch": 1,
+        "positionAgreement": 1,
+        "sourceTier": 1
+      },
+      "primarySource": {
+        "url": "https://www.cork.org/past-results/results2022/ILCA_NAC_results.html",
+        "domain": "www.cork.org",
+        "tier": "HIGH",
+        "fetchedAt": "2026-05-06T06:20:45.955Z",
+        "contentType": "html"
+      },
+      "externalPosition": 3,
+      "totalCompetitors": 49,
+      "fleet": "ILCA 7 Fleet",
+      "candidates": [
+        {
+          "url": "https://www.cork.org/past-results/results2022/ILCA_NAC_results.html",
+          "domain": "www.cork.org",
+          "tier": "HIGH",
+          "contentType": "html",
+          "fetchedAt": "2026-05-06T06:20:45.955Z",
+          "confidenceScore": 1,
+          "confidenceBreakdown": {
+            "nameMatch": 1,
+            "eventNameMatch": 1,
+            "dateOverlap": 1,
+            "classMatch": 1,
+            "positionAgreement": 1,
+            "sourceTier": 1
+          },
+          "externalPosition": 3,
+          "totalCompetitors": 49,
+          "fleet": "ILCA 7 Fleet",
+          "notes": [
+            "tables-found=5",
+            "hit-section=\"ILCA 7 Fleet · Rank  Rang\nSail #\nHelm\nNat\nR1/Q1\nR2/Q2\nR3/Q3\nR4/Q4\nR5/Q5\nR6/Q6\nR7\""
+          ]
+        }
+      ],
+      "needsReview": false,
+      "reviewReasons": []
+    },
+    {
+      "worldSailingEventId": "c47015f7-14a1-4711-8e0e-ea63e3c2edf5",
+      "verifiedAt": "2026-05-06T06:12:30.137Z",
+      "confidenceScore": 0.9,
+      "confidenceBreakdown": {
+        "nameMatch": 1,
+        "eventNameMatch": 1,
+        "dateOverlap": 1,
+        "classMatch": 0.5,
+        "positionAgreement": 1,
+        "sourceTier": 1
+      },
+      "primarySource": {
+        "url": "https://2024ilca7men.ilca-worlds.org/wp-content/uploads/sites/19/2024/01/Results-7M-AUS-Final.html",
+        "domain": "2024ilca7men.ilca-worlds.org",
+        "tier": "HIGH",
+        "fetchedAt": "2026-05-06T06:12:29.259Z",
+        "contentType": "html"
+      },
+      "externalPosition": 107,
+      "totalCompetitors": 50,
+      "fleet": "Bronze Fleet",
+      "candidates": [
+        {
+          "url": "https://2024ilca7men.ilca-worlds.org/wp-content/uploads/sites/19/2024/01/Results-7M-AUS-Final.html",
+          "domain": "2024ilca7men.ilca-worlds.org",
+          "tier": "HIGH",
+          "contentType": "html",
+          "fetchedAt": "2026-05-06T06:12:29.259Z",
+          "confidenceScore": 0.9,
+          "confidenceBreakdown": {
+            "nameMatch": 1,
+            "eventNameMatch": 1,
+            "dateOverlap": 1,
+            "classMatch": 0.5,
+            "positionAgreement": 1,
+            "sourceTier": 1
+          },
+          "externalPosition": 107,
+          "totalCompetitors": 50,
+          "fleet": "Bronze Fleet",
+          "notes": [
+            "tables-found=4",
+            "hit-section=\"Bronze Fleet · Rank\nNat\n \nSailNo\nHelmName\nHelmId\n \nQ1\nQ2\nQ3\nQ4\nQ5\nQ6\nF1\nF2\nF3\nF4\""
+          ]
+        },
+        {
+          "url": "https://2024ilca7men.ilca-worlds.org/",
+          "domain": "2024ilca7men.ilca-worlds.org",
+          "tier": "HIGH",
+          "contentType": "playwright-html",
+          "fetchedAt": "2026-05-06T06:11:54.172Z",
+          "confidenceScore": 0,
+          "confidenceBreakdown": {
+            "nameMatch": 0,
+            "eventNameMatch": 1,
+            "dateOverlap": 1,
+            "classMatch": 0.5,
+            "positionAgreement": 0.5,
+            "sourceTier": 1
+          },
+          "externalPosition": null,
+          "totalCompetitors": null,
+          "fleet": null,
+          "rejectReason": "name-not-found",
+          "notes": [
+            "tables-found=0",
+            "no-row-matched",
+            "via-playwright"
+          ]
+        }
+      ],
+      "needsReview": false,
+      "reviewReasons": [
+        "class-implied-not-confirmed"
+      ]
+    }
+  ]
+}

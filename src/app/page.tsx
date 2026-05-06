@@ -99,23 +99,22 @@ export default async function HomePage() {
                 <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-ink-3 mb-3">
                   {group.label}
                 </p>
-                <ul className="flex flex-wrap items-center gap-x-6 sm:gap-x-8 lg:gap-x-12 gap-y-4">
+                <ul className="flex items-center gap-x-3 sm:gap-x-5 lg:gap-x-8 w-full">
                   {group.items.map((s) => (
-                    <li key={s.name}>
+                    <li key={s.name} className="flex-1 min-w-0 flex justify-center">
                       <a
                         href={s.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex flex-col items-center gap-1.5 transition hover:opacity-80"
+                        className="flex flex-col items-center gap-1 transition hover:opacity-80"
                       >
                         <img
                           src={s.logo}
                           alt={s.name}
                           loading="lazy"
-                          className="w-auto object-contain"
-                          style={{ height: '48px', maxWidth: '180px' }}
+                          className="max-h-7 sm:max-h-9 lg:max-h-12 w-auto max-w-full object-contain"
                         />
-                        <span className="font-mono uppercase text-ink-3 text-center leading-tight" style={{ fontSize: '9px', letterSpacing: '0.15em' }}>
+                        <span className="font-mono uppercase text-ink-3 text-center leading-tight text-[8px] tracking-[0.12em]">
                           {s.name}
                         </span>
                       </a>

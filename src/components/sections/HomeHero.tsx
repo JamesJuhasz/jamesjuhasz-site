@@ -20,7 +20,7 @@ export function HomeHero() {
       {/* Mobile: single portrait-friendly image */}
       <div className="sm:hidden absolute inset-0 -z-20 overflow-hidden">
         <Image
-          src="/images/hero-candidates/dsc02737.jpg"
+          src="/images/hero-candidates/dsc04465.jpg"
           alt=""
           fill
           priority

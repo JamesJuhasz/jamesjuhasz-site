@@ -76,11 +76,10 @@ export function Editor({
     if (!file || !editor) return;
     setUploading(true);
     try {
-      const fd = new FormData();
-      fd.append("file", file);
       const res = await fetch("/api/admin/upload", {
         method: "POST",
-        body: fd,
+        body: file,
+        headers: { "content-type": file.type || "application/octet-stream" },
       });
       const data = (await res.json()) as { ok: boolean; url?: string; error?: string };
       if (!data.ok || !data.url) {

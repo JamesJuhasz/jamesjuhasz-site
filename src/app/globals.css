@@ -105,17 +105,18 @@
     color: var(--color-ink);
   }
 
-  /* Tailwind v4 dropped the v3 `cursor: pointer` default on buttons. Restore it
-     so interactive controls feel interactive; honor disabled state. */
-  button:not(:disabled),
-  [role="button"]:not(:disabled),
-  summary {
-    cursor: pointer;
-  }
-  button:disabled,
-  [role="button"][aria-disabled="true"] {
-    cursor: not-allowed;
-  }
+}
+
+/* Tailwind v4 dropped the v3 `cursor: pointer` default on buttons. Restore it
+   outside any @layer so it always wins against utility cascades. */
+button:not(:disabled),
+[role="button"]:not(:disabled),
+summary {
+  cursor: pointer;
+}
+button:disabled,
+[role="button"][aria-disabled="true"] {
+  cursor: not-allowed;
 }
 
 /* Selection */

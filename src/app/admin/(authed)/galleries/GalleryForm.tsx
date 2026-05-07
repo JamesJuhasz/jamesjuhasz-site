@@ -59,9 +59,11 @@ export function GalleryForm({ initial }: { initial?: GalleryInitial }) {
   }, [title, isNew]);
 
   async function uploadOne(file: File): Promise<string> {
-    const fd = new FormData();
-    fd.append("file", file);
-    const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
+    const res = await fetch("/api/admin/upload", {
+      method: "POST",
+      body: file,
+      headers: { "content-type": file.type || "application/octet-stream" },
+    });
     const data = (await res.json()) as {
       ok: boolean;
       url?: string;

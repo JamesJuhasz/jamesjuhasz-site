@@ -54,7 +54,7 @@ function StatOrDash({
 
 export default async function EventsPage() {
   const [events, upcomingApi, statsApi] = await Promise.all([
-    getEventsIndex(),
+    getEventsIndex().catch(() => []),
     fetchUpcoming(100),
     fetchTrainingStats(365),
   ]);

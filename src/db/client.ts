@@ -7,6 +7,16 @@ declare global {
   var __pgPool: Pool | undefined;
 }
 
+function needsSsl(url: string): boolean | { rejectUnauthorized: boolean } {
+  // Railway's internal network (postgres.railway.internal:5432) doesn't
+  // require SSL — connecting with SSL fails the handshake. Local Postgres
+  // also doesn't use SSL. Public proxy hostnames (e.g. proxy.rlwy.net)
+  // require SSL but with self-signed certs we don't verify.
+  if (url.includes("localhost")) return false;
+  if (url.includes(".railway.internal")) return false;
+  return { rejectUnauthorized: false };
+}
+
 function getPool(): Pool {
   const url = process.env.DATABASE_URL;
   if (!url) {
@@ -17,8 +27,7 @@ function getPool(): Pool {
   if (!global.__pgPool) {
     global.__pgPool = new Pool({
       connectionString: url,
-      // Railway proxies use TLS but skip cert verification for the proxy host.
-      ssl: url.includes("localhost") ? false : { rejectUnauthorized: false },
+      ssl: needsSsl(url),
       max: 5,
     });
   }

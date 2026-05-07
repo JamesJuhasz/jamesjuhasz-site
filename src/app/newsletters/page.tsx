@@ -14,7 +14,7 @@ export const metadata = {
 };
 
 export default async function NewslettersPage() {
-  const posts = await getPostsIndex();
+  const posts = await getPostsIndex().catch(() => []);
 
   return (
     <>

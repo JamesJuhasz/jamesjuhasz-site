@@ -23,10 +23,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE.url}/clinic-registration`, priority: 0.6, changeFrequency: "monthly", lastModified: now },
   ];
 
+  // Resilient: if the DB is unreachable at build time, omit DB-backed
+  // routes from the sitemap. ISR (revalidate=3600) regenerates the
+  // sitemap on demand once the DB comes back.
   const [posts, events, galleries] = await Promise.all([
-    getPostsIndex(),
-    getEventsIndex(),
-    getGalleries(),
+    getPostsIndex().catch(() => []),
+    getEventsIndex().catch(() => []),
+    getGalleries().catch(() => []),
   ]);
 
   const postRoutes: MetadataRoute.Sitemap = posts.map((p) => ({

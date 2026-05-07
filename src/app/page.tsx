@@ -71,11 +71,13 @@ export const metadata = {
 };
 
 export default async function HomePage() {
+  // Resilient: build doesn't fail if Postgres is unavailable. ISR
+  // (revalidate=60) refills these as soon as the DB is reachable again.
   const [allPosts, events, statsApi, allPress] = await Promise.all([
-    getPostsIndex(),
-    getEventsIndex(),
+    getPostsIndex().catch(() => []),
+    getEventsIndex().catch(() => []),
     fetchTrainingStats(365),
-    getPressMentions(),
+    getPressMentions().catch(() => []),
   ]);
   const stats = statsApi ? deriveStats(statsApi) : null;
   const recentPosts = allPosts.slice(0, 3);

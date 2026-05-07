@@ -30,16 +30,22 @@ function formatRange(start: string, end: string) {
 }
 
 export async function generateStaticParams() {
-  const [dbEventsList, wsSlugs] = await Promise.all([
-    getEventsIndex(),
-    Promise.resolve(getWorldSailingSlugs()),
-  ]);
+  // Resilient: if the DB is unreachable at build time, fall back to WS
+  // slugs only. ISR (revalidate=60) regenerates DB-backed events on demand.
+  let dbEventsList: { slug: string }[] = [];
+  try {
+    dbEventsList = await getEventsIndex();
+  } catch (err) {
+    if (process.env.NODE_ENV !== "production") {
+      console.warn("[events] generateStaticParams skipped DB:", err);
+    }
+  }
+  const wsSlugs = getWorldSailingSlugs();
   const dbSet = new Set(dbEventsList.map((e) => e.slug));
-  const all = [
+  return [
     ...dbEventsList.map((e) => ({ slug: e.slug })),
     ...wsSlugs.filter((s) => !dbSet.has(s)).map((s) => ({ slug: s })),
   ];
-  return all;
 }
 
 export async function generateMetadata({

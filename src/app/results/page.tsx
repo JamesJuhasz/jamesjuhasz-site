@@ -40,7 +40,7 @@ function StatOrDash({
 }
 
 export default async function ResultsPage() {
-  const results = await getResults();
+  const results = await getResults().catch(() => []);
   const stats = deriveResultStats(results);
 
   return (

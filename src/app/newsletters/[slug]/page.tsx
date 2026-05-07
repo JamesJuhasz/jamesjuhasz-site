@@ -17,8 +17,17 @@ const dateFmt = new Intl.DateTimeFormat("en-CA", {
 });
 
 export async function generateStaticParams() {
-  const posts = await getPostsIndex();
-  return posts.map((p) => ({ slug: p.slug }));
+  // Resilient: if the DB is unreachable at build time, fall back to
+  // on-demand generation. ISR (revalidate=60) handles the rest.
+  try {
+    const posts = await getPostsIndex();
+    return posts.map((p) => ({ slug: p.slug }));
+  } catch (err) {
+    if (process.env.NODE_ENV !== "production") {
+      console.warn("[newsletters] generateStaticParams skipped:", err);
+    }
+    return [];
+  }
 }
 
 export async function generateMetadata({

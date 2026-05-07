@@ -62,8 +62,19 @@ export function GalleryForm({ initial }: { initial?: GalleryInitial }) {
     const fd = new FormData();
     fd.append("file", file);
     const res = await fetch("/api/admin/upload", { method: "POST", body: fd });
-    const data = (await res.json()) as { ok: boolean; url?: string; error?: string };
-    if (!data.ok || !data.url) throw new Error(data.error ?? "upload failed");
+    const data = (await res.json()) as {
+      ok: boolean;
+      url?: string;
+      error?: string;
+      detail?: string;
+      got?: string;
+    };
+    if (!data.ok || !data.url) {
+      const parts = [data.error ?? "upload failed"];
+      if (data.detail) parts.push(data.detail);
+      if (data.got) parts.push(`(got ${data.got})`);
+      throw new Error(parts.join(" — "));
+    }
     return data.url;
   }
 

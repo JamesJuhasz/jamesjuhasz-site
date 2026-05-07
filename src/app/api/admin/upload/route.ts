@@ -7,8 +7,17 @@ export async function POST(req: NextRequest) {
   let form: FormData;
   try {
     form = await req.formData();
-  } catch {
-    return NextResponse.json({ ok: false, error: "invalid_form" }, { status: 400 });
+  } catch (err) {
+    const message = (err as Error).message ?? String(err);
+    console.error("[upload] formData() failed:", {
+      message,
+      contentType: req.headers.get("content-type"),
+      contentLength: req.headers.get("content-length"),
+    });
+    return NextResponse.json(
+      { ok: false, error: "invalid_form", detail: message },
+      { status: 400 },
+    );
   }
 
   const file = form.get("file");

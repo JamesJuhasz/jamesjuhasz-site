@@ -77,3 +77,78 @@ Running log of corrections, gotchas, and patterns to repeat. Reviewed at session
 **How to apply.**
 - `parsePosition()` helper in `scripts/fetch-world-sailing.ts`: accepts `string | number | null`, returns `number | null`.
 - Validate fixtures by asserting non-zero count of expected-positive rows after a fetch (e.g. `at least 80% have position !== null`).
+
+---
+
+## 2026-05-07 — Admin dashboard build
+
+### Lesson: Sanity Studio is already an admin dashboard — don't rebuild it before checking.
+
+**Pattern.** When the user asks for "an admin dashboard with CRUD," walk the
+codebase first. We already had `/studio` (Sanity) doing the entire CRUD job
+for the entities the user listed. The first plan I floated was to rebuild
+that surface; the right answer was to keep it (or build a thin custom layer
+on top) until the user had a reason to replace it.
+
+**How to apply.** When a user asks for a feature, search for partial / full
+implementations of the same surface before scoping new work. Then ask the
+user whether they want to keep, extend, or replace what's there.
+
+### Lesson: Postgres schema migrations with Drizzle want push semantics for first deploy.
+
+**Rule.** Run `drizzle-kit generate` to produce a versioned `0000_init.sql`,
+then a tiny `tsx scripts/db-migrate.ts` calling `migrate()` from
+`drizzle-orm/node-postgres/migrator`. Don't rely on `drizzle-kit push` in CI —
+it's interactive.
+
+**How to apply.** `npm run db:migrate` is idempotent and runs in any environment
+that has `DATABASE_URL`. Re-run it on every deploy.
+
+### Lesson: TipTap can't directly load Sanity portable-text JSON.
+
+**Rule.** Detect TipTap-shape JSON (`{ type: "doc", … }`) before passing as
+`content`; otherwise fall back to HTML so TipTap parses the structure on
+mount.
+
+**How to apply.** `Editor.tsx` does `const isTiptapDoc = json?.type === "doc"`;
+content-on-mount = either the doc, the HTML, or `""`.
+
+### Lesson: Resend Broadcasts auto-handle unsubscribe — don't roll your own.
+
+**Pattern.** When sending a Broadcast against an Audience, Resend injects
+`List-Unsubscribe` headers and replaces `{{{RESEND_UNSUBSCRIBE_URL}}}` with
+their hosted unsubscribe URL. No custom `/unsubscribe` page needed.
+
+**How to apply.** In `src/lib/admin/newsletter-html.ts` we use that exact
+placeholder in the footer. For test sends we substitute `#` so the link still
+renders without the audience flow.
+
+### Lesson: Railway has TWO postgres URLs — pick the right one for the runtime.
+
+**Rule.** `DATABASE_URL` is internal-network only; `DATABASE_PUBLIC_URL` is
+proxied via the public internet. For local dev / migration scripts, use
+`DATABASE_PUBLIC_URL`. For the deployed app, link `DATABASE_URL` via Variable
+Reference (faster + private network).
+
+**How to apply.** `.env.local` in dev points at the public proxy. On Railway
+the deployed service should use a Variable Reference to the Postgres
+service's `DATABASE_URL`.
+
+### Lesson: Local image hosting on Railway needs a Volume.
+
+**Rule.** Railway's container filesystem is ephemeral — files written at
+runtime disappear on the next deploy. Mount a Volume (e.g. at `/data/uploads`)
+and set `UPLOADS_DIR=/data/uploads`. Local dev defaults to `./uploads`
+(gitignored).
+
+**How to apply.** `src/lib/admin/uploads.ts::getUploadsDir()` reads from the
+env. Same code works in dev and prod once the Volume is mounted.
+
+### Lesson: Next.js 16 renamed `middleware` → `proxy`.
+
+**Pattern.** The file at `src/middleware.ts` with an exported `middleware`
+function still works in Next 16 but emits a deprecation warning. Rename the
+file to `src/proxy.ts` and the export to `proxy`.
+
+**How to apply.** Already done. Future projects: skip the deprecated form
+entirely.

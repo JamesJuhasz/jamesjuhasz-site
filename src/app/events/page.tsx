@@ -8,7 +8,7 @@ import { HeroParallax } from "@/components/sections/HeroParallax";
 import { UpcomingEventCard } from "@/components/cards/UpcomingEventCard";
 import { EventCard } from "@/components/cards/EventCard";
 import { DonateCTAInline } from "@/components/cta/DonateCTA";
-import { getEventsIndex } from "@/sanity/fetch";
+import { getEventsIndex } from "@/lib/events";
 import {
   consolidateEvents,
   deriveStats,

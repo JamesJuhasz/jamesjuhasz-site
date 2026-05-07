@@ -1,79 +1,8 @@
 /*
-  GROQ queries used by Next.js routes. All callers should go through
-  `fetchSanity` (queries.ts has the GROQ; src/sanity/fetch.ts has the wrapper
-  with seed-data fallback when Sanity isn't configured).
+  GROQ queries for Sanity-backed reference content (press, supporters,
+  giving levels). Newsletters and events live in Postgres now — see
+  src/lib/posts.ts and src/lib/events.ts.
 */
-
-export const POSTS_INDEX = /* groq */ `
-  *[_type == "post" && !(_id in path("drafts.**"))] | order(publishedAt desc) {
-    "slug": slug.current,
-    title,
-    excerpt,
-    publishedAt,
-    coverImage { asset->{url, metadata}, alt },
-    tags,
-    featured
-  }
-`;
-
-export const POST_BY_SLUG = /* groq */ `
-  *[_type == "post" && slug.current == $slug && !(_id in path("drafts.**"))][0] {
-    "slug": slug.current,
-    title,
-    excerpt,
-    publishedAt,
-    coverImage { asset->{url, metadata}, alt },
-    body,
-    tags,
-    featured,
-    "previous": *[_type == "post" && publishedAt < ^.publishedAt && !(_id in path("drafts.**"))] | order(publishedAt desc)[0] {
-      title, "slug": slug.current
-    },
-    "next": *[_type == "post" && publishedAt > ^.publishedAt && !(_id in path("drafts.**"))] | order(publishedAt asc)[0] {
-      title, "slug": slug.current
-    }
-  }
-`;
-
-export const FEATURED_POSTS = /* groq */ `
-  *[_type == "post" && featured == true && !(_id in path("drafts.**"))] | order(publishedAt desc)[0...3] {
-    "slug": slug.current,
-    title,
-    excerpt,
-    publishedAt,
-    coverImage { asset->{url}, alt }
-  }
-`;
-
-export const EVENTS_INDEX = /* groq */ `
-  *[_type == "event" && !(_id in path("drafts.**"))] | order(eventDate desc) {
-    "slug": slug.current,
-    title,
-    eventDate,
-    endDate,
-    location,
-    category,
-    resultPosition,
-    coverImage { asset->{url}, alt },
-    upcoming
-  }
-`;
-
-export const EVENT_BY_SLUG = /* groq */ `
-  *[_type == "event" && slug.current == $slug && !(_id in path("drafts.**"))][0] {
-    "slug": slug.current,
-    title,
-    eventDate,
-    endDate,
-    location,
-    category,
-    resultPosition,
-    coverImage { asset->{url, metadata}, alt },
-    body,
-    upcoming,
-    "relatedPosts": relatedPosts[]->{ "slug": slug.current, title, publishedAt }
-  }
-`;
 
 export const PRESS_MENTIONS = /* groq */ `
   *[_type == "pressMention" && !(_id in path("drafts.**"))] | order(publishedAt desc) {

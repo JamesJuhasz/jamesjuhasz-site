@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/site";
-import { getPostsIndex, getEventsIndex } from "@/sanity/fetch";
+import { getPostsIndex } from "@/lib/posts";
+import { getEventsIndex } from "@/lib/events";
 import { galleries } from "@/lib/galleries";
 
 export const revalidate = 3600;

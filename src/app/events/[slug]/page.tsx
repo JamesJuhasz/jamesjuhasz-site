@@ -9,7 +9,7 @@ import { DonateCTAInline, DonateCTASidebar } from "@/components/cta/DonateCTA";
 import { PortableText } from "@/components/sanity/PortableText";
 import { JsonLd } from "@/components/JsonLd";
 import { eventJsonLd } from "@/lib/json-ld";
-import { getEventBySlug, getEventsIndex } from "@/sanity/fetch";
+import { getEventBySlug, getEventsIndex } from "@/lib/events";
 import {
   getWorldSailingEventBySlug,
   getWorldSailingSlugs,

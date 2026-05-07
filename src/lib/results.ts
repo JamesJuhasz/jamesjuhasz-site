@@ -3,7 +3,7 @@ import {
   fetchTrainingStats,
   type ConsolidatedEvent,
 } from "@/lib/coachaible";
-import { getEventsIndex } from "@/sanity/fetch";
+import { getEventsIndex } from "@/lib/events";
 import { type SeedEvent } from "@/lib/seed-data";
 import { getWorldSailingResults } from "@/lib/world-sailing";
 import resultsAuto from "@/data/results-auto.json";
@@ -115,13 +115,71 @@ function fromSanityOnly(event: SeedEvent): Result {
   };
 }
 
+function applyOverrides(
+  base: Result[],
+  overrides: Map<string, { position: string | null; totalCompetitors: number | null; fleet: string | null; externalUrl: string | null; hidden: boolean }>,
+): Result[] {
+  return base
+    .map((r) => {
+      const o = overrides.get(r.id);
+      if (!o) return r;
+      if (o.hidden) return null;
+      return {
+        ...r,
+        position: o.position ?? r.position,
+        totalCompetitors: o.totalCompetitors ?? r.totalCompetitors,
+        fleet: o.fleet ?? r.fleet,
+        externalUrl: o.externalUrl ?? r.externalUrl,
+      };
+    })
+    .filter((r): r is Result => r !== null);
+}
+
+async function loadOverrides(): Promise<
+  Map<
+    string,
+    {
+      position: string | null;
+      totalCompetitors: number | null;
+      fleet: string | null;
+      externalUrl: string | null;
+      hidden: boolean;
+    }
+  >
+> {
+  if (!process.env.DATABASE_URL) return new Map();
+  try {
+    const { listOverrides } = await import("@/lib/admin/store/results");
+    const rows = await listOverrides();
+    return new Map(
+      rows.map((r) => [
+        r.coachaibleId,
+        {
+          position: r.position,
+          totalCompetitors: r.totalCompetitors,
+          fleet: r.fleet,
+          externalUrl: r.externalUrl,
+          hidden: r.hidden,
+        },
+      ]),
+    );
+  } catch (err) {
+    if (process.env.NODE_ENV !== "production") {
+      console.warn("[results] override load failed:", err);
+    }
+    return new Map();
+  }
+}
+
 export async function getResults(): Promise<Result[]> {
+  const overrides = await loadOverrides();
+
   // World Sailing is the authoritative source for past regatta results.
   // The fixture under src/data/world-sailing-events.json is regenerated from
   // the federation profile by scripts/fetch-world-sailing.ts.
   const wsResults = getWorldSailingResults();
   if (wsResults.length > 0) {
-    return wsResults;
+    return applyOverrides(wsResults, overrides);
   }
 
   const [statsApi, sanityEvents] = await Promise.all([
@@ -161,7 +219,10 @@ export async function getResults(): Promise<Result[]> {
     results.push(fromSanityOnly(ev));
   }
 
-  return results.sort((a, b) => (a.startDate < b.startDate ? 1 : -1));
+  return applyOverrides(
+    results.sort((a, b) => (a.startDate < b.startDate ? 1 : -1)),
+    overrides,
+  );
 }
 
 export function deriveResultStats(results: Result[]): {

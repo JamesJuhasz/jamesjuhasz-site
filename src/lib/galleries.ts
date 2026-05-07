@@ -1,7 +1,7 @@
 /*
   Gallery sub-collections, mirroring jamesjuhasz.com — most recent first.
-  Photos live in /public/images/galleries/<slug>/photo-NN.<ext>; each gallery
-  has 16 hand-ordered shots taken from the original Squarespace galleries.
+  Photos live in /public/images/galleries/<slug>/photo-NN.<ext>; all photos
+  from the original Squarespace galleries are included in original order.
 */
 
 export type Gallery = {
@@ -9,13 +9,13 @@ export type Gallery = {
   title: string;
   dateRange: string;
   context?: string;
-  /** Total photos in the original Squarespace gallery (we ship a curated 16). */
+  /** Total photos in this gallery (matches files on disk). */
   photoCount: number;
   /** Cover photo path (in /public). */
   coverImage: string;
   /** Tone hint kept for legacy use; no longer drives placeholder gradients. */
   toneHue?: number;
-  /** Ordered photo list shown on the detail page (16 items). */
+  /** Ordered photo list shown on the detail page. */
   photos: string[];
 };
 
@@ -34,14 +34,14 @@ export const galleries: Gallery[] = [
     photoCount: 45,
     coverImage: photo("spring-2023", 1),
     toneHue: 205,
-    photos: seq("spring-2023"),
+    photos: seq("spring-2023", 45),
   },
   {
     slug: "winter-202223",
     title: "Winter 2022/23",
     dateRange: "Dec 2022 – Feb 2023",
     context: "Off-season training between blocks.",
-    photoCount: 35,
+    photoCount: 16,
     coverImage: photo("winter-202223", 1, "png"),
     toneHue: 220,
     photos: seq("winter-202223", 16, "png"),
@@ -51,10 +51,10 @@ export const galleries: Gallery[] = [
     title: "Fall 2022",
     dateRange: "Sep – Nov 2022",
     context: "Hyères + warm-up regattas.",
-    photoCount: 102,
+    photoCount: 107,
     coverImage: photo("fall2022", 1),
     toneHue: 20,
-    photos: seq("fall2022"),
+    photos: seq("fall2022", 107),
   },
   {
     slug: "summer-2022",
@@ -64,7 +64,7 @@ export const galleries: Gallery[] = [
     photoCount: 51,
     coverImage: photo("summer-2022", 1),
     toneHue: 30,
-    photos: seq("summer-2022"),
+    photos: seq("summer-2022", 51),
   },
   {
     slug: "spring-2022",
@@ -74,7 +74,7 @@ export const galleries: Gallery[] = [
     photoCount: 28,
     coverImage: photo("spring-2022", 1),
     toneHue: 190,
-    photos: seq("spring-2022"),
+    photos: seq("spring-2022", 28),
   },
   {
     slug: "winter-202122",
@@ -84,7 +84,7 @@ export const galleries: Gallery[] = [
     photoCount: 29,
     coverImage: photo("winter-202122", 1),
     toneHue: 215,
-    photos: seq("winter-202122"),
+    photos: seq("winter-202122", 29),
   },
   {
     slug: "fall-2021",
@@ -94,7 +94,7 @@ export const galleries: Gallery[] = [
     photoCount: 44,
     coverImage: photo("fall-2021", 1),
     toneHue: 15,
-    photos: seq("fall-2021"),
+    photos: seq("fall-2021", 44),
   },
   {
     slug: "summer-2021",
@@ -104,7 +104,7 @@ export const galleries: Gallery[] = [
     photoCount: 41,
     coverImage: photo("summer-2021", 1),
     toneHue: 200,
-    photos: seq("summer-2021"),
+    photos: seq("summer-2021", 41),
   },
   {
     slug: "spring-2021",
@@ -114,7 +114,7 @@ export const galleries: Gallery[] = [
     photoCount: 18,
     coverImage: photo("spring-2021", 1),
     toneHue: 195,
-    photos: seq("spring-2021"),
+    photos: seq("spring-2021", 18),
   },
   {
     slug: "winter-202021",
@@ -124,7 +124,7 @@ export const galleries: Gallery[] = [
     photoCount: 26,
     coverImage: photo("winter-202021", 1),
     toneHue: 220,
-    photos: seq("winter-202021"),
+    photos: seq("winter-202021", 26),
   },
   {
     slug: "fall-2020",
@@ -134,7 +134,7 @@ export const galleries: Gallery[] = [
     photoCount: 52,
     coverImage: photo("fall-2020", 1),
     toneHue: 25,
-    photos: seq("fall-2020"),
+    photos: seq("fall-2020", 52),
   },
   {
     slug: "summer-2020",
@@ -144,7 +144,7 @@ export const galleries: Gallery[] = [
     photoCount: 58,
     coverImage: photo("summer-2020", 1),
     toneHue: 210,
-    photos: seq("summer-2020"),
+    photos: seq("summer-2020", 58),
   },
   {
     slug: "spring-2020",
@@ -154,7 +154,7 @@ export const galleries: Gallery[] = [
     photoCount: 24,
     coverImage: photo("spring-2020", 1),
     toneHue: 35,
-    photos: seq("spring-2020"),
+    photos: seq("spring-2020", 24),
   },
   {
     slug: "junior-years",
@@ -164,14 +164,14 @@ export const galleries: Gallery[] = [
     photoCount: 35,
     coverImage: photo("junior-years", 1),
     toneHue: 45,
-    photos: seq("junior-years"),
+    photos: seq("junior-years", 35),
   },
 ];
 
 /** Photos for a gallery's detail page. */
-export function photosForGallery(slug: string, count = 12): string[] {
+export function photosForGallery(slug: string): string[] {
   const g = galleries.find((x) => x.slug === slug);
-  return g ? g.photos.slice(0, count) : [];
+  return g ? g.photos : [];
 }
 
 export function getGallery(slug: string) {

@@ -1,36 +1,23 @@
 /*
-  Sanity fetch wrapper with automatic seed-data fallback.
+  Sanity fetch wrappers for the entities still hosted in Sanity:
+  press mentions, supporters, giving levels.
 
-  When NEXT_PUBLIC_SANITY_PROJECT_ID is unset, callers get the same shape
-  back from local seed-data. This means the site stays runnable through
-  Days 2-4 (no Sanity yet) and Day 5 only gates the publish flow, not
-  the dev experience.
+  Newsletters and events have moved to Postgres — see src/lib/posts.ts
+  and src/lib/events.ts. Falls back to seed-data when Sanity isn't
+  configured so the site keeps rendering in dev.
 */
 
 import { sanityClient } from "./client";
 import { isSanityConfigured } from "./env";
 import {
-  recentPosts,
   pressEntries,
   givingLevels,
-  type SeedPost,
-  type SeedEvent,
   type SeedPress,
   type GivingLevel,
 } from "@/lib/seed-data";
-import { getWorldSailingPastEvents } from "@/lib/world-sailing";
 import pressAuto from "@/data/press-auto.json";
 import { SITE } from "@/lib/site";
-import {
-  POSTS_INDEX,
-  POST_BY_SLUG,
-  FEATURED_POSTS,
-  EVENTS_INDEX,
-  EVENT_BY_SLUG,
-  PRESS_MENTIONS,
-  SUPPORTERS,
-  GIVING_LEVELS,
-} from "./queries";
+import { PRESS_MENTIONS, SUPPORTERS, GIVING_LEVELS } from "./queries";
 
 const REVALIDATE_SECONDS = 60;
 
@@ -52,49 +39,6 @@ async function fetchOrFallback<T>(
     }
     return fallback;
   }
-}
-
-export type FetchedPost = SeedPost & {
-  body?: unknown;
-  previous?: { slug: string; title: string };
-  next?: { slug: string; title: string };
-};
-
-export type FetchedEvent = SeedEvent & {
-  body?: unknown;
-  upcoming?: boolean;
-};
-
-export async function getPostsIndex(): Promise<SeedPost[]> {
-  return fetchOrFallback<SeedPost[]>(POSTS_INDEX, {}, recentPosts);
-}
-
-export async function getPostBySlug(slug: string): Promise<FetchedPost | null> {
-  const fallback = recentPosts.find((p) => p.slug === slug);
-  return fetchOrFallback<FetchedPost | null>(
-    POST_BY_SLUG,
-    { slug },
-    fallback ?? null,
-  );
-}
-
-export async function getFeaturedPosts(): Promise<SeedPost[]> {
-  return fetchOrFallback<SeedPost[]>(FEATURED_POSTS, {}, recentPosts.slice(0, 3));
-}
-
-export async function getEventsIndex(): Promise<SeedEvent[]> {
-  // Fallback is verified World Sailing data. Upcoming events come from
-  // CoachAible at the page level — the WS feed is past-only.
-  return fetchOrFallback<SeedEvent[]>(EVENTS_INDEX, {}, getWorldSailingPastEvents());
-}
-
-export async function getEventBySlug(slug: string): Promise<FetchedEvent | null> {
-  const fallback = getWorldSailingPastEvents().find((e) => e.slug === slug);
-  return fetchOrFallback<FetchedEvent | null>(
-    EVENT_BY_SLUG,
-    { slug },
-    fallback ?? null,
-  );
 }
 
 export async function getPressMentions(): Promise<SeedPress[]> {

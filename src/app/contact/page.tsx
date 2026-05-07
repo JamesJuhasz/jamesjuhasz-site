@@ -59,8 +59,7 @@ export default function ContactPage() {
           </h1>
           <p className="mt-6 text-body-lg text-paper/85 max-w-prose">
             Press inquiries, sponsorship conversations, training questions —
-            send a note and I&apos;ll respond within a few days. Often within 48
-            hours.
+            send a note and I&apos;ll respond as soon as I can!
           </p>
         </Container>
       </section>

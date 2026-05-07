@@ -8,7 +8,7 @@ import { HeroParallax } from "@/components/sections/HeroParallax";
 import { UpcomingEventCard } from "@/components/cards/UpcomingEventCard";
 import { EventCard } from "@/components/cards/EventCard";
 import { DonateCTAInline } from "@/components/cta/DonateCTA";
-import { getEventsIndex } from "@/sanity/fetch";
+import { getEventsIndex } from "@/lib/events";
 import {
   consolidateEvents,
   deriveStats,
@@ -90,7 +90,7 @@ export default async function EventsPage() {
             What&apos;s next
           </h1>
           <p className="mt-6 max-w-prose text-body-lg text-paper/85">
-            Where the campaign goes next. Each event is a chance to score Olympic qualification points. Past results live on the Results page.
+            Past results live on the Results page.
           </p>
           <div className="mt-10 flex flex-col items-start gap-3">
             <span className="text-caption uppercase tracking-wider text-paper/70">
@@ -141,7 +141,6 @@ export default async function EventsPage() {
             <SectionHeader
               eyebrow="Upcoming"
               title="Next on the calendar"
-              lede="Where the campaign goes next. Each event is a chance to score Olympic qualification points."
             />
             <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {upcomingFromApi.map((e, i) => (
@@ -158,7 +157,6 @@ export default async function EventsPage() {
             <SectionHeader
               eyebrow="Upcoming"
               title="Next on the calendar"
-              lede="Where the campaign goes next. Each event is a chance to score Olympic qualification points."
             />
             <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {upcomingFromSanity.map((e, i) => (

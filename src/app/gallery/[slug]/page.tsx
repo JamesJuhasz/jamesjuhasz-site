@@ -6,11 +6,11 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { DonateCTAInline } from "@/components/cta/DonateCTA";
-import { galleries, getGallery, photosForGallery } from "@/lib/galleries";
+import { getGalleries, getGallery } from "@/lib/galleries";
+import { GalleryGrid } from "@/components/gallery/GalleryGrid";
+import blurData from "@/data/gallery-blur.json";
 
-export function generateStaticParams() {
-  return galleries.map((g) => ({ slug: g.slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
@@ -18,7 +18,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const g = getGallery(slug);
+  const g = await getGallery(slug);
   if (!g) return { title: "Gallery not found" };
   return {
     title: g.title,
@@ -32,14 +32,14 @@ export default async function GalleryDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const gallery = getGallery(slug);
+  const gallery = await getGallery(slug);
   if (!gallery) notFound();
 
-  const photos = photosForGallery(gallery.slug, 12);
+  const photos = gallery.photos;
   const heroPhoto = photos[0];
   const tilePhotos = photos.slice(1);
-  const aspects = ["aspect-[4/5]", "aspect-[3/2]", "aspect-square", "aspect-[5/4]"];
-  const related = galleries.filter((g) => g.slug !== gallery.slug).slice(0, 4);
+  const allGalleries = await getGalleries();
+  const related = allGalleries.filter((g) => g.slug !== gallery.slug).slice(0, 4);
 
   return (
     <>
@@ -71,37 +71,13 @@ export default async function GalleryDetailPage({
 
       <section className="py-section-y">
         <Container width="wide">
-          {heroPhoto ? (
-            <Reveal className="relative aspect-[21/9] rounded-2xl overflow-hidden bg-fog mb-3">
-              <Image
-                src={heroPhoto}
-                alt=""
-                fill
-                priority
-                sizes="(min-width: 1280px) 1200px, 100vw"
-                className="object-cover hover:scale-[1.02] transition-transform duration-700"
-              />
-            </Reveal>
-          ) : null}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            {tilePhotos.map((src, i) => (
-              <Reveal
-                key={`${src}-${i}`}
-                delay={Math.min(i * 0.04, 0.32)}
-                className={`relative ${aspects[i % aspects.length]} rounded-xl overflow-hidden bg-fog`}
-              >
-                <Image
-                  src={src}
-                  alt=""
-                  fill
-                  sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
-                  className="object-cover hover:scale-[1.03] transition-transform duration-700"
-                />
-              </Reveal>
-            ))}
-          </div>
+          <GalleryGrid
+            heroPhoto={heroPhoto}
+            tilePhotos={tilePhotos}
+            blurDataURLs={blurData as Record<string, string>}
+          />
           <p className="mt-6 text-caption text-ink-3">
-            A curated selection from the campaign archive.
+            Click any photo to view full size.
           </p>
         </Container>
       </section>

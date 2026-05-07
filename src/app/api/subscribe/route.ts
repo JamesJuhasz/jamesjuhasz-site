@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { sendEmail } from "@/lib/email";
+import { addContactToAudience } from "@/lib/resend";
 import { rateLimit, clientIp } from "@/lib/rate-limit";
 
 const SubscribeSchema = z.object({
@@ -45,9 +46,16 @@ export async function POST(req: NextRequest) {
   }
 
   const { email, name } = parsed.data;
+
+  // Add to Resend audience (idempotent: Resend dedupes by email).
+  const audienceResult = await addContactToAudience({
+    email,
+    firstName: name,
+  });
+
   await sendEmail({
     subject: "[subscribe] new newsletter signup",
-    text: `Email: ${email}\nName: ${name ?? "—"}`,
+    text: `Email: ${email}\nName: ${name ?? "—"}\nAudience: ${audienceResult.ok ? "added" : `failed (${audienceResult.error})`}`,
     replyTo: email,
   });
 

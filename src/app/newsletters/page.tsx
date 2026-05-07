@@ -3,8 +3,7 @@ import { PostCard } from "@/components/cards/PostCard";
 import { HeroParallax } from "@/components/sections/HeroParallax";
 import { Reveal } from "@/components/ui/Reveal";
 import { DonateCTAInline } from "@/components/cta/DonateCTA";
-import { getPostsIndex } from "@/sanity/fetch";
-import { isSanityConfigured } from "@/sanity/env";
+import { getPostsIndex } from "@/lib/posts";
 
 export const revalidate = 60;
 
@@ -16,7 +15,6 @@ export const metadata = {
 
 export default async function NewslettersPage() {
   const posts = await getPostsIndex();
-  const usingSanity = isSanityConfigured();
 
   return (
     <>
@@ -38,18 +36,6 @@ export default async function NewslettersPage() {
           <h1 className="font-display text-display text-paper max-w-[20ch]">
             The journey, post by post
           </h1>
-          <p className="mt-6 max-w-prose text-body-lg text-paper/85">
-            Race recaps, training notes, what&apos;s working, what isn&apos;t. Published the first week of each month.
-          </p>
-          {!usingSanity ? (
-            <p className="mt-6 text-caption text-paper/75 max-w-prose">
-              Showing seed data. Configure Sanity (see{" "}
-              <code className="bg-paper/15 text-paper px-1.5 py-0.5 rounded">
-                docs/SANITY_SETUP.md
-              </code>
-              ) to publish from the studio.
-            </p>
-          ) : null}
         </Container>
       </section>
 

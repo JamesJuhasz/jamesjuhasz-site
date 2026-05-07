@@ -4,10 +4,9 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { DonateCTASidebar, DonateCTAInline } from "@/components/cta/DonateCTA";
-import { PortableText } from "@/components/sanity/PortableText";
 import { JsonLd } from "@/components/JsonLd";
 import { articleJsonLd } from "@/lib/json-ld";
-import { getPostBySlug, getPostsIndex } from "@/sanity/fetch";
+import { getPostBySlug, getPostsIndex } from "@/lib/posts";
 
 export const revalidate = 60;
 
@@ -61,7 +60,7 @@ export default async function PostPage({
   const post = await getPostBySlug(slug);
   if (!post) notFound();
 
-  const hasBody = !!post.body;
+  const hasBody = Boolean(post.bodyHtml);
 
   return (
     <>
@@ -105,11 +104,13 @@ export default async function PostPage({
             <article className="lg:col-span-8">
               <Reveal>
                 {hasBody ? (
-                  <PortableText value={post.body} />
+                  <div
+                    className="prose-newsletter max-w-prose"
+                    dangerouslySetInnerHTML={{ __html: post.bodyHtml }}
+                  />
                 ) : (
                   <p className="text-body-lg text-ink/80 max-w-prose">
-                    {post.excerpt ??
-                      "Full body text lands once Sanity is set up and content is imported (Day 5)."}
+                    {post.excerpt ?? ""}
                   </p>
                 )}
               </Reveal>

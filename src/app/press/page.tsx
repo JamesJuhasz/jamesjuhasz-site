@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Reveal } from "@/components/ui/Reveal";
 import { Button } from "@/components/ui/Button";
 import { DonateCTAInline } from "@/components/cta/DonateCTA";
-import { getPressMentions } from "@/sanity/fetch";
+import { getPressMentions } from "@/lib/press";
 
 export const revalidate = 60;
 

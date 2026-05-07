@@ -54,6 +54,9 @@ next-env.d.ts
 # Audit screenshots/findings
 /audit/
 
+# Local uploads (admin newsletter images). On Railway this lives on a Volume.
+/uploads/
+
 # Claude Code internals
 .claude/scheduled_tasks.lock
 .claude/worktrees/

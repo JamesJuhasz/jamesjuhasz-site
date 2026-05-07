@@ -10,7 +10,9 @@ import { PostCard } from "@/components/cards/PostCard";
 import { EventCard } from "@/components/cards/EventCard";
 import { DonateCTAInline } from "@/components/cta/DonateCTA";
 import { deriveStats, fetchTrainingStats } from "@/lib/coachaible";
-import { getPostsIndex, getEventsIndex, getPressMentions } from "@/sanity/fetch";
+import { getPostsIndex } from "@/lib/posts";
+import { getEventsIndex } from "@/lib/events";
+import { getPressMentions } from "@/lib/press";
 import { Badge } from "@/components/ui/Badge";
 import { SITE } from "@/lib/site";
 

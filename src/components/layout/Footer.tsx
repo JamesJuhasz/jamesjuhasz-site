@@ -32,6 +32,7 @@ const footerNavGroups: {
     items: [
       { href: "/subscribe", label: "Subscribe" },
       { href: "/contact", label: "Contact" },
+      { href: "/admin/sign-in", label: "Sign in" },
     ],
   },
 ];

@@ -3,7 +3,7 @@ import {
   fetchTrainingStats,
   type ConsolidatedEvent,
 } from "@/lib/coachaible";
-import { getEventsIndex } from "@/sanity/fetch";
+import { getEventsIndex } from "@/lib/events";
 import { type SeedEvent } from "@/lib/seed-data";
 import { getWorldSailingResults } from "@/lib/world-sailing";
 import resultsAuto from "@/data/results-auto.json";
@@ -54,12 +54,12 @@ function daysApart(a: string, b: string): number {
   return Math.abs(Math.round((bMs - aMs) / 86_400_000));
 }
 
-function findSanityOverlay(
+function findOverlay(
   event: ConsolidatedEvent,
-  sanity: SeedEvent[],
+  overlays: SeedEvent[],
 ): SeedEvent | undefined {
   const evNorm = normalizeTitle(event.title);
-  return sanity.find((s) => {
+  return overlays.find((s) => {
     if (normalizeTitle(s.title) !== evNorm) return false;
     return daysApart(s.eventDate, event.startDate) <= 7;
   });
@@ -94,9 +94,9 @@ function fromConsolidated(
   };
 }
 
-function fromSanityOnly(event: SeedEvent): Result {
+function fromOverlayOnly(event: SeedEvent): Result {
   return {
-    id: `sanity-${event.slug}`,
+    id: `db-${event.slug}`,
     title: event.title,
     startDate: event.eventDate,
     endDate: event.endDate ?? event.eventDate,
@@ -115,16 +115,74 @@ function fromSanityOnly(event: SeedEvent): Result {
   };
 }
 
+function applyOverrides(
+  base: Result[],
+  overrides: Map<string, { position: string | null; totalCompetitors: number | null; fleet: string | null; externalUrl: string | null; hidden: boolean }>,
+): Result[] {
+  return base
+    .map((r) => {
+      const o = overrides.get(r.id);
+      if (!o) return r;
+      if (o.hidden) return null;
+      return {
+        ...r,
+        position: o.position ?? r.position,
+        totalCompetitors: o.totalCompetitors ?? r.totalCompetitors,
+        fleet: o.fleet ?? r.fleet,
+        externalUrl: o.externalUrl ?? r.externalUrl,
+      };
+    })
+    .filter((r): r is Result => r !== null);
+}
+
+async function loadOverrides(): Promise<
+  Map<
+    string,
+    {
+      position: string | null;
+      totalCompetitors: number | null;
+      fleet: string | null;
+      externalUrl: string | null;
+      hidden: boolean;
+    }
+  >
+> {
+  if (!process.env.DATABASE_URL) return new Map();
+  try {
+    const { listOverrides } = await import("@/lib/admin/store/results");
+    const rows = await listOverrides();
+    return new Map(
+      rows.map((r) => [
+        r.coachaibleId,
+        {
+          position: r.position,
+          totalCompetitors: r.totalCompetitors,
+          fleet: r.fleet,
+          externalUrl: r.externalUrl,
+          hidden: r.hidden,
+        },
+      ]),
+    );
+  } catch (err) {
+    if (process.env.NODE_ENV !== "production") {
+      console.warn("[results] override load failed:", err);
+    }
+    return new Map();
+  }
+}
+
 export async function getResults(): Promise<Result[]> {
+  const overrides = await loadOverrides();
+
   // World Sailing is the authoritative source for past regatta results.
   // The fixture under src/data/world-sailing-events.json is regenerated from
   // the federation profile by scripts/fetch-world-sailing.ts.
   const wsResults = getWorldSailingResults();
   if (wsResults.length > 0) {
-    return wsResults;
+    return applyOverrides(wsResults, overrides);
   }
 
-  const [statsApi, sanityEvents] = await Promise.all([
+  const [statsApi, dbEvents] = await Promise.all([
     fetchTrainingStats(STATS_WINDOW_DAYS),
     getEventsIndex(),
   ]);
@@ -134,11 +192,11 @@ export async function getResults(): Promise<Result[]> {
     auto.items.map((it) => [it.coachaibleId, it]),
   );
 
-  const sanityPast = sanityEvents.filter((e) => e.status !== "upcoming");
+  const dbPast = dbEvents.filter((e) => e.status !== "upcoming");
 
   if (!statsApi) {
-    return sanityPast
-      .map(fromSanityOnly)
+    return dbPast
+      .map(fromOverlayOnly)
       .sort((a, b) => (a.startDate < b.startDate ? 1 : -1));
   }
 
@@ -149,19 +207,22 @@ export async function getResults(): Promise<Result[]> {
     ),
   );
 
-  const usedSanitySlugs = new Set<string>();
+  const usedOverlaySlugs = new Set<string>();
   const results: Result[] = pastRaces.map((event) => {
-    const overlay = findSanityOverlay(event, sanityPast);
-    if (overlay) usedSanitySlugs.add(overlay.slug);
+    const overlay = findOverlay(event, dbPast);
+    if (overlay) usedOverlaySlugs.add(overlay.slug);
     return fromConsolidated(event, scrapedById.get(event.id), overlay);
   });
 
-  for (const ev of sanityPast) {
-    if (usedSanitySlugs.has(ev.slug)) continue;
-    results.push(fromSanityOnly(ev));
+  for (const ev of dbPast) {
+    if (usedOverlaySlugs.has(ev.slug)) continue;
+    results.push(fromOverlayOnly(ev));
   }
 
-  return results.sort((a, b) => (a.startDate < b.startDate ? 1 : -1));
+  return applyOverrides(
+    results.sort((a, b) => (a.startDate < b.startDate ? 1 : -1)),
+    overrides,
+  );
 }
 
 export function deriveResultStats(results: Result[]): {

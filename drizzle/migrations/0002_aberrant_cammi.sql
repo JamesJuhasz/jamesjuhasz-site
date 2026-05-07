@@ -1,0 +1,1 @@
+ALTER TABLE "galleries" ADD COLUMN "last_announced_at" timestamp with time zone;

@@ -9,7 +9,14 @@ const Body = z.object({
   title: z.string().trim().min(1).max(180),
   slug: z.string().trim().min(1).max(96).optional(),
   excerpt: z.string().trim().max(400).optional().nullable(),
-  coverImageUrl: z.string().trim().url().optional().nullable(),
+  coverImageUrl: z
+    .string()
+    .trim()
+    .refine((v) => v === "" || v.startsWith("/") || /^https?:\/\//i.test(v), {
+      message: "Must be an absolute URL or a path starting with /",
+    })
+    .optional()
+    .nullable(),
   coverImageAlt: z.string().trim().max(200).optional().nullable(),
   bodyHtml: z.string().optional().nullable(),
   bodyJson: z.unknown().optional(),

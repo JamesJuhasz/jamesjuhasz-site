@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { slugify } from "@/lib/admin/slug";
 
 type PhotoItem = {
   id?: number;
@@ -43,19 +44,12 @@ export function GalleryForm({ initial }: { initial?: GalleryInitial }) {
   );
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const slugTouched = useRef(Boolean(initial?.slug));
 
   useEffect(() => {
-    if (!isNew || !title) return;
-    setSlug((prev) =>
-      prev
-        ? prev
-        : title
-            .toLowerCase()
-            .replace(/[^a-z0-9\s-]/g, "")
-            .trim()
-            .replace(/\s+/g, "-")
-            .slice(0, 96),
-    );
+    if (!isNew) return;
+    if (slugTouched.current) return;
+    setSlug(slugify(title));
   }, [title, isNew]);
 
   async function uploadOne(file: File): Promise<string> {
@@ -439,7 +433,10 @@ export function GalleryForm({ initial }: { initial?: GalleryInitial }) {
           <Label>Slug</Label>
           <input
             value={slug}
-            onChange={(e) => setSlug(e.target.value)}
+            onChange={(e) => {
+              slugTouched.current = true;
+              setSlug(e.target.value);
+            }}
             className={inputCls}
             placeholder="auto-from-title"
           />

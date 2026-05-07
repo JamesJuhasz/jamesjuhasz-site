@@ -118,6 +118,11 @@ button:disabled,
 [role="button"][aria-disabled="true"] {
   cursor: not-allowed;
 }
+input[type="file"]:not(:disabled),
+input[type="file"]:not(:disabled)::file-selector-button,
+input[type="file"]:not(:disabled)::-webkit-file-upload-button {
+  cursor: pointer;
+}
 
 /* Selection */
 ::selection {

@@ -50,7 +50,7 @@ export default function AboutPage() {
       </section>
 
       {/* THE STORY — editorial */}
-      <section className="pb-section-y-lg pt-0">
+      <section className="pb-section-y-lg pt-section-y">
         <Container width="prose">
           <p className="text-eyebrow uppercase tracking-wider text-ink-3 mb-4">
             The story · 6 min read
@@ -293,7 +293,7 @@ export default function AboutPage() {
                 alt="Racing alongside the international squad in the Mediterranean"
                 fill
                 sizes="(min-width: 1024px) 70ch, 100vw"
-                className="object-cover object-[50%_40%]"
+                className="object-cover object-bottom"
               />
             </div>
 

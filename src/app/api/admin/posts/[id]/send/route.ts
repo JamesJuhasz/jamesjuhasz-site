@@ -7,15 +7,54 @@ import {
   sendTestEmail,
   getOwnerAddress,
 } from "@/lib/resend";
+import { SITE } from "@/lib/site";
 
 export const runtime = "nodejs";
 
 const Body = z.object({ mode: z.enum(["test", "all"]) });
 
-function originFromReq(req: NextRequest): string {
-  const proto = req.headers.get("x-forwarded-proto") ?? "https";
-  const host = req.headers.get("x-forwarded-host") ?? req.headers.get("host");
-  return `${proto}://${host}`;
+/**
+ * Always absolutize email URLs against the canonical production domain.
+ *
+ * Email clients (Gmail, Apple Mail, Outlook) fetch image src URLs from the
+ * server side, so they cannot resolve `http://localhost:3000/uploads/...`
+ * even when the test send goes to your own inbox. Hardcoding SITE.url means
+ * images and links work in tests and in real broadcasts identically — at the
+ * cost that locally-uploaded images need to be deployed to production before
+ * a test send will render them. That's the right tradeoff: a test should
+ * fail-loud if a referenced image won't be available to subscribers either.
+ */
+function emailOrigin(): string {
+  return SITE.url.replace(/\/+$/, "");
+}
+
+function escapeAttr(s: string): string {
+  return s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+}
+function escapeText(s: string): string {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+/**
+ * Build the email body: first paragraph of the newsletter + a styled CTA
+ * linking back to the public post. Subscribers + the test sender both see
+ * this so the test is a faithful preview of what subs receive.
+ */
+function buildTeaserHtml(bodyHtml: string, publicUrl: string): string {
+  const trimmed = bodyHtml.replace(/^\s+/, "");
+  const firstP = trimmed.match(/<p\b[^>]*>[\s\S]*?<\/p>/i);
+  const firstBlock =
+    firstP?.[0] ??
+    trimmed.match(/<(h[1-6]|ul|ol|blockquote)\b[^>]*>[\s\S]*?<\/\1>/i)?.[0] ??
+    bodyHtml;
+  const cta = `
+    <p style="margin:24px 0 8px 0;text-align:center;">
+      <a href="${escapeAttr(publicUrl)}" style="display:inline-block;background:#0a0a0a;color:#ffffff;text-decoration:none;padding:14px 28px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:14px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;">Read the rest on the website</a>
+    </p>
+    <p style="margin:0;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:13px;color:#666666;">
+      Or open it directly: <a href="${escapeAttr(publicUrl)}" style="color:#666666;">${escapeText(publicUrl)}</a>
+    </p>`;
+  return firstBlock + cta;
 }
 
 export async function POST(
@@ -48,16 +87,26 @@ export async function POST(
     );
   }
 
-  const html = renderNewsletterEmail({
-    title: post.title,
-    bodyHtml: post.bodyHtml,
-    excerpt: post.excerpt,
-    coverImageUrl: post.coverImageUrl,
-    coverImageAlt: post.coverImageAlt,
-    origin: originFromReq(req),
-  });
+  // Public URL for the "Read the rest" CTA always points at the canonical
+  // production domain so subscribers' clicks resolve even when the test send
+  // was triggered from a localhost dev session.
+  const publicUrl = `${SITE.url.replace(/\/+$/, "")}/newsletters/${post.slug}`;
+  const teaserBody = buildTeaserHtml(post.bodyHtml, publicUrl);
 
   if (parsed.data.mode === "test") {
+    // Test sends go through `emails.send`, which does NOT substitute
+    // {{{RESEND_UNSUBSCRIBE_URL}}}. Pass a working mailto so the test recipient
+    // (the owner) can still click the link without it 404-ing.
+    const testUnsubscribeUrl = `mailto:${getOwnerAddress()}?subject=Unsubscribe%20%5Btest%5D`;
+    const html = renderNewsletterEmail({
+      title: post.title,
+      bodyHtml: teaserBody,
+      excerpt: post.excerpt,
+      coverImageUrl: post.coverImageUrl,
+      coverImageAlt: post.coverImageAlt,
+      origin: emailOrigin(),
+      unsubscribeUrl: testUnsubscribeUrl,
+    });
     const result = await sendTestEmail({
       to: getOwnerAddress(),
       subject: `[TEST] ${post.title}`,
@@ -80,9 +129,20 @@ export async function POST(
     );
   }
 
+  // Broadcast path: leave the unsubscribe URL as the Resend placeholder so
+  // their server substitutes it with the audience-scoped hosted URL at send.
+  const broadcastHtml = renderNewsletterEmail({
+    title: post.title,
+    bodyHtml: teaserBody,
+    excerpt: post.excerpt,
+    coverImageUrl: post.coverImageUrl,
+    coverImageAlt: post.coverImageAlt,
+    origin: emailOrigin(),
+  });
+
   const result = await createAndSendBroadcast({
     subject: post.title,
-    html,
+    html: broadcastHtml,
     name: post.title,
   });
   if (!result.ok) {

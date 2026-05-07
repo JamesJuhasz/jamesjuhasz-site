@@ -54,12 +54,12 @@ function daysApart(a: string, b: string): number {
   return Math.abs(Math.round((bMs - aMs) / 86_400_000));
 }
 
-function findSanityOverlay(
+function findOverlay(
   event: ConsolidatedEvent,
-  sanity: SeedEvent[],
+  overlays: SeedEvent[],
 ): SeedEvent | undefined {
   const evNorm = normalizeTitle(event.title);
-  return sanity.find((s) => {
+  return overlays.find((s) => {
     if (normalizeTitle(s.title) !== evNorm) return false;
     return daysApart(s.eventDate, event.startDate) <= 7;
   });
@@ -94,9 +94,9 @@ function fromConsolidated(
   };
 }
 
-function fromSanityOnly(event: SeedEvent): Result {
+function fromOverlayOnly(event: SeedEvent): Result {
   return {
-    id: `sanity-${event.slug}`,
+    id: `db-${event.slug}`,
     title: event.title,
     startDate: event.eventDate,
     endDate: event.endDate ?? event.eventDate,
@@ -182,7 +182,7 @@ export async function getResults(): Promise<Result[]> {
     return applyOverrides(wsResults, overrides);
   }
 
-  const [statsApi, sanityEvents] = await Promise.all([
+  const [statsApi, dbEvents] = await Promise.all([
     fetchTrainingStats(STATS_WINDOW_DAYS),
     getEventsIndex(),
   ]);
@@ -192,11 +192,11 @@ export async function getResults(): Promise<Result[]> {
     auto.items.map((it) => [it.coachaibleId, it]),
   );
 
-  const sanityPast = sanityEvents.filter((e) => e.status !== "upcoming");
+  const dbPast = dbEvents.filter((e) => e.status !== "upcoming");
 
   if (!statsApi) {
-    return sanityPast
-      .map(fromSanityOnly)
+    return dbPast
+      .map(fromOverlayOnly)
       .sort((a, b) => (a.startDate < b.startDate ? 1 : -1));
   }
 
@@ -207,16 +207,16 @@ export async function getResults(): Promise<Result[]> {
     ),
   );
 
-  const usedSanitySlugs = new Set<string>();
+  const usedOverlaySlugs = new Set<string>();
   const results: Result[] = pastRaces.map((event) => {
-    const overlay = findSanityOverlay(event, sanityPast);
-    if (overlay) usedSanitySlugs.add(overlay.slug);
+    const overlay = findOverlay(event, dbPast);
+    if (overlay) usedOverlaySlugs.add(overlay.slug);
     return fromConsolidated(event, scrapedById.get(event.id), overlay);
   });
 
-  for (const ev of sanityPast) {
-    if (usedSanitySlugs.has(ev.slug)) continue;
-    results.push(fromSanityOnly(ev));
+  for (const ev of dbPast) {
+    if (usedOverlaySlugs.has(ev.slug)) continue;
+    results.push(fromOverlayOnly(ev));
   }
 
   return applyOverrides(

@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/site";
 import { getPostsIndex } from "@/lib/posts";
 import { getEventsIndex } from "@/lib/events";
-import { galleries } from "@/lib/galleries";
+import { getGalleries } from "@/lib/galleries";
 
 export const revalidate = 3600;
 
@@ -23,9 +23,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE.url}/clinic-registration`, priority: 0.6, changeFrequency: "monthly", lastModified: now },
   ];
 
-  const [posts, events] = await Promise.all([
+  const [posts, events, galleries] = await Promise.all([
     getPostsIndex(),
     getEventsIndex(),
+    getGalleries(),
   ]);
 
   const postRoutes: MetadataRoute.Sitemap = posts.map((p) => ({

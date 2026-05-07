@@ -79,6 +79,42 @@ export const resultOverrides = pgTable("result_overrides", {
     .defaultNow(),
 });
 
+export const galleries = pgTable(
+  "galleries",
+  {
+    id: serial("id").primaryKey(),
+    slug: text("slug").notNull(),
+    title: text("title").notNull(),
+    dateRange: text("date_range").notNull(),
+    context: text("context"),
+    coverImageUrl: text("cover_image_url"),
+    sortOrder: integer("sort_order").notNull().default(0),
+    lastAnnouncedAt: timestamp("last_announced_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (t) => ({
+    slugIdx: uniqueIndex("galleries_slug_idx").on(t.slug),
+  }),
+);
+
+export const galleryPhotos = pgTable("gallery_photos", {
+  id: serial("id").primaryKey(),
+  galleryId: integer("gallery_id")
+    .notNull()
+    .references(() => galleries.id, { onDelete: "cascade" }),
+  url: text("url").notNull(),
+  alt: text("alt"),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
 export const resultReviewDecisions = pgTable("result_review_decisions", {
   eventId: text("event_id").primaryKey(),
   decision: text("decision").notNull(), // 'approve' | 'reject'
@@ -97,3 +133,7 @@ export type NewResultOverrideRow = typeof resultOverrides.$inferInsert;
 export type ResultReviewDecisionRow = typeof resultReviewDecisions.$inferSelect;
 export type NewResultReviewDecisionRow =
   typeof resultReviewDecisions.$inferInsert;
+export type GalleryRow = typeof galleries.$inferSelect;
+export type NewGalleryRow = typeof galleries.$inferInsert;
+export type GalleryPhotoRow = typeof galleryPhotos.$inferSelect;
+export type NewGalleryPhotoRow = typeof galleryPhotos.$inferInsert;

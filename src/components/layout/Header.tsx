@@ -54,6 +54,7 @@ export function Header() {
   }, [open]);
 
   return (
+    <>
     <header
       className={cn(
         "sticky top-0 z-40 w-full transition-[background-color,backdrop-filter] duration-300",
@@ -134,8 +135,11 @@ export function Header() {
         className="origin-left h-[2px] w-full bg-red"
         style={{ scaleX: progressScaleX }}
       />
+    </header>
 
-      {/* Mobile sheet — h-[calc(100svh-4rem)] because transformed parent (header) breaks `bottom-0` */}
+      {/* Mobile sheet — rendered as sibling of <header> because the header's
+          backdrop-filter creates a containing block, which would break the
+          sheet's `position: fixed` and cause it to scroll with the page. */}
       <div
         id="mobile-nav"
         className={cn(
@@ -187,6 +191,6 @@ export function Header() {
           </div>
         </div>
       </div>
-    </header>
+    </>
   );
 }

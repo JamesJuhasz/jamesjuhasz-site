@@ -9,17 +9,23 @@ import { Reveal } from "@/components/ui/Reveal";
 type Props = {
   heroPhoto: string;
   tilePhotos: string[];
+  blurDataURLs: Record<string, string>;
 };
 
 const aspects = ["aspect-[4/5]", "aspect-[3/2]", "aspect-square", "aspect-[5/4]"];
 
-export function GalleryGrid({ heroPhoto, tilePhotos }: Props) {
+export function GalleryGrid({ heroPhoto, tilePhotos, blurDataURLs }: Props) {
   const [lightboxIndex, setLightboxIndex] = useState(-1);
   const allPhotos = [heroPhoto, ...tilePhotos];
   const slides = allPhotos.map((src) => ({ src }));
 
   const open = useCallback((index: number) => setLightboxIndex(index), []);
   const close = useCallback(() => setLightboxIndex(-1), []);
+
+  const blur = (src: string) =>
+    blurDataURLs[src]
+      ? { placeholder: "blur" as const, blurDataURL: blurDataURLs[src] }
+      : {};
 
   return (
     <>
@@ -30,9 +36,11 @@ export function GalleryGrid({ heroPhoto, tilePhotos }: Props) {
             alt=""
             fill
             priority
+            quality={75}
             sizes="(min-width: 1280px) 1200px, 100vw"
             className="object-cover hover:scale-[1.02] transition-transform duration-700"
             onClick={() => open(0)}
+            {...blur(heroPhoto)}
           />
         </Reveal>
       ) : null}
@@ -48,9 +56,11 @@ export function GalleryGrid({ heroPhoto, tilePhotos }: Props) {
               src={src}
               alt=""
               fill
+              quality={45}
               sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
               className="object-cover hover:scale-[1.03] transition-transform duration-700"
               onClick={() => open(i + 1)}
+              {...blur(src)}
             />
           </Reveal>
         ))}

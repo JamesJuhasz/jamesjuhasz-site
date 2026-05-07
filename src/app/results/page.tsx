@@ -64,9 +64,6 @@ export default async function ResultsPage() {
           <h1 className="font-display text-display text-paper max-w-[20ch]">
             Race log
           </h1>
-          <p className="mt-6 max-w-prose text-body-lg text-paper/85">
-            Every regatta from the LA28 campaign — placement, fleet, and a link to the full scoreboard. Pulled from CoachAible and enriched nightly from public results pages.
-          </p>
         </Container>
       </section>
 

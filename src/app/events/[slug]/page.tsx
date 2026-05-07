@@ -6,7 +6,6 @@ import { Container } from "@/components/ui/Container";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { DonateCTAInline, DonateCTASidebar } from "@/components/cta/DonateCTA";
-import { PortableText } from "@/components/sanity/PortableText";
 import { JsonLd } from "@/components/JsonLd";
 import { eventJsonLd } from "@/lib/json-ld";
 import { getEventBySlug, getEventsIndex } from "@/lib/events";
@@ -31,14 +30,14 @@ function formatRange(start: string, end: string) {
 }
 
 export async function generateStaticParams() {
-  const [sanityEvents, wsSlugs] = await Promise.all([
+  const [dbEventsList, wsSlugs] = await Promise.all([
     getEventsIndex(),
     Promise.resolve(getWorldSailingSlugs()),
   ]);
-  const sanitySet = new Set(sanityEvents.map((e) => e.slug));
+  const dbSet = new Set(dbEventsList.map((e) => e.slug));
   const all = [
-    ...sanityEvents.map((e) => ({ slug: e.slug })),
-    ...wsSlugs.filter((s) => !sanitySet.has(s)).map((s) => ({ slug: s })),
+    ...dbEventsList.map((e) => ({ slug: e.slug })),
+    ...wsSlugs.filter((s) => !dbSet.has(s)).map((s) => ({ slug: s })),
   ];
   return all;
 }
@@ -170,10 +169,10 @@ export default async function EventDetailPage({
   const { slug } = await params;
 
   // Try Sanity first, fall back to WorldSailing enrichment data.
-  const sanityEvent = await getEventBySlug(slug);
+  const dbEvent = await getEventBySlug(slug);
   // Always look up WS enrichment — used when Sanity event has no hand-written body.
   const wsEvent = getWorldSailingEventBySlug(slug);
-  if (!sanityEvent && !wsEvent) notFound();
+  if (!dbEvent && !wsEvent) notFound();
 
   // Navigation neighbours.
   let prev: { slug: string; title: string } | null = null;
@@ -182,7 +181,7 @@ export default async function EventDetailPage({
   if (wsEvent) {
     // WS events have richer adjacent-event data (all 51 regattas by date).
     ({ prev, next } = getWorldSailingAdjacentEvents(slug));
-  } else if (sanityEvent) {
+  } else if (dbEvent) {
     const allEvents = await getEventsIndex();
     const idx = allEvents.findIndex((e) => e.slug === slug);
     prev = idx > 0 ? allEvents[idx - 1] : null;
@@ -190,14 +189,14 @@ export default async function EventDetailPage({
   }
 
   // Unified display values.
-  const title = sanityEvent?.title ?? wsEvent!.title;
-  const eventDate = sanityEvent?.eventDate ?? wsEvent!.eventDate;
-  const endDate = sanityEvent?.endDate ?? wsEvent!.endDate;
-  const location = sanityEvent?.location ?? wsEvent!.location ?? "";
-  const status = sanityEvent?.status ?? "past";
-  const category = sanityEvent?.category ?? "Regatta";
-  const resultPosition = sanityEvent?.resultPosition ?? wsEvent?.resultPosition;
-  const excerpt = sanityEvent?.excerpt ?? wsEvent?.diaryExcerpt?.slice(0, 200);
+  const title = dbEvent?.title ?? wsEvent!.title;
+  const eventDate = dbEvent?.eventDate ?? wsEvent!.eventDate;
+  const endDate = dbEvent?.endDate ?? wsEvent!.endDate;
+  const location = dbEvent?.location ?? wsEvent!.location ?? "";
+  const status = dbEvent?.status ?? "past";
+  const category = dbEvent?.category ?? "Regatta";
+  const resultPosition = dbEvent?.resultPosition ?? wsEvent?.resultPosition;
+  const excerpt = dbEvent?.excerpt ?? wsEvent?.diaryExcerpt?.slice(0, 200);
 
   return (
     <>
@@ -272,14 +271,17 @@ export default async function EventDetailPage({
           <div className="grid lg:grid-cols-12 gap-10">
             <article className="lg:col-span-8 prose-area">
 
-              {/* Content: Sanity body wins; fall back to WS enrichment; last resort is Sanity excerpt. */}
-              {sanityEvent?.body ? (
-                <PortableText value={sanityEvent.body} />
+              {/* Content: admin-supplied body wins; fall back to WS enrichment; last resort is the excerpt. */}
+              {dbEvent?.bodyHtml ? (
+                <div
+                  className="prose-newsletter max-w-prose"
+                  dangerouslySetInnerHTML={{ __html: dbEvent.bodyHtml }}
+                />
               ) : wsEvent ? (
                 <WSDiaryBody ws={wsEvent} />
               ) : (
                 <div className="space-y-6 text-body-lg text-ink/80 leading-relaxed">
-                  <p className="drop-cap">{sanityEvent?.excerpt}</p>
+                  <p className="drop-cap">{dbEvent?.excerpt}</p>
                 </div>
               )}
 

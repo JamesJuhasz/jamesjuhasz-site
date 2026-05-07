@@ -32,12 +32,44 @@ export type NewsletterEmailInput = {
    */
   origin: string;
   /**
+   * Public URL for the full newsletter — drives the "Read the rest on the
+   * website" CTA in teaser mode. Required for teaser; ignored for full.
+   */
+  publicUrl?: string;
+  /**
+   * "teaser" — first paragraph + CTA back to the public newsletter. This is
+   * what subscribers receive when broadcasting.
+   * "full" — the entire newsletter body inline. This is what the author
+   * receives via "Send test to me" so they can proof the complete piece.
+   * Default: "teaser".
+   */
+  mode?: "teaser" | "full";
+  /**
    * Resend variable; when broadcasting they replace {{{RESEND_UNSUBSCRIBE_URL}}}
    * with the hosted unsubscribe URL. For test sends we substitute the literal
    * string "#" so the link still renders.
    */
   unsubscribeUrl?: string;
 };
+
+/**
+ * Pull the first paragraph (or first leading element) out of the body HTML
+ * for the email teaser. Returns the raw HTML of that block. Falls back to
+ * the full HTML if no recognizable leading block is found.
+ */
+function extractFirstParagraph(html: string): string {
+  // Strip leading whitespace + image-only blocks so the teaser leads with
+  // text rather than a bare image.
+  const trimmed = html.replace(/^\s+/, "");
+  const firstP = trimmed.match(/<p\b[^>]*>[\s\S]*?<\/p>/i);
+  if (firstP) return firstP[0];
+  // No <p> — fall back to first heading/list/blockquote, then to full body.
+  const firstBlock = trimmed.match(
+    /<(h[1-6]|ul|ol|blockquote)\b[^>]*>[\s\S]*?<\/\1>/i,
+  );
+  if (firstBlock) return firstBlock[0];
+  return html;
+}
 
 function absolutize(html: string, origin: string): string {
   // Rewrite src/href that start with "/" to absolute URLs.
@@ -55,7 +87,8 @@ function escapeText(s: string): string {
 }
 
 export function renderNewsletterEmail(input: NewsletterEmailInput): string {
-  const { title, bodyHtml, excerpt, coverImageUrl, coverImageAlt, origin } = input;
+  const { title, bodyHtml, excerpt, coverImageUrl, coverImageAlt, origin, publicUrl } = input;
+  const mode = input.mode ?? "teaser";
   const unsubscribe = input.unsubscribeUrl ?? "{{{RESEND_UNSUBSCRIBE_URL}}}";
 
   const cover = coverImageUrl
@@ -64,7 +97,23 @@ export function renderNewsletterEmail(input: NewsletterEmailInput): string {
       )}" alt="${escapeAttr(coverImageAlt ?? "")}" width="600" style="display:block;width:100%;max-width:600px;height:auto;border:0;" /></td></tr>`
     : "";
 
-  const body = absolutize(bodyHtml, origin);
+  const bodyContent =
+    mode === "teaser"
+      ? absolutize(extractFirstParagraph(bodyHtml), origin)
+      : absolutize(bodyHtml, origin);
+  const readMoreUrl = publicUrl ?? `${origin}/newsletters`;
+  const cta =
+    mode === "teaser"
+      ? `
+    <tr>
+      <td style="padding:8px 32px 32px 32px;text-align:center;">
+        <a href="${escapeAttr(readMoreUrl)}" style="display:inline-block;background:${BRAND.ink};color:#ffffff;text-decoration:none;padding:14px 28px;${SANS}font-size:14px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;">Read the rest on the website</a>
+        <p style="${RESET}margin-top:14px;${SANS}font-size:13px;color:${BRAND.muted};">
+          Or open it directly: <a href="${escapeAttr(readMoreUrl)}" style="color:${BRAND.muted};">${escapeText(readMoreUrl)}</a>
+        </p>
+      </td>
+    </tr>`
+      : "";
 
   return `<!doctype html>
 <html lang="en">
@@ -86,10 +135,11 @@ export function renderNewsletterEmail(input: NewsletterEmailInput): string {
           </td>
         </tr>
         <tr>
-          <td style="padding:16px 32px 32px 32px;${FONT}font-size:17px;">
-            ${body}
+          <td style="padding:16px 32px ${mode === "teaser" ? "8" : "32"}px 32px;${FONT}font-size:17px;">
+            ${bodyContent}
           </td>
         </tr>
+        ${cta}
         <tr>
           <td style="padding:24px 32px;border-top:1px solid #eee;${SANS}font-size:13px;color:${BRAND.muted};text-align:center;">
             <p style="${RESET}margin-bottom:8px;">James Juhasz · Road to LA28 · ILCA 7 · CAN 217718</p>

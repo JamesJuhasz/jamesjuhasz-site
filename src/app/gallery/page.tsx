@@ -5,7 +5,9 @@ import { Reveal } from "@/components/ui/Reveal";
 import { HeroParallax } from "@/components/sections/HeroParallax";
 import { Badge } from "@/components/ui/Badge";
 import { DonateCTAInline } from "@/components/cta/DonateCTA";
-import { galleries } from "@/lib/galleries";
+import { getGalleries } from "@/lib/galleries";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Gallery",
@@ -34,7 +36,8 @@ const layoutSizes = [
   "md:col-span-4 aspect-[4/5]",
 ];
 
-export default function GalleryIndexPage() {
+export default async function GalleryIndexPage() {
+  const galleries = await getGalleries();
   return (
     <>
       <section className="relative isolate overflow-hidden min-h-[55svh] flex items-end">
@@ -56,9 +59,6 @@ export default function GalleryIndexPage() {
           <h1 className="font-display text-display text-paper max-w-[20ch]">
             Photos from the road
           </h1>
-          <p className="mt-6 max-w-prose text-body-lg text-paper/85">
-            Fourteen sub-galleries — Malta, the Mediterranean circuit, Lake Garda, the junior years. The campaign as it actually looks.
-          </p>
         </Container>
       </section>
 

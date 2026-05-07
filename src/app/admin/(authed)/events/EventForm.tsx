@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { slugify } from "@/lib/admin/slug";
 import { useRouter } from "next/navigation";
 import { Editor, type EditorValue } from "../newsletters/Editor";
 
@@ -43,19 +44,12 @@ export function EventForm({ initial }: { initial?: EventInitial }) {
   const [busy, setBusy] = useState<"" | "saving" | "deleting">("");
   const [coverUploading, setCoverUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const slugTouched = useRef(Boolean(initial?.slug));
 
   useEffect(() => {
-    if (!isNew || !title) return;
-    setSlug((prev) =>
-      prev
-        ? prev
-        : title
-            .toLowerCase()
-            .replace(/[^a-z0-9\s-]/g, "")
-            .trim()
-            .replace(/\s+/g, "-")
-            .slice(0, 96),
-    );
+    if (!isNew) return;
+    if (slugTouched.current) return;
+    setSlug(slugify(title));
   }, [title, isNew]);
 
   async function uploadCover(file: File) {
@@ -221,7 +215,10 @@ export function EventForm({ initial }: { initial?: EventInitial }) {
           <Label>Slug</Label>
           <input
             value={slug}
-            onChange={(e) => setSlug(e.target.value)}
+            onChange={(e) => {
+              slugTouched.current = true;
+              setSlug(e.target.value);
+            }}
             className={inputCls}
             placeholder="auto-from-title"
           />

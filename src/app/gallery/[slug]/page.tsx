@@ -6,12 +6,11 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { DonateCTAInline } from "@/components/cta/DonateCTA";
-import { galleries, getGallery, photosForGallery } from "@/lib/galleries";
+import { getGalleries, getGallery } from "@/lib/galleries";
 import { GalleryGrid } from "@/components/gallery/GalleryGrid";
+import blurData from "@/data/gallery-blur.json";
 
-export function generateStaticParams() {
-  return galleries.map((g) => ({ slug: g.slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
@@ -19,7 +18,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const g = getGallery(slug);
+  const g = await getGallery(slug);
   if (!g) return { title: "Gallery not found" };
   return {
     title: g.title,
@@ -33,13 +32,14 @@ export default async function GalleryDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const gallery = getGallery(slug);
+  const gallery = await getGallery(slug);
   if (!gallery) notFound();
 
-  const photos = photosForGallery(gallery.slug);
+  const photos = gallery.photos;
   const heroPhoto = photos[0];
   const tilePhotos = photos.slice(1);
-  const related = galleries.filter((g) => g.slug !== gallery.slug).slice(0, 4);
+  const allGalleries = await getGalleries();
+  const related = allGalleries.filter((g) => g.slug !== gallery.slug).slice(0, 4);
 
   return (
     <>
@@ -71,7 +71,11 @@ export default async function GalleryDetailPage({
 
       <section className="py-section-y">
         <Container width="wide">
-          <GalleryGrid heroPhoto={heroPhoto} tilePhotos={tilePhotos} />
+          <GalleryGrid
+            heroPhoto={heroPhoto}
+            tilePhotos={tilePhotos}
+            blurDataURLs={blurData as Record<string, string>}
+          />
           <p className="mt-6 text-caption text-ink-3">
             Click any photo to view full size.
           </p>

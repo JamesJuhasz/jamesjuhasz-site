@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Editor, type EditorValue } from "./Editor";
+import { slugify } from "@/lib/admin/slug";
 
 export type PostInitial = {
   id?: number;
@@ -37,24 +38,19 @@ export function PostForm({ initial }: { initial?: PostInitial }) {
     html: initial?.bodyHtml ?? "",
     json: initial?.bodyJson ?? null,
   });
-  const [busy, setBusy] = useState<"" | "saving" | "publishing" | "deleting">("");
+  const [busy, setBusy] = useState<"" | "saving" | "publishing" | "deleting" | "testing">("");
+  const [testMsg, setTestMsg] = useState<string | null>(null);
   const [coverUploading, setCoverUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Auto-track whether the user has manually edited the slug. While untouched,
+  // the slug stays in sync with the title; once the user edits it, we leave
+  // their value alone.
+  const slugTouched = useRef(Boolean(initial?.slug));
 
-  // Auto-suggest slug from title when creating a new post and slug is empty.
   useEffect(() => {
     if (!isNew) return;
-    if (!title) return;
-    setSlug((prev) =>
-      prev
-        ? prev
-        : title
-            .toLowerCase()
-            .replace(/[^a-z0-9\s-]/g, "")
-            .trim()
-            .replace(/\s+/g, "-")
-            .slice(0, 96),
-    );
+    if (slugTouched.current) return;
+    setSlug(slugify(title));
   }, [title, isNew]);
 
   async function uploadCover(file: File) {
@@ -73,9 +69,10 @@ export function PostForm({ initial }: { initial?: PostInitial }) {
     }
   }
 
-  async function save(args: { publish?: boolean }) {
+  async function save(args: { publish?: boolean; navigate?: boolean }) {
+    const navigate = args.navigate ?? true;
     setError(null);
-    setBusy(args.publish ? "publishing" : "saving");
+    if (navigate) setBusy(args.publish ? "publishing" : "saving");
     try {
       const payload = {
         title: title.trim(),
@@ -115,8 +112,36 @@ export function PostForm({ initial }: { initial?: PostInitial }) {
         return;
       }
       const id = data.post?.id ?? initial?.id;
-      router.push(`/admin/newsletters/${id}`);
-      router.refresh();
+      if (navigate) {
+        router.push(`/admin/newsletters/${id}`);
+        router.refresh();
+      }
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      if (navigate) setBusy("");
+    }
+  }
+
+  async function onSendTest() {
+    if (!initial?.id) {
+      setTestMsg("Save the newsletter first, then you can send a test.");
+      return;
+    }
+    setBusy("testing");
+    setTestMsg(null);
+    setError(null);
+    try {
+      // Save current edits first so the test reflects what's on screen.
+      await save({ publish: false, navigate: false });
+      const res = await fetch(`/api/admin/posts/${initial.id}/send`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ mode: "test" }),
+      });
+      const data = (await res.json()) as { ok: boolean; error?: string };
+      if (!data.ok) throw new Error(data.error ?? `HTTP ${res.status}`);
+      setTestMsg("Test sent — check your inbox.");
     } catch (err) {
       setError((err as Error).message);
     } finally {
@@ -169,6 +194,9 @@ export function PostForm({ initial }: { initial?: PostInitial }) {
             {error}
           </p>
         ) : null}
+        {testMsg ? (
+          <p className="text-body-sm text-green-700">{testMsg}</p>
+        ) : null}
 
         <div className="flex flex-wrap gap-3">
           <button
@@ -190,6 +218,17 @@ export function PostForm({ initial }: { initial?: PostInitial }) {
           {!isNew ? (
             <button
               type="button"
+              disabled={Boolean(busy) || !title}
+              onClick={onSendTest}
+              title="Sends a test of this newsletter to the owner address only — exactly what subscribers will receive."
+              className="border border-ink px-5 py-3 text-button uppercase tracking-wider disabled:opacity-50"
+            >
+              {busy === "testing" ? "Sending test…" : "Send test to me"}
+            </button>
+          ) : null}
+          {!isNew ? (
+            <button
+              type="button"
               disabled={Boolean(busy)}
               onClick={onDelete}
               className="ml-auto border border-red-600 px-5 py-3 text-button uppercase tracking-wider text-red-700 disabled:opacity-50"
@@ -205,7 +244,10 @@ export function PostForm({ initial }: { initial?: PostInitial }) {
           <Label>Slug</Label>
           <input
             value={slug}
-            onChange={(e) => setSlug(e.target.value)}
+            onChange={(e) => {
+              slugTouched.current = true;
+              setSlug(e.target.value);
+            }}
             className={inputCls}
             placeholder="auto-from-title"
           />

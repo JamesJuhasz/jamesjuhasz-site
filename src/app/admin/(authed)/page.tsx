@@ -17,6 +17,11 @@ const tiles = [
     body: "Edit positions, fleet sizes, and notes.",
   },
   {
+    href: "/admin/galleries",
+    title: "Galleries",
+    body: "Create galleries, upload photos, edit titles and subtitles.",
+  },
+  {
     href: "/admin/results-review",
     title: "Results review",
     body: "Approve or reject scraped results.",

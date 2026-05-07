@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from "node:crypto";
 import { mkdir, writeFile, readFile, stat } from "node:fs/promises";
 import path from "node:path";
+import sharp from "sharp";
 
 export const ACCEPTED_MIME = new Set([
   "image/jpeg",
@@ -8,6 +9,8 @@ export const ACCEPTED_MIME = new Set([
   "image/webp",
   "image/gif",
   "image/avif",
+  "image/heic",
+  "image/heif",
 ]);
 const EXT_BY_MIME: Record<string, string> = {
   "image/jpeg": "jpg",
@@ -15,6 +18,8 @@ const EXT_BY_MIME: Record<string, string> = {
   "image/webp": "webp",
   "image/gif": "gif",
   "image/avif": "avif",
+  "image/heic": "heic",
+  "image/heif": "heif",
 };
 const MIME_BY_EXT: Record<string, string> = {
   jpg: "image/jpeg",
@@ -25,7 +30,7 @@ const MIME_BY_EXT: Record<string, string> = {
   avif: "image/avif",
 };
 
-export const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
+export const MAX_BYTES = 30 * 1024 * 1024; // 30 MB — fits modern iPhone HEIC/JPEG/Live Photos
 
 export function getUploadsDir(): string {
   return process.env.UPLOADS_DIR ?? path.join(process.cwd(), "uploads");
@@ -54,10 +59,18 @@ export async function saveUpload(
   if (data.length === 0) throw new Error("empty file");
   if (data.length > MAX_BYTES) throw new Error("file too large");
 
+  // iPhones upload HEIC/HEIF; browsers can't render those, so transcode to JPEG.
+  let outData = data;
+  let outMime = mime;
+  if (mime === "image/heic" || mime === "image/heif") {
+    outData = await sharp(data).rotate().jpeg({ quality: 85 }).toBuffer();
+    outMime = "image/jpeg";
+  }
+
   const dir = await ensureUploadsDir();
-  // Dedupe: hash content; if a file with the same hash exists, return its URL.
-  const hash = createHash("sha256").update(data).digest("hex").slice(0, 16);
-  const ext = EXT_BY_MIME[mime];
+  // Dedupe: hash final content; if a file with the same hash exists, return its URL.
+  const hash = createHash("sha256").update(outData).digest("hex").slice(0, 16);
+  const ext = EXT_BY_MIME[outMime];
   const filename = `${hash}.${ext}`;
   const fullPath = path.join(dir, filename);
   let exists = false;
@@ -68,9 +81,9 @@ export async function saveUpload(
     /* not present */
   }
   if (!exists) {
-    await writeFile(fullPath, data);
+    await writeFile(fullPath, outData);
   }
-  return { filename, url: `/uploads/${filename}`, size: data.length };
+  return { filename, url: `/uploads/${filename}`, size: outData.length };
 }
 
 export async function readUpload(name: string): Promise<{

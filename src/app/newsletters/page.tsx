@@ -36,9 +36,6 @@ export default async function NewslettersPage() {
           <h1 className="font-display text-display text-paper max-w-[20ch]">
             The journey, post by post
           </h1>
-          <p className="mt-6 max-w-prose text-body-lg text-paper/85">
-            Race recaps, training notes, what&apos;s working, what isn&apos;t. Published the first week of each month.
-          </p>
         </Container>
       </section>
 

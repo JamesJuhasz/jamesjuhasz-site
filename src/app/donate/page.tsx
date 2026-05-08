@@ -273,32 +273,8 @@ export default async function DonatePage({
               <p className="mt-3 text-caption text-paper/60">
                 Stripe + PayPal via Donorbox · Secure · Cancel anytime
               </p>
-              <div id="where" className="mt-5">
-                <p className="font-display text-h3 text-paper mb-3">Where your support goes</p>
-                <div className="rounded-2xl bg-paper ring-1 ring-mist p-5">
-                  <div className="flex flex-col sm:flex-row gap-5 sm:items-start items-center">
-                    <DonatePieChart />
-                    <ul className="flex-1 divide-y divide-mist min-w-0">
-                      {budgetCategories.map(({ icon: Icon, ...c }, i) => (
-                        <li key={c.label} className="flex items-start gap-2 py-2">
-                          <span aria-hidden className="mt-1.5 h-2 w-2 rounded-full flex-shrink-0" style={{ background: DONATE_COLORS[i] }} />
-                          <Icon size={13} className="mt-1.5 text-ink-3 flex-shrink-0" aria-hidden />
-                          <div className="flex-1 min-w-0">
-                            <span className="text-caption font-medium text-ink">{c.label}</span>
-                            <p className="text-[11px] text-ink-3 leading-snug">{c.body}</p>
-                          </div>
-                          <div className="text-right flex-shrink-0 pl-2">
-                            <div className="text-caption font-semibold text-ink">{c.pct}%</div>
-                            <div className="text-[11px] text-ink-3">~{fmtCurrency.format(c.dollars)}</div>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
             </div>
-            <div className="lg:col-span-5 lg:flex lg:flex-col" id="give">
+            <div className="lg:col-span-5 lg:row-span-2 lg:flex lg:flex-col" id="give">
               <DonorboxEmbed amount={amount} interval={interval} className="lg:flex-1" />
               {amount ? (
                 <p className="mt-3 text-caption text-paper/70">
@@ -306,6 +282,30 @@ export default async function DonatePage({
                   amount inside the form if you'd like.
                 </p>
               ) : null}
+            </div>
+            <div id="where" className="lg:col-span-7 text-paper">
+              <p className="font-display text-h3 text-paper mb-3">Where your support goes</p>
+              <div className="rounded-2xl bg-paper ring-1 ring-mist p-5">
+                <div className="flex flex-col sm:flex-row gap-5 sm:items-start items-center">
+                  <DonatePieChart />
+                  <ul className="flex-1 divide-y divide-mist min-w-0">
+                    {budgetCategories.map(({ icon: Icon, ...c }, i) => (
+                      <li key={c.label} className="flex items-start gap-2 py-2">
+                        <span aria-hidden className="mt-1.5 h-2 w-2 rounded-full flex-shrink-0" style={{ background: DONATE_COLORS[i] }} />
+                        <Icon size={13} className="mt-1.5 text-ink-3 flex-shrink-0" aria-hidden />
+                        <div className="flex-1 min-w-0">
+                          <span className="text-caption font-medium text-ink">{c.label}</span>
+                          <p className="text-[11px] text-ink-3 leading-snug">{c.body}</p>
+                        </div>
+                        <div className="text-right flex-shrink-0 pl-2">
+                          <div className="text-caption font-semibold text-ink">{c.pct}%</div>
+                          <div className="text-[11px] text-ink-3">~{fmtCurrency.format(c.dollars)}</div>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
         </Container>

@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
@@ -70,6 +71,7 @@ export default async function PostPage({
   if (!post) notFound();
 
   const hasBody = Boolean(post.bodyHtml);
+  const coverUrl = post.coverImage?.asset?.url;
 
   return (
     <>
@@ -82,28 +84,62 @@ export default async function PostPage({
         })}
       />
       <section className="py-section-y bg-fog border-b border-mist">
-        <Container width="prose">
+        <Container width={coverUrl ? "wide" : "prose"}>
           <Link
             href="/newsletters"
             className="inline-flex items-center gap-1 text-ink-3 hover:text-ink mb-6 text-caption uppercase tracking-wider"
           >
             <ChevronLeft size={14} /> All posts
           </Link>
-          <p className="text-eyebrow uppercase tracking-wider text-ink-3 mb-3">
-            {dateFmt.format(new Date(post.publishedAt))}
-            {post.tags?.length ? (
-              <>
-                {" · "}
-                {post.tags.slice(0, 2).join(" · ")}
-              </>
-            ) : null}
-          </p>
-          <h1 className="font-display text-h1 text-ink">{post.title}</h1>
-          {post.excerpt ? (
-            <p className="mt-4 text-body-lg text-ink/80 max-w-prose">
-              {post.excerpt}
-            </p>
-          ) : null}
+          {coverUrl ? (
+            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+              <div>
+                <p className="text-eyebrow uppercase tracking-wider text-ink-3 mb-3">
+                  {dateFmt.format(new Date(post.publishedAt))}
+                  {post.tags?.length ? (
+                    <>
+                      {" · "}
+                      {post.tags.slice(0, 2).join(" · ")}
+                    </>
+                  ) : null}
+                </p>
+                <h1 className="font-display text-h1 text-ink">{post.title}</h1>
+                {post.excerpt ? (
+                  <p className="mt-4 text-body-lg text-ink/80">
+                    {post.excerpt}
+                  </p>
+                ) : null}
+              </div>
+              <div className="relative aspect-[16/10] w-full rounded-xl overflow-hidden bg-mist">
+                <Image
+                  src={coverUrl}
+                  alt={post.coverImage?.alt ?? ""}
+                  fill
+                  sizes="(min-width: 1024px) 50vw, 100vw"
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            </div>
+          ) : (
+            <>
+              <p className="text-eyebrow uppercase tracking-wider text-ink-3 mb-3">
+                {dateFmt.format(new Date(post.publishedAt))}
+                {post.tags?.length ? (
+                  <>
+                    {" · "}
+                    {post.tags.slice(0, 2).join(" · ")}
+                  </>
+                ) : null}
+              </p>
+              <h1 className="font-display text-h1 text-ink">{post.title}</h1>
+              {post.excerpt ? (
+                <p className="mt-4 text-body-lg text-ink/80 max-w-prose">
+                  {post.excerpt}
+                </p>
+              ) : null}
+            </>
+          )}
         </Container>
       </section>
 

@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { slugify } from "@/lib/admin/slug";
+import { proxyImagePreview } from "@/lib/admin/img-preview";
 import { PasswordConfirmModal } from "../_components/PasswordConfirmModal";
 
 type PhotoItem = {
@@ -468,7 +469,7 @@ export function GalleryForm({ initial }: { initial?: GalleryInitial }) {
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={p.url}
+                      src={proxyImagePreview(p.url, 384)}
                       alt={p.alt ?? ""}
                       className="w-full aspect-[4/3] object-cover"
                     />
@@ -579,7 +580,7 @@ export function GalleryForm({ initial }: { initial?: GalleryInitial }) {
           {coverImageUrl ? (
             <div className="border border-ink/10 p-2">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={coverImageUrl} alt="" className="w-full" />
+              <img src={proxyImagePreview(coverImageUrl, 1200)} alt="" className="w-full" />
               <button
                 type="button"
                 onClick={() => setCoverImageUrl("")}

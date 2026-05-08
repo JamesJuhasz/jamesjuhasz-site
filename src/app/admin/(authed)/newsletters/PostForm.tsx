@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Editor, type EditorValue } from "./Editor";
 import { slugify } from "@/lib/admin/slug";
+import { proxyImagePreview } from "@/lib/admin/img-preview";
 
 export type PostInitial = {
   id?: number;
@@ -268,8 +269,9 @@ export function PostForm({ initial }: { initial?: PostInitial }) {
           <Label>Cover image</Label>
           {coverImageUrl ? (
             <div className="border border-ink/10 p-2">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={coverImageUrl}
+                src={proxyImagePreview(coverImageUrl, 1200)}
                 alt={coverImageAlt ?? ""}
                 className="w-full"
               />

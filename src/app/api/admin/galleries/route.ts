@@ -13,6 +13,18 @@ const Body = z.object({
   title: z.string().trim().min(1).max(180),
   slug: z.string().trim().max(96).optional(),
   dateRange: z.string().trim().min(1).max(120),
+  startMonth: z
+    .string()
+    .trim()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional()
+    .nullable(),
+  endMonth: z
+    .string()
+    .trim()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional()
+    .nullable(),
   context: z.string().trim().max(600).optional().nullable(),
   coverImageUrl: z.string().trim().max(500).optional().nullable(),
 });
@@ -44,6 +56,8 @@ export async function POST(req: NextRequest) {
     title: data.title,
     slug,
     dateRange: data.dateRange,
+    startMonth: data.startMonth ?? null,
+    endMonth: data.endMonth ?? null,
     context: data.context ?? null,
     coverImageUrl: data.coverImageUrl ?? null,
   });

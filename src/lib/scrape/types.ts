@@ -95,7 +95,9 @@ export type RejectedEntry = {
     | "ambiguous-multiple-matches"
     | "class-mismatch"
     | "extraction-failed"
-    | "image-only-pdf";
+    | "image-only-pdf"
+    /** Reviewer clicked Reject in the admin queue. Permanent — never auto-retried, never promoted back to review. */
+    | "human-rejected";
   attemptCount: number;
   lastAttemptAt: string;
   /** ISO; null = give up. */

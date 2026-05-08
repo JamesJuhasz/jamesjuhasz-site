@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { slugify } from "@/lib/admin/slug";
+import { PasswordConfirmModal } from "../_components/PasswordConfirmModal";
 
 type PhotoItem = {
   id?: number;
@@ -17,11 +18,71 @@ export type GalleryInitial = {
   title?: string;
   slug?: string;
   dateRange?: string;
+  startMonth?: string | null;
+  endMonth?: string | null;
   context?: string | null;
   coverImageUrl?: string | null;
   lastAnnouncedAt?: string | null;
   photos?: PhotoItem[];
 };
+
+const MONTH_FULL = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+const MONTH_SHORT = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
+function monthInputToDate(month: string): string | null {
+  return /^\d{4}-\d{2}$/.test(month) ? `${month}-01` : null;
+}
+
+function initialMonthFromDate(d?: string | null): string {
+  if (!d) return "";
+  const m = /^(\d{4})-(\d{2})/.exec(d);
+  return m ? `${m[1]}-${m[2]}` : "";
+}
+
+function rangeLabel(start: string, end: string): string {
+  const startOk = /^\d{4}-\d{2}$/.test(start);
+  const endOk = /^\d{4}-\d{2}$/.test(end);
+  if (!startOk && !endOk) return "";
+  if (!startOk || !endOk) {
+    const only = (startOk ? start : end).split("-");
+    return `${MONTH_FULL[Number(only[1]) - 1]} ${only[0]}`;
+  }
+  const [sy, sm] = start.split("-");
+  const [ey, em] = end.split("-");
+  if (sy === ey && sm === em) {
+    return `${MONTH_FULL[Number(sm) - 1]} ${sy}`;
+  }
+  if (sy === ey) {
+    return `${MONTH_SHORT[Number(sm) - 1]} – ${MONTH_SHORT[Number(em) - 1]} ${sy}`;
+  }
+  return `${MONTH_SHORT[Number(sm) - 1]} ${sy} – ${MONTH_SHORT[Number(em) - 1]} ${ey}`;
+}
 
 export function GalleryForm({ initial }: { initial?: GalleryInitial }) {
   const router = useRouter();
@@ -29,7 +90,12 @@ export function GalleryForm({ initial }: { initial?: GalleryInitial }) {
 
   const [title, setTitle] = useState(initial?.title ?? "");
   const [slug, setSlug] = useState(initial?.slug ?? "");
-  const [dateRange, setDateRange] = useState(initial?.dateRange ?? "");
+  const [startMonth, setStartMonth] = useState(
+    initialMonthFromDate(initial?.startMonth),
+  );
+  const [endMonth, setEndMonth] = useState(
+    initialMonthFromDate(initial?.endMonth),
+  );
   const [context, setContext] = useState(initial?.context ?? "");
   const [coverImageUrl, setCoverImageUrl] = useState(initial?.coverImageUrl ?? "");
   const [photos, setPhotos] = useState<PhotoItem[]>(initial?.photos ?? []);
@@ -42,6 +108,8 @@ export function GalleryForm({ initial }: { initial?: GalleryInitial }) {
   const [lastAnnouncedAt, setLastAnnouncedAt] = useState<string | null>(
     initial?.lastAnnouncedAt ?? null,
   );
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [confirmError, setConfirmError] = useState<string | null>(null);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const slugTouched = useRef(Boolean(initial?.slug));
@@ -146,10 +214,13 @@ export function GalleryForm({ initial }: { initial?: GalleryInitial }) {
     setError(null);
     setBusy("saving");
     try {
+      const dateRange = rangeLabel(startMonth, endMonth);
       const payload = {
         title: title.trim(),
         slug: slug.trim() || undefined,
-        dateRange: dateRange.trim(),
+        dateRange,
+        startMonth: monthInputToDate(startMonth),
+        endMonth: monthInputToDate(endMonth) ?? monthInputToDate(startMonth),
         context: context.trim() || null,
         coverImageUrl: coverImageUrl.trim() || null,
         ...(isNew
@@ -189,22 +260,44 @@ export function GalleryForm({ initial }: { initial?: GalleryInitial }) {
     }
   }
 
-  async function sendAnnouncement(mode: "test" | "all") {
+  async function sendTestAnnouncement() {
     if (!initial?.id) return;
     setSendNote(null);
     setError(null);
-    if (mode === "all") {
-      const ok = confirm(
-        `Send a "${title} — new photos" announcement to ALL subscribers? This cannot be undone.`,
-      );
-      if (!ok) return;
-    }
-    setBusy(mode === "test" ? "sending-test" : "sending-all");
+    setBusy("sending-test");
     try {
       const res = await fetch(`/api/admin/galleries/${initial.id}/send`, {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ mode }),
+        body: JSON.stringify({ mode: "test" }),
+      });
+      const data = (await res.json()) as {
+        ok: boolean;
+        error?: string;
+      };
+      if (!data.ok) {
+        setError(data.error ?? "send failed");
+        return;
+      }
+      setSendNote("Test sent — check your inbox.");
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setBusy("");
+    }
+  }
+
+  async function sendAllAnnouncement(password: string) {
+    if (!initial?.id) return;
+    setSendNote(null);
+    setError(null);
+    setConfirmError(null);
+    setBusy("sending-all");
+    try {
+      const res = await fetch(`/api/admin/galleries/${initial.id}/send`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ mode: "all", password }),
       });
       const data = (await res.json()) as {
         ok: boolean;
@@ -213,19 +306,26 @@ export function GalleryForm({ initial }: { initial?: GalleryInitial }) {
         lastAnnouncedAt?: string | null;
       };
       if (!data.ok) {
+        if (data.error === "wrong_password" || data.error === "password_required") {
+          setConfirmError("Wrong password.");
+          return;
+        }
+        if (data.error === "rate_limited") {
+          setConfirmError("Too many attempts. Wait a few minutes.");
+          return;
+        }
         setError(data.error ?? "send failed");
+        setConfirmOpen(false);
         return;
       }
-      if (mode === "test") {
-        setSendNote("Test sent — check your inbox.");
-      } else {
-        setSendNote(
-          `Broadcast sent${data.broadcastId ? ` (id ${data.broadcastId.slice(0, 8)}…)` : ""}.`,
-        );
-        if (data.lastAnnouncedAt) setLastAnnouncedAt(data.lastAnnouncedAt);
-      }
+      setSendNote(
+        `Broadcast sent${data.broadcastId ? ` (id ${data.broadcastId.slice(0, 8)}…)` : ""}.`,
+      );
+      if (data.lastAnnouncedAt) setLastAnnouncedAt(data.lastAnnouncedAt);
+      setConfirmOpen(false);
     } catch (err) {
       setError((err as Error).message);
+      setConfirmOpen(false);
     } finally {
       setBusy("");
     }
@@ -268,12 +368,37 @@ export function GalleryForm({ initial }: { initial?: GalleryInitial }) {
         </div>
         <div>
           <Label>Date range</Label>
-          <input
-            value={dateRange}
-            onChange={(e) => setDateRange(e.target.value)}
-            className={inputCls}
-            placeholder="Mar – May 2026"
-          />
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <span className="block text-caption text-ink/60 mb-1">From</span>
+              <input
+                type="month"
+                value={startMonth}
+                onChange={(e) => setStartMonth(e.target.value)}
+                className={inputCls}
+              />
+            </div>
+            <div>
+              <span className="block text-caption text-ink/60 mb-1">To</span>
+              <input
+                type="month"
+                value={endMonth}
+                onChange={(e) => setEndMonth(e.target.value)}
+                className={inputCls}
+              />
+            </div>
+          </div>
+          {startMonth || endMonth ? (
+            <p className="mt-1 text-caption text-ink/50">
+              Displays as “{rangeLabel(startMonth, endMonth)}”. Galleries are
+              sorted by the most recent month in the range.
+            </p>
+          ) : (
+            <p className="mt-1 text-caption text-ink/50">
+              Pick the start and end month. Leave “To” blank for a single
+              month.
+            </p>
+          )}
         </div>
         <div>
           <Label>Subtitle (context)</Label>
@@ -405,7 +530,7 @@ export function GalleryForm({ initial }: { initial?: GalleryInitial }) {
         <div className="flex flex-wrap gap-3">
           <button
             type="button"
-            disabled={Boolean(busy) || !title || !dateRange}
+            disabled={Boolean(busy) || !title || !startMonth}
             onClick={save}
             className="bg-ink text-paper px-5 py-3 text-button uppercase tracking-wider disabled:opacity-50"
           >
@@ -484,7 +609,7 @@ export function GalleryForm({ initial }: { initial?: GalleryInitial }) {
               <button
                 type="button"
                 disabled={Boolean(busy)}
-                onClick={() => sendAnnouncement("test")}
+                onClick={() => sendTestAnnouncement()}
                 className="border border-ink px-3 py-2 text-button uppercase tracking-wider disabled:opacity-50"
               >
                 {busy === "sending-test" ? "Sending…" : "Send test to me"}
@@ -492,7 +617,10 @@ export function GalleryForm({ initial }: { initial?: GalleryInitial }) {
               <button
                 type="button"
                 disabled={Boolean(busy)}
-                onClick={() => sendAnnouncement("all")}
+                onClick={() => {
+                  setConfirmError(null);
+                  setConfirmOpen(true);
+                }}
                 className="bg-ink text-paper px-3 py-2 text-button uppercase tracking-wider disabled:opacity-50"
               >
                 {busy === "sending-all"
@@ -511,6 +639,20 @@ export function GalleryForm({ initial }: { initial?: GalleryInitial }) {
           </div>
         ) : null}
       </aside>
+      <PasswordConfirmModal
+        open={confirmOpen}
+        title="Confirm broadcast"
+        message={`Send a "${title} — new photos" announcement to ALL subscribers? This cannot be undone. Enter your admin password to confirm.`}
+        confirmLabel="Send to all"
+        busy={busy === "sending-all"}
+        errorOverride={confirmError}
+        onCancel={() => {
+          if (busy === "sending-all") return;
+          setConfirmOpen(false);
+          setConfirmError(null);
+        }}
+        onConfirm={(pwd) => void sendAllAnnouncement(pwd)}
+      />
     </div>
   );
 }

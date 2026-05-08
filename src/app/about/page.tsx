@@ -12,6 +12,8 @@ import { DonateCTAInline, DonateCTASidebar } from "@/components/cta/DonateCTA";
 import { aboutStats, pressEntries } from "@/lib/seed-data";
 import { daysToLA2028 } from "@/lib/countdown";
 
+export const revalidate = 60;
+
 export const metadata = {
   title: "About",
   description:
@@ -50,7 +52,7 @@ export default function AboutPage() {
       </section>
 
       {/* THE STORY — editorial */}
-      <section className="pb-section-y-lg pt-section-y">
+      <section className="pb-8 pt-section-y">
         <Container width="prose">
           <p className="text-eyebrow uppercase tracking-wider text-ink-3 mb-4">
             The story · 6 min read
@@ -310,7 +312,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <figure className="my-12">
+          <figure className="mt-12 mb-0">
             <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-fog">
               <Image
                 src="/images/section/02.jpg"
@@ -336,14 +338,14 @@ export default function AboutPage() {
       />
 
       {/* CAREER TIMELINE */}
-      <section className="py-section-y-lg bg-fog border-y border-mist">
+      <section className="py-12 md:py-16 bg-fog border-y border-mist">
         <Container width="default">
           <SectionHeader
             eyebrow="Career timeline"
             title="The path so far"
             lede="Major milestones and the inflection points behind them."
           />
-          <div className="mt-12">
+          <div className="mt-6 md:mt-8">
             <CareerTimeline />
           </div>
         </Container>
@@ -352,13 +354,14 @@ export default function AboutPage() {
       {/* STATS STRIP */}
       <section className="py-section-y">
         <Container width="default">
-          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-10 sm:grid-cols-3">
             {stats.map((s) => (
               <StatNumber
                 key={s.label}
                 value={s.value}
                 suffix={s.suffix}
                 label={s.label}
+                className="items-center text-center"
               />
             ))}
           </div>

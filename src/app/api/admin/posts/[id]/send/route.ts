@@ -2,6 +2,8 @@ import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { getPostById, markSent } from "@/lib/admin/store/posts";
 import { renderNewsletterEmail } from "@/lib/admin/newsletter-html";
+import { verifyAdminPassword } from "@/lib/admin/password";
+import { rateLimit, clientIp } from "@/lib/rate-limit";
 import {
   createAndSendBroadcast,
   sendTestEmail,
@@ -11,7 +13,10 @@ import { SITE } from "@/lib/site";
 
 export const runtime = "nodejs";
 
-const Body = z.object({ mode: z.enum(["test", "all"]) });
+const Body = z.object({
+  mode: z.enum(["test", "all"]),
+  password: z.string().min(1).max(500).optional(),
+});
 
 /**
  * Always absolutize email URLs against the canonical production domain.
@@ -28,33 +33,8 @@ function emailOrigin(): string {
   return SITE.url.replace(/\/+$/, "");
 }
 
-function escapeAttr(s: string): string {
-  return s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
-}
-function escapeText(s: string): string {
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
-
-/**
- * Build the email body: first paragraph of the newsletter + a styled CTA
- * linking back to the public post. Subscribers + the test sender both see
- * this so the test is a faithful preview of what subs receive.
- */
-function buildTeaserHtml(bodyHtml: string, publicUrl: string): string {
-  const trimmed = bodyHtml.replace(/^\s+/, "");
-  const firstP = trimmed.match(/<p\b[^>]*>[\s\S]*?<\/p>/i);
-  const firstBlock =
-    firstP?.[0] ??
-    trimmed.match(/<(h[1-6]|ul|ol|blockquote)\b[^>]*>[\s\S]*?<\/\1>/i)?.[0] ??
-    bodyHtml;
-  const cta = `
-    <p style="margin:24px 0 8px 0;text-align:center;">
-      <a href="${escapeAttr(publicUrl)}" style="display:inline-block;background:#0a0a0a;color:#ffffff;text-decoration:none;padding:14px 28px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:14px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;">Read the rest on the website</a>
-    </p>
-    <p style="margin:0;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:13px;color:#666666;">
-      Or open it directly: <a href="${escapeAttr(publicUrl)}" style="color:#666666;">${escapeText(publicUrl)}</a>
-    </p>`;
-  return firstBlock + cta;
+function buildSubject(title: string): string {
+  return `James Juhasz Sailing - "${title}"`;
 }
 
 export async function POST(
@@ -77,6 +57,40 @@ export async function POST(
     return NextResponse.json({ ok: false, error: "invalid_input" }, { status: 400 });
   }
 
+  if (parsed.data.mode === "all") {
+    const ip = clientIp(req);
+    const rl = rateLimit(`admin-broadcast-confirm:${ip}`, {
+      max: 10,
+      windowMs: 10 * 60 * 1000,
+    });
+    if (!rl.ok) {
+      return NextResponse.json(
+        { ok: false, error: "rate_limited" },
+        { status: 429 },
+      );
+    }
+    const password = parsed.data.password ?? "";
+    if (!password) {
+      return NextResponse.json(
+        { ok: false, error: "password_required" },
+        { status: 401 },
+      );
+    }
+    const verdict = verifyAdminPassword(password);
+    if (!verdict.ok) {
+      if (verdict.reason === "not_configured") {
+        return NextResponse.json(
+          { ok: false, error: "admin_not_configured" },
+          { status: 500 },
+        );
+      }
+      return NextResponse.json(
+        { ok: false, error: "wrong_password" },
+        { status: 401 },
+      );
+    }
+  }
+
   const post = await getPostById(id);
   if (!post)
     return NextResponse.json({ ok: false, error: "not_found" }, { status: 404 });
@@ -91,7 +105,7 @@ export async function POST(
   // production domain so subscribers' clicks resolve even when the test send
   // was triggered from a localhost dev session.
   const publicUrl = `${SITE.url.replace(/\/+$/, "")}/newsletters/${post.slug}`;
-  const teaserBody = buildTeaserHtml(post.bodyHtml, publicUrl);
+  const subject = buildSubject(post.title);
 
   if (parsed.data.mode === "test") {
     // Test sends go through `emails.send`, which does NOT substitute
@@ -100,16 +114,16 @@ export async function POST(
     const testUnsubscribeUrl = `mailto:${getOwnerAddress()}?subject=Unsubscribe%20%5Btest%5D`;
     const html = renderNewsletterEmail({
       title: post.title,
-      bodyHtml: teaserBody,
-      excerpt: post.excerpt,
+      bodyHtml: post.bodyHtml,
       coverImageUrl: post.coverImageUrl,
       coverImageAlt: post.coverImageAlt,
       origin: emailOrigin(),
+      publicUrl,
       unsubscribeUrl: testUnsubscribeUrl,
     });
     const result = await sendTestEmail({
       to: getOwnerAddress(),
-      subject: `[TEST] ${post.title}`,
+      subject: `[TEST] ${subject}`,
       html,
     });
     if (!result.ok) {
@@ -133,15 +147,15 @@ export async function POST(
   // their server substitutes it with the audience-scoped hosted URL at send.
   const broadcastHtml = renderNewsletterEmail({
     title: post.title,
-    bodyHtml: teaserBody,
-    excerpt: post.excerpt,
+    bodyHtml: post.bodyHtml,
     coverImageUrl: post.coverImageUrl,
     coverImageAlt: post.coverImageAlt,
     origin: emailOrigin(),
+    publicUrl,
   });
 
   const result = await createAndSendBroadcast({
-    subject: post.title,
+    subject,
     html: broadcastHtml,
     name: post.title,
   });

@@ -32,10 +32,27 @@ export type NewsletterEmailInput = {
    */
   origin: string;
   /**
-   * Public URL for the full newsletter — drives the "Read the rest on the
-   * website" CTA in teaser mode. Required for teaser; ignored for full.
+   * Public URL for the full newsletter — drives the CTA button in teaser
+   * mode. Required for teaser; ignored for full.
    */
   publicUrl?: string;
+  /**
+   * Button label for the teaser CTA. Default "Read the rest on the website";
+   * gallery announcements pass "View the gallery".
+   */
+  ctaLabel?: string;
+  /**
+   * Optional small uppercase label rendered above the title. Used by gallery
+   * announcements ("New Photo Gallery Published").
+   */
+  kicker?: string;
+  /**
+   * Optional override for the media row that normally shows the cover image.
+   * When provided, replaces the default 16:10 cover with arbitrary email-safe
+   * HTML — used by gallery announcements to render a multi-photo grid.
+   * Must include the wrapping `<tr><td>...</td></tr>`.
+   */
+  mediaHtml?: string;
   /**
    * "teaser" — first paragraph + CTA back to the public newsletter. This is
    * what subscribers receive when broadcasting.
@@ -53,22 +70,50 @@ export type NewsletterEmailInput = {
 };
 
 /**
- * Pull the first paragraph (or first leading element) out of the body HTML
- * for the email teaser. Returns the raw HTML of that block. Falls back to
- * the full HTML if no recognizable leading block is found.
+ * Build the email teaser: roughly the first 150 words of the body, rendered
+ * as one or more <p> blocks. We strip inline formatting (bold/italic/links)
+ * to keep the teaser a clean lead-in — readers click through for the full,
+ * formatted piece. Paragraph breaks are preserved when possible. The last
+ * included block is truncated mid-paragraph with an ellipsis if needed.
  */
-function extractFirstParagraph(html: string): string {
-  // Strip leading whitespace + image-only blocks so the teaser leads with
-  // text rather than a bare image.
-  const trimmed = html.replace(/^\s+/, "");
-  const firstP = trimmed.match(/<p\b[^>]*>[\s\S]*?<\/p>/i);
-  if (firstP) return firstP[0];
-  // No <p> — fall back to first heading/list/blockquote, then to full body.
-  const firstBlock = trimmed.match(
-    /<(h[1-6]|ul|ol|blockquote)\b[^>]*>[\s\S]*?<\/\1>/i,
-  );
-  if (firstBlock) return firstBlock[0];
-  return html;
+function extractTeaser(html: string, targetWords = 150): string {
+  const blocks: string[] = [];
+  const blockRegex = /<(p|div|h[1-6]|blockquote|li)\b[^>]*>([\s\S]*?)<\/\1>/gi;
+  let m: RegExpExecArray | null;
+  while ((m = blockRegex.exec(html)) !== null) {
+    const text = m[2]
+      .replace(/<br\s*\/?>/gi, " ")
+      .replace(/<[^>]+>/g, "")
+      .replace(/&nbsp;/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (text) blocks.push(text);
+  }
+  if (blocks.length === 0) {
+    const text = html
+      .replace(/<[^>]+>/g, "")
+      .replace(/&nbsp;/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (text) blocks.push(text);
+  }
+
+  const out: string[] = [];
+  let used = 0;
+  for (const block of blocks) {
+    const words = block.split(/\s+/);
+    const remaining = targetWords - used;
+    if (remaining <= 0) break;
+    if (words.length <= remaining) {
+      out.push(`<p style="margin:0 0 1em 0;">${escapeText(block)}</p>`);
+      used += words.length;
+    } else {
+      const truncated = words.slice(0, remaining).join(" ") + "…";
+      out.push(`<p style="margin:0 0 1em 0;">${escapeText(truncated)}</p>`);
+      break;
+    }
+  }
+  return out.join("");
 }
 
 function absolutize(html: string, origin: string): string {
@@ -76,6 +121,10 @@ function absolutize(html: string, origin: string): string {
   return html
     .replace(/(\s(?:src|href)=")\/([^"]+)/g, `$1${origin}/$2`)
     .replace(/(\s(?:src|href)=')\/([^']+)/g, `$1${origin}/$2`);
+}
+
+export function absolutizeUrl(url: string, origin: string): string {
+  return url.startsWith("/") ? `${origin}${url}` : url;
 }
 
 function escapeAttr(s: string): string {
@@ -86,20 +135,48 @@ function escapeText(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
+// 16:10 landscape crop, email-client safe.
+// The image URL is set as a CSS `background-image` on a table cell with
+// `background-size:cover` (crops to fill). A 1x1 transparent GIF, sized via
+// HTML `width`/`height` attributes that establish the intrinsic aspect ratio,
+// sits inside the cell as a spacer — it's what gives the cell its responsive
+// 16:10 height (the spacer scales with the email container width). This is
+// the bulletproof email technique: `aspect-ratio` CSS gets stripped by Gmail,
+// and `object-fit` on an `<img>` can't override the natural portrait aspect
+// when the source is taller than wide.
+const SPACER_GIF =
+  "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+
+/**
+ * Render a single cropped landscape image as an email-safe table cell.
+ * Caller is responsible for absolutizing `src` if it's a relative URL.
+ */
+export function renderCroppedImage(args: {
+  src: string;
+  alt?: string | null;
+  width: number;
+  height: number;
+}): string {
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0;padding:0;border-collapse:collapse;"><tr><td background="${escapeAttr(args.src)}" style="background-image:url('${escapeAttr(args.src)}');background-size:cover;background-position:center center;background-repeat:no-repeat;font-size:0;line-height:0;mso-line-height-rule:exactly;"><img src="${SPACER_GIF}" alt="${escapeAttr(args.alt ?? "")}" width="${args.width}" height="${args.height}" style="display:block;width:100%;height:auto;border:0;" /></td></tr></table>`;
+}
+
 export function renderNewsletterEmail(input: NewsletterEmailInput): string {
-  const { title, bodyHtml, excerpt, coverImageUrl, coverImageAlt, origin, publicUrl } = input;
+  const { title, bodyHtml, excerpt, coverImageUrl, coverImageAlt, origin, publicUrl, kicker, mediaHtml } = input;
   const mode = input.mode ?? "teaser";
+  const ctaLabel = input.ctaLabel ?? "Read the rest on the website";
   const unsubscribe = input.unsubscribeUrl ?? "{{{RESEND_UNSUBSCRIBE_URL}}}";
 
-  const cover = coverImageUrl
-    ? `<tr><td style="padding:0;"><img src="${escapeAttr(
-        coverImageUrl.startsWith("/") ? `${origin}${coverImageUrl}` : coverImageUrl,
-      )}" alt="${escapeAttr(coverImageAlt ?? "")}" width="600" style="display:block;width:100%;max-width:600px;height:auto;border:0;" /></td></tr>`
-    : "";
+  let mediaRow = "";
+  if (mediaHtml) {
+    mediaRow = mediaHtml;
+  } else if (coverImageUrl) {
+    const coverSrc = absolutizeUrl(coverImageUrl, origin);
+    mediaRow = `<tr><td style="padding:0 32px 24px 32px;">${renderCroppedImage({ src: coverSrc, alt: coverImageAlt, width: 536, height: 335 })}</td></tr>`;
+  }
 
   const bodyContent =
     mode === "teaser"
-      ? absolutize(extractFirstParagraph(bodyHtml), origin)
+      ? absolutize(extractTeaser(bodyHtml), origin)
       : absolutize(bodyHtml, origin);
   const readMoreUrl = publicUrl ?? `${origin}/newsletters`;
   const cta =
@@ -107,7 +184,7 @@ export function renderNewsletterEmail(input: NewsletterEmailInput): string {
       ? `
     <tr>
       <td style="padding:8px 32px 32px 32px;text-align:center;">
-        <a href="${escapeAttr(readMoreUrl)}" style="display:inline-block;background:${BRAND.ink};color:#ffffff;text-decoration:none;padding:14px 28px;${SANS}font-size:14px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;">Read the rest on the website</a>
+        <a href="${escapeAttr(readMoreUrl)}" style="display:inline-block;background:${BRAND.ink};color:#ffffff;text-decoration:none;padding:14px 28px;${SANS}font-size:14px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;">${escapeText(ctaLabel)}</a>
         <p style="${RESET}margin-top:14px;${SANS}font-size:13px;color:${BRAND.muted};">
           Or open it directly: <a href="${escapeAttr(readMoreUrl)}" style="color:${BRAND.muted};">${escapeText(readMoreUrl)}</a>
         </p>
@@ -127,15 +204,16 @@ export function renderNewsletterEmail(input: NewsletterEmailInput): string {
   <tr>
     <td align="center" style="padding:32px 16px;">
       <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="${RESET}max-width:600px;background:#ffffff;">
-        ${cover}
         <tr>
-          <td style="padding:32px 32px 8px 32px;">
+          <td style="padding:32px 32px 16px 32px;">
+            ${kicker ? `<p style="${RESET}${SANS}font-size:12px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;color:${BRAND.muted};margin-bottom:8px;">${escapeText(kicker)}</p>` : ""}
             <h1 style="${RESET}${FONT}font-size:28px;line-height:1.2;font-weight:700;color:${BRAND.ink};">${escapeText(title)}</h1>
-            ${excerpt ? `<p style="${RESET}margin-top:12px;${FONT}font-size:16px;color:${BRAND.muted};">${escapeText(excerpt)}</p>` : ""}
           </td>
         </tr>
+        ${mediaRow}
+        ${excerpt ? `<tr><td style="padding:0 32px 16px 32px;"><p style="${RESET}${FONT}font-size:16px;color:${BRAND.muted};">${escapeText(excerpt)}</p></td></tr>` : ""}
         <tr>
-          <td style="padding:16px 32px ${mode === "teaser" ? "8" : "32"}px 32px;${FONT}font-size:17px;">
+          <td style="padding:0 32px ${mode === "teaser" ? "8" : "32"}px 32px;${FONT}font-size:17px;">
             ${bodyContent}
           </td>
         </tr>

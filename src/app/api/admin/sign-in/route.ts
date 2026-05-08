@@ -5,6 +5,7 @@ import {
   ADMIN_SESSION_MAX_AGE,
   createSessionToken,
 } from "@/lib/admin/session";
+import { verifyAdminPassword } from "@/lib/admin/password";
 import { rateLimit, clientIp } from "@/lib/rate-limit";
 
 const Body = z.object({ password: z.string().min(1).max(500) });
@@ -19,14 +20,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "rate_limited" }, { status: 429 });
   }
 
-  const expected = process.env.ADMIN_PASSWORD;
-  if (!expected) {
-    return NextResponse.json(
-      { ok: false, error: "admin_not_configured" },
-      { status: 500 },
-    );
-  }
-
   let parsed;
   try {
     parsed = Body.safeParse(await req.json());
@@ -37,15 +30,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "invalid_input" }, { status: 400 });
   }
 
-  // constant-time-ish compare
-  const a = parsed.data.password;
-  const b = expected;
-  let mismatch = a.length === b.length ? 0 : 1;
-  const len = Math.max(a.length, b.length);
-  for (let i = 0; i < len; i++) {
-    mismatch |= (a.charCodeAt(i) || 0) ^ (b.charCodeAt(i) || 0);
-  }
-  if (mismatch !== 0) {
+  const verdict = verifyAdminPassword(parsed.data.password);
+  if (!verdict.ok) {
+    if (verdict.reason === "not_configured") {
+      return NextResponse.json(
+        { ok: false, error: "admin_not_configured" },
+        { status: 500 },
+      );
+    }
     return NextResponse.json({ ok: false, error: "wrong_password" }, { status: 401 });
   }
 

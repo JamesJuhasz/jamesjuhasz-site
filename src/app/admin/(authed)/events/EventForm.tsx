@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { slugify } from "@/lib/admin/slug";
-import { proxyImagePreview } from "@/lib/admin/img-preview";
+import { proxyImageUrl } from "@/lib/img-proxy";
 import { useRouter } from "next/navigation";
 import { Editor, type EditorValue } from "../newsletters/Editor";
 
@@ -254,7 +254,7 @@ export function EventForm({ initial }: { initial?: EventInitial }) {
           {coverImageUrl ? (
             <div className="border border-ink/10 p-2">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={proxyImagePreview(coverImageUrl, 1200)} alt={coverImageAlt ?? ""} className="w-full" />
+              <img src={proxyImageUrl(coverImageUrl, 1200)} alt={coverImageAlt ?? ""} className="w-full" />
               <button
                 type="button"
                 onClick={() => setCoverImageUrl("")}

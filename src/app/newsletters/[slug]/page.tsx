@@ -8,6 +8,7 @@ import { DonateCTASidebar, DonateCTAInline } from "@/components/cta/DonateCTA";
 import { JsonLd } from "@/components/JsonLd";
 import { articleJsonLd } from "@/lib/json-ld";
 import { getPostBySlug, getPostsIndex } from "@/lib/posts";
+import { proxyImagesInHtml } from "@/lib/img-proxy";
 
 export const revalidate = 60;
 
@@ -151,7 +152,7 @@ export default async function PostPage({
                 {hasBody ? (
                   <div
                     className="prose-newsletter max-w-prose"
-                    dangerouslySetInnerHTML={{ __html: post.bodyHtml }}
+                    dangerouslySetInnerHTML={{ __html: proxyImagesInHtml(post.bodyHtml) }}
                   />
                 ) : (
                   <p className="text-body-lg text-ink/80 max-w-prose">

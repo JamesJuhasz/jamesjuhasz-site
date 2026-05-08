@@ -9,6 +9,7 @@ import { DonateCTAInline, DonateCTASidebar } from "@/components/cta/DonateCTA";
 import { JsonLd } from "@/components/JsonLd";
 import { eventJsonLd } from "@/lib/json-ld";
 import { getEventBySlug, getEventsIndex } from "@/lib/events";
+import { proxyImagesInHtml } from "@/lib/img-proxy";
 import {
   getWorldSailingEventBySlug,
   getWorldSailingSlugs,
@@ -281,7 +282,7 @@ export default async function EventDetailPage({
               {dbEvent?.bodyHtml ? (
                 <div
                   className="prose-newsletter max-w-prose"
-                  dangerouslySetInnerHTML={{ __html: dbEvent.bodyHtml }}
+                  dangerouslySetInnerHTML={{ __html: proxyImagesInHtml(dbEvent.bodyHtml) }}
                 />
               ) : wsEvent ? (
                 <WSDiaryBody ws={wsEvent} />

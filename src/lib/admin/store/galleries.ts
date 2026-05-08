@@ -18,8 +18,7 @@ export async function listGalleries(): Promise<GalleryRow[]> {
     .select()
     .from(galleries)
     .orderBy(
-      sql`${galleries.endMonth} DESC NULLS LAST`,
-      asc(galleries.sortOrder),
+      sql`COALESCE(${galleries.endMonth}, ${galleries.startMonth}, ${galleries.createdAt}::date) DESC`,
       desc(galleries.createdAt),
     );
 }

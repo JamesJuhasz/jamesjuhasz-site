@@ -65,6 +65,21 @@ function initialMonthFromDate(d?: string | null): string {
   return m ? `${m[1]}-${m[2]}` : "";
 }
 
+const CURRENT_YEAR = new Date().getFullYear();
+const YEAR_OPTIONS = Array.from(
+  { length: CURRENT_YEAR + 1 - 2008 + 1 },
+  (_, i) => CURRENT_YEAR + 1 - i,
+);
+
+function splitMonth(value: string): { year: string; month: string } {
+  const m = /^(\d{4})-(\d{2})$/.exec(value);
+  return m ? { year: m[1], month: m[2] } : { year: "", month: "" };
+}
+
+function joinMonth(year: string, month: string): string {
+  return year && month ? `${year}-${month}` : "";
+}
+
 function rangeLabel(start: string, end: string): string {
   const startOk = /^\d{4}-\d{2}$/.test(start);
   const endOk = /^\d{4}-\d{2}$/.test(end);
@@ -369,24 +384,16 @@ export function GalleryForm({ initial }: { initial?: GalleryInitial }) {
         <div>
           <Label>Date range</Label>
           <div className="grid grid-cols-2 gap-3">
-            <div>
-              <span className="block text-caption text-ink/60 mb-1">From</span>
-              <input
-                type="month"
-                value={startMonth}
-                onChange={(e) => setStartMonth(e.target.value)}
-                className={inputCls}
-              />
-            </div>
-            <div>
-              <span className="block text-caption text-ink/60 mb-1">To</span>
-              <input
-                type="month"
-                value={endMonth}
-                onChange={(e) => setEndMonth(e.target.value)}
-                className={inputCls}
-              />
-            </div>
+            <MonthYearPicker
+              label="From"
+              value={startMonth}
+              onChange={setStartMonth}
+            />
+            <MonthYearPicker
+              label="To"
+              value={endMonth}
+              onChange={setEndMonth}
+            />
           </div>
           {startMonth || endMonth ? (
             <p className="mt-1 text-caption text-ink/50">
@@ -665,5 +672,68 @@ function Label({ children }: { children: React.ReactNode }) {
     <span className="block text-caption uppercase tracking-wider text-ink/60 mb-1.5">
       {children}
     </span>
+  );
+}
+
+function MonthYearPicker({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  onChange: (next: string) => void;
+}) {
+  const parsed = splitMonth(value);
+  const [year, setYear] = useState(parsed.year);
+  const [month, setMonth] = useState(parsed.month);
+
+  useEffect(() => {
+    const next = splitMonth(value);
+    setYear(next.year);
+    setMonth(next.month);
+  }, [value]);
+
+  function update(nextYear: string, nextMonth: string) {
+    setYear(nextYear);
+    setMonth(nextMonth);
+    onChange(joinMonth(nextYear, nextMonth));
+  }
+
+  return (
+    <div>
+      <span className="block text-caption text-ink/60 mb-1">{label}</span>
+      <div className="grid grid-cols-2 gap-2">
+        <select
+          value={month}
+          onChange={(e) => update(year, e.target.value)}
+          className={inputCls}
+          aria-label={`${label} month`}
+        >
+          <option value="">Month</option>
+          {MONTH_FULL.map((name, i) => {
+            const v = String(i + 1).padStart(2, "0");
+            return (
+              <option key={v} value={v}>
+                {name}
+              </option>
+            );
+          })}
+        </select>
+        <select
+          value={year}
+          onChange={(e) => update(e.target.value, month)}
+          className={inputCls}
+          aria-label={`${label} year`}
+        >
+          <option value="">Year</option>
+          {YEAR_OPTIONS.map((y) => (
+            <option key={y} value={String(y)}>
+              {y}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
   );
 }

@@ -25,6 +25,8 @@ export default async function EditGalleryPage({
           title: gallery.title,
           slug: gallery.slug,
           dateRange: gallery.dateRange,
+          startMonth: gallery.startMonth ?? null,
+          endMonth: gallery.endMonth ?? null,
           context: gallery.context,
           coverImageUrl: gallery.coverImageUrl,
           lastAnnouncedAt: gallery.lastAnnouncedAt

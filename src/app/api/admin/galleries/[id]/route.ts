@@ -20,6 +20,18 @@ const Patch = z.object({
   title: z.string().trim().min(1).max(180).optional(),
   slug: z.string().trim().max(96).optional(),
   dateRange: z.string().trim().min(1).max(120).optional(),
+  startMonth: z
+    .string()
+    .trim()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional()
+    .nullable(),
+  endMonth: z
+    .string()
+    .trim()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional()
+    .nullable(),
   context: z.string().trim().max(600).optional().nullable(),
   coverImageUrl: z.string().trim().max(500).optional().nullable(),
   sortOrder: z.number().int().optional(),

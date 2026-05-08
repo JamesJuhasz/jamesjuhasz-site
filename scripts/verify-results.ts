@@ -610,8 +610,12 @@ async function main() {
   // parsed candidate gets surfaced as a review item with the top candidate's
   // confidence score. Only entries with truly zero candidates remain in the
   // rejected file. Idempotent — safe to run on every invocation.
+  // Exception: entries the reviewer explicitly rejected (reason "human-rejected")
+  // stay in rejected forever — promoting them back would re-queue work the human
+  // already adjudicated.
   for (const [id, entry] of Array.from(rejectedNew.entries())) {
     if (entry.candidates.length === 0) continue;
+    if (entry.reason === "human-rejected") continue;
     if (verifiedNew.has(id) || reviewNew.has(id)) {
       rejectedNew.delete(id);
       continue;

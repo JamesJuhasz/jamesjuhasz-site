@@ -86,6 +86,8 @@ export const galleries = pgTable(
     slug: text("slug").notNull(),
     title: text("title").notNull(),
     dateRange: text("date_range").notNull(),
+    startMonth: date("start_month"),
+    endMonth: date("end_month"),
     context: text("context"),
     coverImageUrl: text("cover_image_url"),
     sortOrder: integer("sort_order").notNull().default(0),

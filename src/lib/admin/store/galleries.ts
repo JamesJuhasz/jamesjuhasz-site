@@ -1,4 +1,4 @@
-import { eq, asc, desc, max } from "drizzle-orm";
+import { eq, asc, desc, max, sql } from "drizzle-orm";
 import { getDb } from "@/db/client";
 import {
   galleries,
@@ -17,7 +17,11 @@ export async function listGalleries(): Promise<GalleryRow[]> {
   return db
     .select()
     .from(galleries)
-    .orderBy(asc(galleries.sortOrder), desc(galleries.createdAt));
+    .orderBy(
+      sql`${galleries.endMonth} DESC NULLS LAST`,
+      asc(galleries.sortOrder),
+      desc(galleries.createdAt),
+    );
 }
 
 export async function listGalleriesWithCounts(): Promise<

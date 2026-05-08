@@ -162,9 +162,11 @@ export async function POST(req: NextRequest) {
     }
   } else {
     // Reject: persist as a rejected entry with the candidates we have.
+    // The "human-rejected" reason is the durable signal: verify-results' rejected→review
+    // promotion loop checks it and refuses to re-surface these entries on subsequent runs.
     const synthetic: RejectedEntry = {
       worldSailingEventId: eventId,
-      reason: "low-confidence",
+      reason: "human-rejected",
       attemptCount: 99, // human rejection — don't auto-retry
       lastAttemptAt: new Date().toISOString(),
       nextRetryAt: null,

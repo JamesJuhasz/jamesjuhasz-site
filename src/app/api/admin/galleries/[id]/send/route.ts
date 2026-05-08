@@ -4,7 +4,13 @@ import {
   getGalleryById,
   markGalleryAnnounced,
 } from "@/lib/admin/store/galleries";
-import { renderNewsletterEmail } from "@/lib/admin/newsletter-html";
+import {
+  renderNewsletterEmail,
+  renderCroppedImage,
+  absolutizeUrl,
+} from "@/lib/admin/newsletter-html";
+import { verifyAdminPassword } from "@/lib/admin/password";
+import { rateLimit, clientIp } from "@/lib/rate-limit";
 import {
   createAndSendBroadcast,
   sendTestEmail,
@@ -14,32 +20,63 @@ import { SITE } from "@/lib/site";
 
 export const runtime = "nodejs";
 
-const Body = z.object({ mode: z.enum(["test", "all"]) });
+const Body = z.object({
+  mode: z.enum(["test", "all"]),
+  password: z.string().min(1).max(500).optional(),
+});
 
-function escapeAttr(s: string): string {
-  return s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
-}
 function escapeText(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-function buildAnnouncementBody(args: {
-  context: string | null | undefined;
-  photoCount: number;
-  publicUrl: string;
-}): string {
-  const intro = args.context
-    ? `<p style="margin:0 0 18px 0;">${escapeText(args.context)}</p>`
-    : "";
-  const meta = `<p style="margin:0 0 24px 0;color:#666666;font-size:15px;">${args.photoCount} ${args.photoCount === 1 ? "photo" : "photos"} from this block.</p>`;
-  const cta = `
-    <p style="margin:24px 0 8px 0;text-align:center;">
-      <a href="${escapeAttr(args.publicUrl)}" style="display:inline-block;background:#0a0a0a;color:#ffffff;text-decoration:none;padding:14px 28px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:14px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;">View the gallery</a>
-    </p>
-    <p style="margin:0;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:13px;color:#666666;">
-      Or open it directly: <a href="${escapeAttr(args.publicUrl)}" style="color:#666666;">${escapeText(args.publicUrl)}</a>
-    </p>`;
-  return intro + meta + cta;
+/**
+ * Wrap the gallery's free-text context as the email body. The renderer's
+ * teaser pass truncates to 150 words and appends the CTA; we just need a
+ * `<p>`-shaped body for it to chew on. Empty context → empty body, which
+ * collapses to title + grid + CTA.
+ */
+function buildAnnouncementBody(context: string | null | undefined): string {
+  const trimmed = context?.trim();
+  if (!trimmed) return "";
+  return `<p>${escapeText(trimmed)}</p>`;
+}
+
+/**
+ * Render a 2-column grid of up to 6 gallery thumbnails, each cropped to 16:10.
+ * The CTA in the email body invites recipients to view the rest on the site,
+ * so we don't need to show every photo here.
+ */
+function buildPhotoGrid(
+  photos: Array<{ url: string; alt: string | null }>,
+  origin: string,
+): string {
+  const items = photos.slice(0, 6);
+  if (items.length === 0) return "";
+  // Each thumbnail cell is half the inner content width (536/2 = 268px) minus
+  // an 8px gutter — round to 264x165 for clean 16:10.
+  const W = 264;
+  const H = 165;
+  const cellsHtml = items.map((p) =>
+    renderCroppedImage({
+      src: absolutizeUrl(p.url, origin),
+      alt: p.alt,
+      width: W,
+      height: H,
+    }),
+  );
+  const rows: string[] = [];
+  for (let i = 0; i < cellsHtml.length; i += 2) {
+    const left = cellsHtml[i];
+    const right = cellsHtml[i + 1] ?? "";
+    rows.push(
+      `<tr><td width="50%" valign="top" style="padding:0 4px 8px 0;">${left}</td><td width="50%" valign="top" style="padding:0 0 8px 4px;">${right}</td></tr>`,
+    );
+  }
+  return `<tr><td style="padding:0 32px 16px 32px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0;padding:0;border-collapse:separate;border-spacing:0;max-width:536px;">
+      ${rows.join("\n      ")}
+    </table>
+  </td></tr>`;
 }
 
 export async function POST(
@@ -62,6 +99,40 @@ export async function POST(
     return NextResponse.json({ ok: false, error: "invalid_input" }, { status: 400 });
   }
 
+  if (parsed.data.mode === "all") {
+    const ip = clientIp(req);
+    const rl = rateLimit(`admin-broadcast-confirm:${ip}`, {
+      max: 10,
+      windowMs: 10 * 60 * 1000,
+    });
+    if (!rl.ok) {
+      return NextResponse.json(
+        { ok: false, error: "rate_limited" },
+        { status: 429 },
+      );
+    }
+    const password = parsed.data.password ?? "";
+    if (!password) {
+      return NextResponse.json(
+        { ok: false, error: "password_required" },
+        { status: 401 },
+      );
+    }
+    const verdict = verifyAdminPassword(password);
+    if (!verdict.ok) {
+      if (verdict.reason === "not_configured") {
+        return NextResponse.json(
+          { ok: false, error: "admin_not_configured" },
+          { status: 500 },
+        );
+      }
+      return NextResponse.json(
+        { ok: false, error: "wrong_password" },
+        { status: 401 },
+      );
+    }
+  }
+
   const gallery = await getGalleryById(id);
   if (!gallery) {
     return NextResponse.json({ ok: false, error: "not_found" }, { status: 404 });
@@ -69,24 +140,21 @@ export async function POST(
 
   const canonicalOrigin = SITE.url.replace(/\/+$/, "");
   const publicUrl = `${canonicalOrigin}/gallery/${gallery.slug}`;
-  const subject = `New photos: ${gallery.title}`;
-  const cover = gallery.coverImageUrl ?? gallery.photos[0]?.url ?? null;
+  const subject = `New Photo Gallery Published - "${gallery.title}"`;
+  const photoGrid = buildPhotoGrid(gallery.photos, canonicalOrigin);
 
   const html = renderNewsletterEmail({
     title: gallery.title,
-    bodyHtml: buildAnnouncementBody({
-      context: gallery.context,
-      photoCount: gallery.photos.length,
-      publicUrl,
-    }),
-    excerpt: gallery.dateRange,
-    coverImageUrl: cover,
+    bodyHtml: buildAnnouncementBody(gallery.context),
     coverImageAlt: gallery.title,
     // Always absolutize against the canonical production domain so /images and
     // /uploads URLs resolve in Gmail/Outlook even when the test send is fired
     // from a localhost dev session.
     origin: canonicalOrigin,
-    mode: "full",
+    publicUrl,
+    kicker: "New Photo Gallery Published",
+    ctaLabel: "View the gallery",
+    mediaHtml: photoGrid,
   });
 
   if (parsed.data.mode === "test") {

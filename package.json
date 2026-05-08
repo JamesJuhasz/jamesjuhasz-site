@@ -23,7 +23,8 @@
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "seed:galleries": "tsx --env-file=.env.local scripts/seed-galleries.ts",
-    "migrate:uploads-to-r2": "tsx --env-file=.env.local scripts/migrate-uploads-to-r2.ts"
+    "migrate:uploads-to-r2": "tsx --env-file=.env.local scripts/migrate-uploads-to-r2.ts",
+    "migrate:body-uploads-to-r2": "tsx --env-file=.env.local scripts/migrate-body-uploads-to-r2.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1045.0",

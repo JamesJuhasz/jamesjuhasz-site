@@ -14,7 +14,7 @@ export function HomeHero() {
     <section className="relative isolate min-h-[100svh] flex flex-col overflow-hidden text-paper">
       {/* Desktop */}
       <div className="hidden sm:block">
-        <HeroParallax src="/images/hero-candidates/dsc00156.jpg" priority />
+        <HeroParallax src="/images/hero-candidates/dsc00157-3.jpg" priority />
       </div>
 
       {/* Mobile: single portrait-friendly image */}

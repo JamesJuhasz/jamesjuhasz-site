@@ -51,6 +51,7 @@ export const posts = pgTable(
     bodyJson: jsonb("body_json"),
     tags: text("tags").array(),
     featured: boolean("featured").notNull().default(false),
+    emailSubject: text("email_subject"),
     publishedAt: timestamp("published_at", { withTimezone: true }),
     sentAt: timestamp("sent_at", { withTimezone: true }),
     broadcastId: text("broadcast_id"),

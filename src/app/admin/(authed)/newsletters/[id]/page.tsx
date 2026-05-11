@@ -45,6 +45,7 @@ export default async function EditNewsletterPage({
           bodyJson: post.bodyJson,
           tags: post.tags,
           featured: post.featured,
+          emailSubject: post.emailSubject,
           publishedAt: post.publishedAt
             ? post.publishedAt.toISOString()
             : null,

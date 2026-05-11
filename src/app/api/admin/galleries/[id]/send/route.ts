@@ -155,6 +155,7 @@ export async function POST(
     kicker: "New Photo Gallery Published",
     ctaLabel: "View the gallery",
     mediaHtml: photoGrid,
+    utmCampaign: `gallery-${gallery.slug}`,
   });
 
   if (parsed.data.mode === "test") {

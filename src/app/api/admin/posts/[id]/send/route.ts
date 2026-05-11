@@ -33,8 +33,8 @@ function emailOrigin(): string {
   return SITE.url.replace(/\/+$/, "");
 }
 
-function buildSubject(title: string): string {
-  return `James Juhasz Sailing - "${title}"`;
+function buildSubject(post: { title: string; emailSubject?: string | null }): string {
+  return post.emailSubject?.trim() || post.title;
 }
 
 export async function POST(
@@ -105,7 +105,7 @@ export async function POST(
   // production domain so subscribers' clicks resolve even when the test send
   // was triggered from a localhost dev session.
   const publicUrl = `${SITE.url.replace(/\/+$/, "")}/newsletters/${post.slug}`;
-  const subject = buildSubject(post.title);
+  const subject = buildSubject(post);
 
   if (parsed.data.mode === "test") {
     // Test sends go through `emails.send`, which does NOT substitute
@@ -120,6 +120,7 @@ export async function POST(
       origin: emailOrigin(),
       publicUrl,
       unsubscribeUrl: testUnsubscribeUrl,
+      utmCampaign: post.slug,
     });
     const result = await sendTestEmail({
       to: getOwnerAddress(),
@@ -152,6 +153,7 @@ export async function POST(
     coverImageAlt: post.coverImageAlt,
     origin: emailOrigin(),
     publicUrl,
+    utmCampaign: post.slug,
   });
 
   const result = await createAndSendBroadcast({

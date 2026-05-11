@@ -37,8 +37,8 @@ export type NewsletterEmailInput = {
    */
   publicUrl?: string;
   /**
-   * Button label for the teaser CTA. Default "Read the rest on the website";
-   * gallery announcements pass "View the gallery".
+   * Text for the teaser CTA link (an arrow is appended). Default "Continue
+   * reading"; gallery announcements pass "View the gallery".
    */
   ctaLabel?: string;
   /**
@@ -67,7 +67,35 @@ export type NewsletterEmailInput = {
    * string "#" so the link still renders.
    */
   unsubscribeUrl?: string;
+  /**
+   * If set, append `utm_source=newsletter&utm_medium=email&utm_campaign=<this>`
+   * to every href that points at jamesjuhasz.com. Lets GA4 attribute traffic
+   * (and donations) back to the specific broadcast that drove the click.
+   */
+  utmCampaign?: string;
 };
+
+/**
+ * Tag every href pointing at jamesjuhasz.com with utm_source/medium/campaign.
+ * External links and the Resend unsubscribe placeholder are left alone. Already-
+ * tagged URLs (with an existing utm_source param) are skipped so callers can
+ * pre-tag specific links if they want different params for them.
+ *
+ * Ampersands are HTML-encoded (`&amp;`) so the resulting attribute value is
+ * valid HTML — email clients are stricter about this than browsers.
+ */
+export function addUtmParams(html: string, campaign: string): string {
+  const utmString =
+    `utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=${encodeURIComponent(campaign)}`;
+  return html.replace(
+    /(\shref=["'])(https:\/\/(?:www\.)?jamesjuhasz\.com(?:\/[^"']*)?)/gi,
+    (match, prefix: string, url: string) => {
+      if (/[?&](?:amp;)?utm_source=/.test(url)) return match;
+      const sep = url.includes("?") ? "&amp;" : "?";
+      return `${prefix}${url}${sep}${utmString}`;
+    },
+  );
+}
 
 /**
  * Build the email teaser: roughly the first 150 words of the body, rendered
@@ -163,7 +191,7 @@ export function renderCroppedImage(args: {
 export function renderNewsletterEmail(input: NewsletterEmailInput): string {
   const { title, bodyHtml, excerpt, coverImageUrl, coverImageAlt, origin, publicUrl, kicker, mediaHtml } = input;
   const mode = input.mode ?? "teaser";
-  const ctaLabel = input.ctaLabel ?? "Read the rest on the website";
+  const ctaLabel = input.ctaLabel ?? "Continue reading";
   const unsubscribe = input.unsubscribeUrl ?? "{{{RESEND_UNSUBSCRIBE_URL}}}";
 
   let mediaRow = "";
@@ -183,16 +211,13 @@ export function renderNewsletterEmail(input: NewsletterEmailInput): string {
     mode === "teaser"
       ? `
     <tr>
-      <td style="padding:8px 32px 32px 32px;text-align:center;">
-        <a href="${escapeAttr(readMoreUrl)}" style="display:inline-block;background:${BRAND.ink};color:#ffffff;text-decoration:none;padding:14px 28px;${SANS}font-size:14px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;">${escapeText(ctaLabel)}</a>
-        <p style="${RESET}margin-top:14px;${SANS}font-size:13px;color:${BRAND.muted};">
-          Or open it directly: <a href="${escapeAttr(readMoreUrl)}" style="color:${BRAND.muted};">${escapeText(readMoreUrl)}</a>
-        </p>
+      <td style="padding:0 32px 32px 32px;${FONT}font-size:17px;">
+        <p style="${RESET}"><a href="${escapeAttr(readMoreUrl)}" style="color:${BRAND.ink};text-decoration:underline;">${escapeText(ctaLabel)} &rarr;</a></p>
       </td>
     </tr>`
       : "";
 
-  return `<!doctype html>
+  const html = `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -232,4 +257,6 @@ export function renderNewsletterEmail(input: NewsletterEmailInput): string {
 </table>
 </body>
 </html>`;
+
+  return input.utmCampaign ? addUtmParams(html, input.utmCampaign) : html;
 }

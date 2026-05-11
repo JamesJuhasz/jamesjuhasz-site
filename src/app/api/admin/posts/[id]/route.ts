@@ -26,6 +26,7 @@ const Patch = z.object({
   bodyJson: z.unknown().optional(),
   tags: z.array(z.string().trim().max(40)).max(20).optional().nullable(),
   featured: z.boolean().optional(),
+  emailSubject: z.string().trim().max(180).optional().nullable(),
   publishedAt: z.string().datetime().optional().nullable(),
 });
 

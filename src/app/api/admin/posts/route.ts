@@ -22,6 +22,7 @@ const Body = z.object({
   bodyJson: z.unknown().optional(),
   tags: z.array(z.string().trim().max(40)).max(20).optional(),
   featured: z.boolean().optional(),
+  emailSubject: z.string().trim().max(180).optional().nullable(),
   publishedAt: z.string().datetime().optional().nullable(),
 });
 
@@ -58,6 +59,7 @@ export async function POST(req: NextRequest) {
     bodyJson: (data.bodyJson as object | null | undefined) ?? null,
     tags: data.tags ?? null,
     featured: data.featured ?? false,
+    emailSubject: data.emailSubject ?? null,
     publishedAt: data.publishedAt ? new Date(data.publishedAt) : null,
   });
   return NextResponse.json({ ok: true, post: row });

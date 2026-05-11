@@ -17,6 +17,7 @@ export type PostInitial = {
   bodyJson?: unknown;
   tags?: string[] | null;
   featured?: boolean;
+  emailSubject?: string | null;
   publishedAt?: string | null;
 };
 
@@ -30,6 +31,7 @@ export function PostForm({ initial }: { initial?: PostInitial }) {
   const [coverImageAlt, setCoverImageAlt] = useState(initial?.coverImageAlt ?? "");
   const [tags, setTags] = useState((initial?.tags ?? []).join(", "));
   const [featured, setFeatured] = useState(initial?.featured ?? false);
+  const [emailSubject, setEmailSubject] = useState(initial?.emailSubject ?? "");
   const [publishedAt, setPublishedAt] = useState(
     initial?.publishedAt
       ? new Date(initial.publishedAt).toISOString().slice(0, 16)
@@ -90,6 +92,7 @@ export function PostForm({ initial }: { initial?: PostInitial }) {
           .map((t) => t.trim())
           .filter(Boolean),
         featured,
+        emailSubject: emailSubject.trim() || null,
         publishedAt: args.publish
           ? new Date().toISOString()
           : publishedAt
@@ -179,7 +182,7 @@ export function PostForm({ initial }: { initial?: PostInitial }) {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className={inputCls}
-            placeholder="Subject line readers will see"
+            placeholder="Headline shown on the post"
           />
         </div>
 
@@ -264,6 +267,18 @@ export function PostForm({ initial }: { initial?: PostInitial }) {
             className={inputCls}
             placeholder="One-line preview shown in the newsletter list"
           />
+        </div>
+        <div>
+          <Label>Email subject</Label>
+          <input
+            value={emailSubject}
+            onChange={(e) => setEmailSubject(e.target.value)}
+            className={inputCls}
+            placeholder={title || "Defaults to the post title"}
+          />
+          <p className="mt-1 text-caption text-ink/50">
+            Subject line subscribers see in their inbox. Leave blank to use the post title.
+          </p>
         </div>
         <div>
           <Label>Cover image</Label>

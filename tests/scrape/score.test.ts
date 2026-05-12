@@ -56,8 +56,11 @@ describe("computeScore — hard rejects", () => {
   });
 
   it("date=0 with extracted dates and weak trio → hard reject", () => {
+    // nameMatch < 0.95 defeats all three escape hatches (strongTrio,
+    // highTierWithNameAndClass, scoringExportWithClassConfirmed all gate on
+    // nameMatch ≥ 0.95), so the hard reject fires.
     const r = computeScore({
-      breakdown: { ...FULL, dateOverlap: 0, eventNameMatch: 0.7 },
+      breakdown: { ...FULL, nameMatch: 0.7, eventNameMatch: 0.7, dateOverlap: 0 },
       multipleNameMatches: false,
       pageHasNoDates: false,
     });

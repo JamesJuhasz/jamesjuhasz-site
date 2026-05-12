@@ -40,6 +40,14 @@ export type Result = {
   location?: string;
   /** Candidate results URL awaiting human review — not yet confirmed accurate. */
   pendingUrl?: string | null;
+  /** Marks a regatta currently in progress. Absent / "past" for finished races. */
+  status?: "past" | "ongoing";
+  /** Day counter for ongoing regattas, e.g. day 2 of a 5-day series. */
+  dayOfRegatta?: { current: number; total: number };
+  /** ISO timestamp of the last successful scrape — drives "Updated N min ago". */
+  lastUpdated?: string;
+  /** Link to the regatta's Online Notice Board (results PDFs, sailing instructions). */
+  noticeBoardUrl?: string;
 };
 
 const STATS_WINDOW_DAYS = 730;

@@ -33,7 +33,7 @@ export function filterPressForEvent(
   event: { title: string; startDate: string; endDate: string },
 ): SeedPress[] {
   const needle = normalize(event.title);
-  const from = shiftDate(event.startDate, -45);
+  const from = shiftDate(event.startDate, -7);
   const to = shiftDate(event.endDate, 30);
   return press.filter((p) => {
     const hay = `${normalize(p.articleTitle)} ${normalize(p.excerpt ?? "")}`;

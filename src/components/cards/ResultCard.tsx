@@ -129,9 +129,6 @@ export function ResultCard({ result, className }: { result: Result; className?: 
             {result.totalCompetitors ? (
               <span className="text-ink-3"> of {result.totalCompetitors}</span>
             ) : null}
-            {isOngoing && result.fleet ? (
-              <span className="text-ink-3"> · {result.fleet}</span>
-            ) : null}
           </p>
         ) : isOngoing ? (
           <p className="mt-2 text-body text-ink-3">

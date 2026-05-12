@@ -35,7 +35,9 @@ export function RacingNowModal({ ongoing }: { ongoing: Result[] }) {
     // modal even if the user dismissed the previous one this session.
     const key = `${DISMISS_KEY}:${featured.slug ?? featured.id}`;
     if (sessionStorage.getItem(key) === "1") return;
-    setOpen(true);
+    // Defer the state update to the next microtask so this effect doesn't
+    // trigger a cascading render warning. Visually unchanged.
+    queueMicrotask(() => setOpen(true));
   }, [featured]);
 
   if (!featured || !open) return null;

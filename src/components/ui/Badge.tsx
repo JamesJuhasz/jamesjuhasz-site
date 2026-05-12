@@ -1,7 +1,7 @@
 import * as React from "react";
 import { cn } from "@/lib/cn";
 
-type Tone = "default" | "ink" | "fog" | "red" | "navy" | "sand" | "donate";
+type Tone = "default" | "ink" | "fog" | "red" | "navy" | "sand" | "donate" | "ongoing";
 
 const toneStyles: Record<Tone, string> = {
   default: "bg-fog text-ink ring-1 ring-mist",
@@ -12,6 +12,9 @@ const toneStyles: Record<Tone, string> = {
   navy: "bg-ink text-paper",
   sand: "bg-fog text-ink ring-1 ring-mist",
   donate: "bg-red text-paper",
+  // Live "racing now" tone — distinct from donate red. Consumer adds a
+  // pulsing dot to emphasise live status.
+  ongoing: "bg-emerald-600 text-paper",
 };
 
 export function Badge({

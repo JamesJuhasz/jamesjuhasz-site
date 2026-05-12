@@ -91,6 +91,7 @@ New script, mirrors `scripts/fetch-results.ts` in style.
       "totalCompetitors": 64,
       "fleet": "ILCA 7 Open",
       "externalUrl": "https://...",
+      "noticeBoardUrl": "https://www.manage2sail.com/.../Documents.aspx?...",
       "source": "manage2sail.com",
       "resolvedUrl": "https://www.manage2sail.com/.../Result.aspx?...",
       "resolvedAt": "2026-05-10T08:14:00Z",
@@ -104,6 +105,13 @@ New script, mirrors `scripts/fetch-results.ts` in style.
 **Why this matters:** the discover layer can invoke Brave Search (Layer 3 backstop), which has a 2000-query/month free tier. Re-running discovery every 30 minutes for the duration of a 5-day regatta would burn ~240 queries per regatta in the worst case. Caching `resolvedUrl` drops this to roughly **one Brave query per regatta**.
 
 **Cache invalidation:** if a scrape against `resolvedUrl` fails to extract a "juhasz" row for **3 consecutive runs**, increment `failedExtractions`. On the next run after that, clear `resolvedUrl` and re-run discovery. This handles the case where the regatta site changes URL structure mid-event or the cached URL points at a stale page. The threshold balances "don't re-discover for transient network hiccups" against "don't go silent for an entire regatta if the URL is genuinely dead."
+
+**Online Notice Board (ONB) URL:** alongside `resolvedUrl`, the script also persists a `noticeBoardUrl` per event. The ONB is where race documents, sailing instructions, results PDFs, and announcements are posted; on most regatta-management platforms (manage2sail, sailwave, regattanetwork) results are linked from the ONB, so during discovery we frequently visit the ONB on the way to the results page. The script captures it in two ways:
+
+1. **Per-source derivation (preferred):** new helpers in `src/lib/scrape/adapters.ts` for each source we already adapt. E.g. for manage2sail, the ONB lives at a known sibling path of the results page (`/Documents.aspx` style). Each adapter that defines a results derivation also defines an `onbUrl(resolvedUrl)` helper. Zero extra fetches.
+2. **Crawl-time capture (fallback):** when no per-source derivation exists, during discovery the extractor looks for an in-page anchor whose visible text or `href` matches `/notice ?board|^onb$|documents|sailing instructions/i` on the regatta's event landing page and stores its absolute URL.
+
+The ONB URL is cached for the regatta's lifetime (same lifecycle as `resolvedUrl`) — derived once, reused on every subsequent run, never causes a Brave query.
 
 - Idempotent: each run overwrites the file with the current set of ongoing events. Entries whose `endDate < today` are dropped (this is also the pruning mechanism).
 - Flags: `--dry` (no write), `--limit=N` (cap per run), `--force-rediscover=<slug>` (clear `resolvedUrl` for a specific event and re-run discovery — escape hatch for when the cached URL is wrong).
@@ -127,6 +135,7 @@ export type Result = {
   status?: "past" | "ongoing";       // default "past"
   dayOfRegatta?: { current: number; total: number };  // ongoing only
   lastUpdated?: string;               // ISO, ongoing only
+  noticeBoardUrl?: string;            // ongoing only — link to the regatta's Online Notice Board
 };
 
 export async function getOngoingResults(today?: string): Promise<Result[]>
@@ -157,7 +166,9 @@ A new `Badge` tone `"ongoing"`. Label: `"Ongoing"`. Visually distinct from `"don
   - With data: `"Currently 7th of 64 · ILCA 7 Open"`
   - Without data: `"Position not yet available — race in progress"` (rendered in `text-ink-3` muted style)
 - New subline below the title (only present for ongoing): `"Day 2 of 5 · Updated 14 min ago"`, computed from `dayOfRegatta` and `lastUpdated`. "Updated …" uses relative time; falls back to absolute if `> 24h`.
-- External link (if present) labeled `"Live scoreboard ↗"` instead of `"Full results ↗"`.
+- **Two external links** rendered side by side (each only shown if its URL is present):
+  - `"Live scoreboard ↗"` — points at `result.externalUrl` (the resolved results page).
+  - `"Notice board ↗"` — points at `result.noticeBoardUrl` (the regatta's ONB). The ONB hosts race documents, sailing instructions, results PDFs, and announcements — it's where the live scoreboard typically links from, so it gives donors broader race context beyond just the placement.
 
 No new card component — reuse `ResultCard` to keep visual consistency and minimize surface area. The conditional branches are additive — past-result rendering is unchanged.
 

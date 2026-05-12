@@ -8,7 +8,13 @@ import type { Result } from "@/lib/results";
 
 const ALL = "All";
 
-export function ResultsFilter({ results }: { results: Result[] }) {
+export function ResultsFilter({
+  results,
+  ongoing = [],
+}: {
+  results: Result[];
+  ongoing?: Result[];
+}) {
   const years = useMemo(() => {
     const set = new Set<string>();
     for (const r of results) set.add(r.startDate.slice(0, 4));
@@ -25,6 +31,17 @@ export function ResultsFilter({ results }: { results: Result[] }) {
 
   return (
     <>
+      {ongoing.length > 0 ? (
+        <div className="mb-12">
+          <h2 className="font-display text-h2 text-ink mb-6">Racing now</h2>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {ongoing.map((r) => (
+              <ResultCard key={r.id} result={r} />
+            ))}
+          </div>
+        </div>
+      ) : null}
+
       <div className="mt-8 flex flex-wrap items-center gap-2">
         {tabs.map((t) => (
           <button

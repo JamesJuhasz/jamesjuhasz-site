@@ -22,6 +22,9 @@ export function isOngoing(
 }
 
 function todayIso(): string {
+  // FAKE_TODAY env override for local end-to-end testing — simulate
+  // "today is mid-regatta" without waiting for a real ongoing event.
+  if (process.env.FAKE_TODAY) return process.env.FAKE_TODAY;
   return new Date().toISOString().slice(0, 10);
 }
 

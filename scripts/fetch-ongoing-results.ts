@@ -32,12 +32,49 @@ import {
 } from "../src/lib/ongoing";
 import { discoverCandidates } from "../src/lib/scrape/discover";
 import { extractFromHtml } from "../src/lib/scrape/extract-html";
+import { extractFromPdf } from "../src/lib/scrape/extract-pdf";
 import { bufferToText, fetchUrl, isPdf } from "../src/lib/scrape/fetch";
 import {
   deriveNoticeBoardUrl,
   findNoticeBoardAnchor,
 } from "../src/lib/scrape/onb";
 import type { WSEventLite } from "../src/lib/scrape/types";
+import wsDump from "../src/data/world-sailing-events.json";
+
+type WSRow = {
+  regattaName: string;
+  startDate: string;
+  endDate: string | null;
+  worldSailingEventId: string;
+  worldSailingRegattaCode: string | null;
+  regattaWebsite: string | null;
+  className: string;
+  classCode: string;
+  eventName: string | null;
+  sailNumber: string;
+};
+
+function normTitle(s: string): string {
+  return s.toLowerCase().replace(/\s+/g, " ").trim();
+}
+
+/**
+ * Locate the matching WS row by normalized title within ±7 days of the
+ * ongoing-regatta start. When WS has already published the federation entry
+ * (rare for true ongoing regattas, common when simulating with FAKE_TODAY
+ * against past events), we carry forward its `regattaWebsite` and
+ * `regattaCode` so the discover pipeline has its full toolkit.
+ */
+function findMatchingWsRow(title: string, startDate: string): WSRow | null {
+  const wantNorm = normTitle(title);
+  const wantMs = new Date(`${startDate}T00:00:00Z`).getTime();
+  for (const r of wsDump.events as WSRow[]) {
+    if (normTitle(r.regattaName).replace(/\./g, "") !== wantNorm.replace(/\./g, "")) continue;
+    const rowMs = new Date(`${r.startDate}T00:00:00Z`).getTime();
+    if (Math.abs(rowMs - wantMs) <= 7 * 86_400_000) return r;
+  }
+  return null;
+}
 
 dotenv.config({ path: ".env.local" });
 
@@ -73,18 +110,19 @@ function bootstrapWSEvent(r: {
   startDate: string;
   endDate: string;
 }): WSEventLite {
+  const ws = findMatchingWsRow(r.title, r.startDate);
   return {
-    worldSailingEventId: "",
-    worldSailingRegattaCode: null,
-    regattaName: r.title,
+    worldSailingEventId: ws?.worldSailingEventId ?? "",
+    worldSailingRegattaCode: ws?.worldSailingRegattaCode ?? null,
+    regattaName: ws?.regattaName ?? r.title,
     startDate: r.startDate,
     endDate: r.endDate,
     position: null,
-    className: "ILCA 7",
-    classCode: "ILCA7",
-    eventName: r.title,
-    regattaWebsite: null,
-    sailNumber: null,
+    className: ws?.className ?? "ILCA 7",
+    classCode: ws?.classCode ?? "ILCA7",
+    eventName: ws?.eventName ?? r.title,
+    regattaWebsite: ws?.regattaWebsite ?? null,
+    sailNumber: ws?.sailNumber ?? null,
   };
 }
 
@@ -100,10 +138,14 @@ async function fetchAndExtract(url: string): Promise<ExtractionResult | null> {
   const r = await fetchUrl(url);
   if (!r.ok) return null;
   if (isPdf(r.contentType, r.body)) {
-    // PDF extraction not wired into the live path yet — past-results pipeline
-    // has a separate extractor we can plug in later if a live regatta
-    // publishes scoreboards as PDF only.
-    return null;
+    const e = await extractFromPdf(r.body);
+    return {
+      position: e.externalPosition,
+      totalCompetitors: e.totalCompetitors,
+      fleet: e.fleet,
+      finalUrl: r.finalUrl,
+      html: null,
+    };
   }
   const html = bufferToText(r.body);
   const e = extractFromHtml(html);
@@ -125,6 +167,7 @@ async function scrapeOne(
     (existing?.failedExtractions ?? 0) >= FAIL_THRESHOLD;
 
   const cachedUrl = !forceRediscover ? (existing?.resolvedUrl ?? null) : null;
+  const wsEvent = bootstrapWSEvent(regatta);
 
   let resolvedUrl: string | null = cachedUrl;
   let html: string | null = null;
@@ -155,8 +198,7 @@ async function scrapeOne(
       };
     }
   } else {
-    const ws = bootstrapWSEvent(regatta);
-    const candidates = await discoverCandidates(ws);
+    const candidates = await discoverCandidates(wsEvent);
     for (const c of candidates) {
       const r = await fetchAndExtract(c.url);
       if (r && r.position !== null) {
@@ -192,6 +234,23 @@ async function scrapeOne(
     noticeBoardUrl =
       deriveNoticeBoardUrl(resolvedUrl) ??
       (html ? findNoticeBoardAnchor(html, resolvedUrl) : null);
+  }
+  // Fallback: the resolved scoreboard often lives on a scoring host (sailti,
+  // manage2sail) while the ONB lives on the regatta's own site. When the
+  // resolved URL had no ONB hint — e.g. it was a PDF — try the WS-supplied
+  // regatta website too.
+  if (!noticeBoardUrl && wsEvent.regattaWebsite) {
+    try {
+      const r = await fetchUrl(wsEvent.regattaWebsite);
+      if (r.ok && !isPdf(r.contentType, r.body)) {
+        noticeBoardUrl = findNoticeBoardAnchor(
+          bufferToText(r.body),
+          r.finalUrl,
+        );
+      }
+    } catch {
+      // ignore — ONB is best-effort
+    }
   }
 
   let host: string | null = null;

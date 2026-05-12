@@ -13,6 +13,13 @@
 import type { ConsolidatedEvent } from "./coachaible";
 import { lookupVenue } from "./venue-lookup";
 
+// Wikipedia's API policy requires a descriptive User-Agent that identifies
+// the client and includes a contact URL. Anonymous / default Node fetch UAs
+// are rejected with 403 from cloud IPs.
+// See https://meta.wikimedia.org/wiki/User-Agent_policy
+const WIKI_USER_AGENT =
+  "JamesJuhaszWebsite/1.0 (https://www.jamesjuhasz.com; contact@jamesjuhasz.com)";
+
 // ── Wikipedia image ───────────────────────────────────────────────────────────
 
 type WikiPageImagesResponse = {
@@ -36,13 +43,20 @@ async function fetchWikipediaImage(wikiTitle: string): Promise<string | null> {
       origin: "*",
     });
     const res = await fetch(`https://en.wikipedia.org/w/api.php?${params}`, {
+      headers: { "User-Agent": WIKI_USER_AGENT, Accept: "application/json" },
       next: { revalidate: 86400 },
     });
-    if (!res.ok) return null;
+    if (!res.ok) {
+      console.warn(
+        `[venue-image] Wikipedia pageimages "${wikiTitle}" → ${res.status}`,
+      );
+      return null;
+    }
     const data = (await res.json()) as WikiPageImagesResponse;
     const page = Object.values(data?.query?.pages ?? {})[0];
     return page?.thumbnail?.source ?? null;
-  } catch {
+  } catch (err) {
+    console.warn(`[venue-image] Wikipedia pageimages "${wikiTitle}" threw:`, err);
     return null;
   }
 }
@@ -143,11 +157,15 @@ async function findVenueFromWebSearch(
           Accept: "application/json",
           "Accept-Encoding": "gzip",
           "X-Subscription-Token": apiKey,
+          "User-Agent": WIKI_USER_AGENT,
         },
         next: { revalidate: 86400 },
       },
     );
-    if (!res.ok) return null;
+    if (!res.ok) {
+      console.warn(`[venue-image] Brave search "${title}" → ${res.status}`);
+      return null;
+    }
     const data = (await res.json()) as BraveResponse;
 
     const text =
@@ -189,9 +207,15 @@ async function imageForVenueHint(hint: VenueHint): Promise<string | null> {
       origin: "*",
     });
     const res = await fetch(`https://en.wikipedia.org/w/api.php?${params}`, {
+      headers: { "User-Agent": WIKI_USER_AGENT, Accept: "application/json" },
       next: { revalidate: 86400 },
     });
-    if (!res.ok) return null;
+    if (!res.ok) {
+      console.warn(
+        `[venue-image] Wikipedia opensearch "${hint.club}" → ${res.status}`,
+      );
+      return null;
+    }
     const [, results] = (await res.json()) as [string, string[]];
     for (const t of results.slice(0, 3)) {
       img = await fetchWikipediaImage(t);

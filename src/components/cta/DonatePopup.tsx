@@ -130,7 +130,7 @@ export function DonatePopup() {
             on the back of supporters.
           </h2>
           <p className="mt-4 text-body text-ink/80">
-            A full year on campaign costs $67,000 CAD. National funding covers
+            A full year of campaigning costs $67,000 CAD. National funding covers
             part — donations and sponsorship close the $39,000 gap. Recurring
             monthly support is the most useful as it allows me to plan out my
             entire season.

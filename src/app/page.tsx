@@ -218,7 +218,7 @@ export default async function HomePage() {
                 <SectionHeader
                   eyebrow="Why this matters"
                   title="Most Olympic campaigns don't make it. The ones that do, do it on the back of supporters."
-                  lede="A full year on campaign costs $67,000 CAD. National funding covers part — donations and sponsorship close the $39,000 gap. Recurring monthly support is the most useful as it allows me to plan out my entire season."
+                  lede="A full year of campaigning costs $67,000 CAD. National funding covers part — donations and sponsorship close the $39,000 gap. Recurring monthly support is the most useful as it allows me to plan out my entire season."
                 />
                 <dl className="mt-5 grid grid-cols-1 sm:grid-cols-3 gap-4 border-t border-mist pt-5">
                   <div>

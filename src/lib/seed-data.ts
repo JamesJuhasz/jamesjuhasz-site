@@ -120,33 +120,7 @@ export const recentPosts: SeedPost[] = [
    come from CoachAible at the page level. Sanity will replace both fallbacks
    once Day 5 wires the CMS in. */
 
-export const pressEntries: SeedPress[] = [
-  {
-    publication: "Sail Canada",
-    articleTitle: "Juhasz named to Canadian Sailing Team for 2026 cycle",
-    publishedAt: "2025-11-14",
-    externalUrl: "https://www.sailing.ca",
-    excerpt:
-      "Selection puts him among the top male ILCA 7 athletes in the country, with full national-team support.",
-    featured: true,
-  },
-  {
-    publication: "Oakville Beaver",
-    articleTitle: "From the Great Lakes to LA 2028: a hometown Olympic bid",
-    publishedAt: "2025-09-02",
-    externalUrl: "https://www.insidehalton.com",
-    excerpt:
-      "Profile on James's path from junior sailing at Oakville Yacht Squadron to a year-round international campaign.",
-    featured: true,
-  },
-  {
-    publication: "World Sailing",
-    articleTitle: "Top-30 finish at Princesa Sofía — Canadian breakout",
-    publishedAt: "2026-04-05",
-    externalUrl: "https://www.sailing.org",
-    featured: true,
-  },
-];
+export const pressEntries: SeedPress[] = [];
 
 export const careerTimeline = [
   {

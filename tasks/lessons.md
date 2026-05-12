@@ -4,6 +4,21 @@ Running log of corrections, gotchas, and patterns to repeat. Reviewed at session
 
 ---
 
+## 2026-05-12 — Server-side fetches to third-party APIs need an explicit User-Agent in prod
+
+**Context.** Upcoming-event destination photos worked locally but were missing in prod (Railway). Initial investigation chased lazy-loading and viewport theories on the wrong server. The user's redirect ("they load locally but not in prod") forced a re-frame: it had to be an environment difference, not a client-rendering issue. The actual root cause: `fetchWikipediaImage` and the opensearch / Brave search calls in `src/lib/venue-image.ts` had no `User-Agent` header. Wikipedia returns 403 for empty UAs and aggressively rate-limits / blocks anonymous-looking fetches from cloud-datacenter IPs (Railway), while letting them through from residential IPs. Result: every venue lookup returned null in prod and the prerendered HTML had zero `<img>` tags for upcoming cards.
+
+**Rule.** Any server-side `fetch` to a third-party API in this codebase must set a descriptive `User-Agent` that names the app and includes a contact URL. Don't rely on Node's default UA — it's permissive enough to pass locally and fail silently in prod.
+
+**How to apply.**
+- For Wikipedia / MediaWiki specifically, follow the [User-Agent policy](https://meta.wikimedia.org/wiki/User-Agent_policy): `AppName/Version (https://contact-url; email)`.
+- Pair the UA with `console.warn` on non-OK responses. Silent `catch { return null }` masked this for the entire lifetime of the feature.
+- When a user says "works locally, broken in prod," skip browser-side theories until you've confirmed identical HTML between the two environments (`curl prod | grep <expected>` is fast).
+
+**Pattern to repeat.** When investigating "image missing" or "data missing in prod" symptoms, first `curl` prod for the rendered HTML to see whether the data is absent at render time (server-side fetch failure) or present-but-not-displaying (client/CSS/lazy issue). One grep saves hours of viewport experiments.
+
+---
+
 ## 2026-05-04 — Always source results from the federation, not pretrained guesses
 
 **Context.** The `/results` page shipped with `seedResults` from `src/lib/seed-data.ts`, which contained `_guessed: true` placements (estimated based on tier patterns like "national → top 5"). The user flagged that "all results are wrong, and most of the events are wrong too." Replaced with verified data from the World Sailing profile (`https://www.sailing.org/sailor/james-juhasz?ref=CANJJ18`).

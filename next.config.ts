@@ -2,7 +2,13 @@ import type { NextConfig } from "next";
 
 const remotePatterns: NonNullable<
   NonNullable<NextConfig["images"]>["remotePatterns"]
-> = [];
+> = [
+  {
+    protocol: "https",
+    hostname: "upload.wikimedia.org",
+    pathname: "/wikipedia/commons/**",
+  },
+];
 
 // Allow next/image to load from the Cloudflare R2 public domain when configured.
 // Skipped in environments where R2_PUBLIC_BASE_URL isn't set so dev builds

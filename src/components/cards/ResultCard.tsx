@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowUpRight, MapPin, Search, Trophy } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
+import { cn } from "@/lib/cn";
 import type { Result } from "@/lib/results";
 
 const dateFmt = new Intl.DateTimeFormat("en-CA", {
@@ -23,14 +24,20 @@ function googleSearchUrl(title: string) {
   return `https://www.google.com/search?q=${q}`;
 }
 
-export function ResultCard({ result }: { result: Result }) {
+export function ResultCard({ result, className }: { result: Result; className?: string }) {
   const src = result.coverImage?.url;
   const hasResult = Boolean(result.position);
   const hasUrl = Boolean(result.externalUrl);
   const hasPendingUrl = !hasUrl && Boolean(result.pendingUrl);
 
   return (
-    <Card as="article" className="group flex flex-col gap-4 shadow-none hover:shadow-lift hover:-translate-y-0.5 transition-all">
+    <Card
+      as="article"
+      className={cn(
+        "group flex flex-col gap-4 shadow-none hover:shadow-lift hover:-translate-y-0.5 transition-all",
+        className,
+      )}
+    >
       <div className="relative aspect-[16/10] w-full rounded-xl overflow-hidden bg-fog">
         {src ? (
           <Image

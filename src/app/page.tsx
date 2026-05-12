@@ -8,10 +8,20 @@ import { HomeHero } from "@/components/sections/HomeHero";
 import { GivingTiers } from "@/components/sections/GivingTiers";
 import { PostCard } from "@/components/cards/PostCard";
 import { EventCard } from "@/components/cards/EventCard";
+import { ResultCard } from "@/components/cards/ResultCard";
 import { DonateCTAInline } from "@/components/cta/DonateCTA";
-import { deriveStats, fetchTrainingStats } from "@/lib/coachaible";
+import {
+  consolidateEvents,
+  deriveStats,
+  fetchTrainingStats,
+  fetchUpcoming,
+  filterDisplayable,
+} from "@/lib/coachaible";
+import { enrichEventsWithImages } from "@/lib/venue-image";
+import type { SeedEvent } from "@/lib/seed-data";
 import { getPostsIndex } from "@/lib/posts";
 import { getEventsIndex } from "@/lib/events";
+import { getResults } from "@/lib/results";
 import { getPressMentions } from "@/lib/press";
 import { Badge } from "@/components/ui/Badge";
 import { SITE } from "@/lib/site";
@@ -73,27 +83,67 @@ export const metadata = {
 export default async function HomePage() {
   // Resilient: build doesn't fail if Postgres is unavailable. ISR
   // (revalidate=60) refills these as soon as the DB is reachable again.
-  const [allPosts, events, statsApi, allPress] = await Promise.all([
+  const [allPosts, events, statsApi, allPress, upcomingApi, allResults] = await Promise.all([
     getPostsIndex().catch(() => []),
     getEventsIndex().catch(() => []),
     fetchTrainingStats(365),
     getPressMentions().catch(() => []),
+    fetchUpcoming(10),
+    getResults().catch(() => []),
   ]);
   const stats = statsApi ? deriveStats(statsApi) : null;
   const recentPosts = allPosts.slice(0, 3);
   const featuredPress = allPress
     .filter((p) => (p as any).featured)
     .slice(0, 3);
-  const featuredEvent =
-    events.find((e) => e.status === "upcoming") ?? events[0];
+
+  const upcomingFromApi = upcomingApi
+    ? await enrichEventsWithImages(
+        filterDisplayable(consolidateEvents(upcomingApi.events)),
+      )
+    : [];
+  const nearestUpcoming = upcomingFromApi[0];
+
+  // Coachaible upcoming events have no detail page — link the card to /events.
+  const coachaibleNextUp: SeedEvent | null = nearestUpcoming
+    ? {
+        slug: nearestUpcoming.id,
+        title: nearestUpcoming.title,
+        eventDate: nearestUpcoming.startDate,
+        endDate: nearestUpcoming.endDate,
+        location:
+          nearestUpcoming.city && (nearestUpcoming.venueCountry ?? nearestUpcoming.country)
+            ? `${nearestUpcoming.city}, ${nearestUpcoming.venueCountry ?? nearestUpcoming.country}`
+            : (nearestUpcoming.city ?? nearestUpcoming.venueCountry ?? nearestUpcoming.country ?? ""),
+        category: nearestUpcoming.eventType === "race" ? "Regatta" : "Training",
+        status: "upcoming",
+        excerpt: "",
+        coverImage: nearestUpcoming.destinationImageUrl
+          ? {
+              asset: { url: nearestUpcoming.destinationImageUrl },
+              alt: nearestUpcoming.title,
+            }
+          : undefined,
+      }
+    : null;
+
+  const nextUpEvent =
+    coachaibleNextUp ?? events.find((e) => e.status === "upcoming") ?? null;
+  const nextUpHref = coachaibleNextUp
+    ? "/events"
+    : nextUpEvent
+      ? `/events/${nextUpEvent.slug}`
+      : "/events";
+
+  const mostRecentResult = allResults[0] ?? null;
 
   return (
     <>
       <HomeHero />
 
       {/* SOCIAL PROOF BAR */}
-      <section className="bg-fog border-y border-mist">
-        <Container width="wide" className="py-12">
+      <section className="pt-20 pb-10 bg-fog border-y border-mist">
+        <Container width="wide">
           <p className="font-mono font-bold text-[10px] uppercase tracking-[0.2em] text-ink-3 mb-3">
             Backed by
           </p>
@@ -132,7 +182,7 @@ export default async function HomePage() {
       </section>
 
       {/* CAMPAIGN STATS */}
-      <section className="py-8 border-b border-mist">
+      <section className="py-10 border-b border-mist">
         <Container width="wide">
           <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-6">
             <h2 className="font-display text-h3 text-ink">The campaign so far</h2>
@@ -148,7 +198,7 @@ export default async function HomePage() {
       </section>
 
       {/* THE STAKES */}
-      <section id="stakes" className="py-section-y-lg">
+      <section id="stakes" className="py-10">
         <Container width="default">
           <div className="grid lg:grid-cols-12 gap-12 lg:items-end">
             <div className="lg:col-span-7">
@@ -212,8 +262,38 @@ export default async function HomePage() {
         </Container>
       </section>
 
+      {/* NEXT UP + MOST RECENT */}
+      {(nextUpEvent || mostRecentResult) ? (
+        <section className="py-10">
+          <Container width="wide">
+            <div className="grid gap-8 md:grid-cols-2 items-stretch">
+              {nextUpEvent ? (
+                <div className="flex flex-col gap-4">
+                  <p className="text-eyebrow uppercase tracking-wider text-ink-3">
+                    Next up
+                  </p>
+                  <Reveal className="flex-1">
+                    <EventCard event={nextUpEvent} href={nextUpHref} className="h-full" />
+                  </Reveal>
+                </div>
+              ) : null}
+              {mostRecentResult ? (
+                <div className="flex flex-col gap-4">
+                  <p className="text-eyebrow uppercase tracking-wider text-ink-3">
+                    Most recent
+                  </p>
+                  <Reveal delay={0.1} className="flex-1">
+                    <ResultCard result={mostRecentResult} className="h-full" />
+                  </Reveal>
+                </div>
+              ) : null}
+            </div>
+          </Container>
+        </section>
+      ) : null}
+
       {/* RECENT JOURNEY */}
-      <section className="py-section-y bg-fog border-y border-mist">
+      <section className="py-10 bg-fog border-y border-mist">
         <Container width="wide">
           <div className="flex flex-wrap items-end justify-between gap-6 mb-10">
             <SectionHeader
@@ -237,7 +317,7 @@ export default async function HomePage() {
 
       {/* IN THE NEWS */}
       {featuredPress.length > 0 && (
-        <section className="py-16">
+        <section className="py-10">
           <Container width="wide">
             <div className="flex flex-wrap items-end justify-between gap-6 mb-8">
               <SectionHeader
@@ -277,55 +357,8 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* UPCOMING / RECENT EVENT */}
-      {featuredEvent ? (
-        <section className="py-section-y">
-          <Container width="default">
-            <div className="grid lg:grid-cols-12 gap-10 items-center">
-              <div className="lg:col-span-5">
-                <SectionHeader
-                  eyebrow={
-                    featuredEvent.status === "upcoming"
-                      ? "Next on the calendar"
-                      : "Most recent"
-                  }
-                  title={featuredEvent.title}
-                  lede={featuredEvent.excerpt}
-                />
-                <div className="mt-6 flex flex-wrap items-center gap-3">
-                  <Button
-                    href={`/events/${featuredEvent.slug}`}
-                    variant="primary"
-                    size="md"
-                  >
-                    Event details
-                  </Button>
-                  <Button
-                    href="/donate"
-                    variant="donate"
-                    size="md"
-                    data-cta-location="home_event_cta"
-                  >
-                    Cheer me on
-                  </Button>
-                </div>
-              </div>
-              <div className="lg:col-span-7">
-                <Reveal delay={0.15}>
-                  <EventCard
-                    event={featuredEvent}
-                    size="lg"
-                    imageSrc="/images/featured-event.jpg"
-                  />
-                </Reveal>
-              </div>
-            </div>
-          </Container>
-        </section>
-      ) : null}
-
       {/* THE PARTNERSHIP ASK */}
-      <section className="py-section-y-lg">
+      <section className="py-10">
         <Container width="wide">
           <div className="rounded-3xl bg-ink text-paper shadow-lift overflow-hidden p-8 md:p-12 lg:p-16">
             <div className="max-w-prose">
@@ -353,6 +386,7 @@ export default async function HomePage() {
         headline="Help me get to LA 2028."
         body="Three years out. Still a long way to go. Join the team."
         ctaLabel="Join the team"
+        className="!py-10"
       />
     </>
   );

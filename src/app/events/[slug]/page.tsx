@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowUpRight, ChevronLeft, ChevronRight, MapPin, Calendar, Trophy } from "lucide-react";
+import { ArrowUpRight, ChevronLeft, ChevronRight, ExternalLink, MapPin, Calendar, Trophy } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -9,6 +9,7 @@ import { DonateCTAInline, DonateCTASidebar } from "@/components/cta/DonateCTA";
 import { JsonLd } from "@/components/JsonLd";
 import { eventJsonLd } from "@/lib/json-ld";
 import { getEventBySlug, getEventsIndex } from "@/lib/events";
+import { getPressForEvent } from "@/lib/press";
 import { proxyImagesInHtml } from "@/lib/img-proxy";
 import {
   getWorldSailingEventBySlug,
@@ -205,6 +206,12 @@ export default async function EventDetailPage({
   const resultPosition = dbEvent?.resultPosition ?? wsEvent?.resultPosition;
   const excerpt = dbEvent?.excerpt ?? wsEvent?.diaryExcerpt?.slice(0, 200);
 
+  const press = await getPressForEvent({
+    title,
+    startDate: eventDate,
+    endDate: endDate ?? eventDate,
+  }).catch(() => []);
+
   return (
     <>
       <JsonLd
@@ -352,6 +359,46 @@ export default async function EventDetailPage({
           </div>
         </Container>
       </section>
+
+      {press.length > 0 ? (
+        <section id="press" className="py-section-y bg-fog border-t border-mist">
+          <Container width="default">
+            <h2 className="font-display text-h2 text-ink mb-8">Press recaps</h2>
+            <ul className="flex flex-col divide-y divide-mist">
+              {press.map((p) => (
+                <li key={p.externalUrl} className="py-6 first:pt-0 last:pb-0">
+                  <a
+                    href={p.externalUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group grid md:grid-cols-12 gap-4 items-start"
+                  >
+                    <div className="md:col-span-3">
+                      <Badge>{p.publication}</Badge>
+                      <p className="mt-2 text-caption text-ink-3">
+                        {new Date(p.publishedAt).toISOString().slice(0, 10)}
+                      </p>
+                    </div>
+                    <div className="md:col-span-8">
+                      <h3 className="font-display text-h3 text-ink group-hover:text-ink-2 transition-colors">
+                        {p.articleTitle}
+                      </h3>
+                      {p.excerpt ? (
+                        <p className="mt-2 text-body text-ink/75 max-w-prose">
+                          {p.excerpt}
+                        </p>
+                      ) : null}
+                    </div>
+                    <span className="md:col-span-1 inline-flex items-center justify-end text-ink-3 group-hover:text-ink">
+                      <ExternalLink size={18} />
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </Container>
+        </section>
+      ) : null}
 
       <DonateCTAInline location="event_inline_final" />
     </>

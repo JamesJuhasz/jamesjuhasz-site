@@ -1,5 +1,6 @@
 import type { SeedEvent } from "@/lib/seed-data";
-import type { ConsolidatedEvent } from "@/lib/coachaible";
+import { fetchUpcoming, consolidateEvents, type ConsolidatedEvent } from "@/lib/coachaible";
+import { getWorldSailingPastEvents } from "@/lib/world-sailing";
 
 export type OngoingRegatta = {
   slug: string;
@@ -87,14 +88,15 @@ async function loadAdminEvents(): Promise<SeedEvent[]> {
         ? { asset: { url: r.coverImageUrl }, alt: r.coverImageAlt ?? undefined }
         : undefined,
     }));
-  } catch {
+  } catch (err) {
+    if (process.env.NODE_ENV !== "production") {
+      console.warn("[ongoing] admin event load failed:", err);
+    }
     return [];
   }
 }
 
 export async function getOngoingRegattas(today?: string): Promise<OngoingRegatta[]> {
-  const { fetchUpcoming, consolidateEvents } = await import("@/lib/coachaible");
-  const { getWorldSailingPastEvents } = await import("@/lib/world-sailing");
   const t = today ?? todayIso();
   const [admin, ws, upcomingRaw] = await Promise.all([
     loadAdminEvents(),

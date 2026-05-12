@@ -4,6 +4,7 @@ import { HeroParallax } from "@/components/sections/HeroParallax";
 import { DonateCTAInline } from "@/components/cta/DonateCTA";
 import { ResultsFilter } from "@/components/sections/ResultsFilter";
 import { deriveResultStats, getResults } from "@/lib/results";
+import { getOngoingResults } from "@/lib/ongoing";
 
 export const revalidate = 60;
 
@@ -40,7 +41,10 @@ function StatOrDash({
 }
 
 export default async function ResultsPage() {
-  const results = await getResults().catch(() => []);
+  const [results, ongoing] = await Promise.all([
+    getResults().catch(() => []),
+    getOngoingResults().catch(() => []),
+  ]);
   const stats = deriveResultStats(results);
 
   return (
@@ -82,7 +86,7 @@ export default async function ResultsPage() {
 
       <section className="pt-8 pb-section-y">
         <Container width="wide">
-          <ResultsFilter results={results} />
+          <ResultsFilter results={results} ongoing={ongoing} />
         </Container>
       </section>
 

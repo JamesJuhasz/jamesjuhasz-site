@@ -6,3 +6,10 @@ buildCommand = "npm run build"
 startCommand = "next start -H 0.0.0.0 -p ${PORT:-3000}"
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
+
+# Live-scoreboard scrape for in-progress regattas. Reads ongoing regattas
+# from src/lib/ongoing, hits known regatta hosts for live position data,
+# writes src/data/results-ongoing.json. No-ops when no regatta is in progress.
+[[deploy.crons]]
+schedule = "*/30 * * * *"
+command = "npm run results:fetch-ongoing"

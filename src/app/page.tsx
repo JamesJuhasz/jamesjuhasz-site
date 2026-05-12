@@ -22,6 +22,8 @@ import type { SeedEvent } from "@/lib/seed-data";
 import { getPostsIndex } from "@/lib/posts";
 import { getEventsIndex } from "@/lib/events";
 import { getResults } from "@/lib/results";
+import { getOngoingResults } from "@/lib/ongoing";
+import { RacingNowSection } from "@/components/sections/RacingNowSection";
 import { getPressMentions } from "@/lib/press";
 import { Badge } from "@/components/ui/Badge";
 import { SITE } from "@/lib/site";
@@ -83,13 +85,14 @@ export const metadata = {
 export default async function HomePage() {
   // Resilient: build doesn't fail if Postgres is unavailable. ISR
   // (revalidate=60) refills these as soon as the DB is reachable again.
-  const [allPosts, events, statsApi, allPress, upcomingApi, allResults] = await Promise.all([
+  const [allPosts, events, statsApi, allPress, upcomingApi, allResults, ongoing] = await Promise.all([
     getPostsIndex().catch(() => []),
     getEventsIndex().catch(() => []),
     fetchTrainingStats(365),
     getPressMentions().catch(() => []),
     fetchUpcoming(10),
     getResults().catch(() => []),
+    getOngoingResults().catch(() => []),
   ]);
   const stats = statsApi ? deriveStats(statsApi) : null;
   const recentPosts = allPosts.slice(0, 3);
@@ -261,6 +264,9 @@ export default async function HomePage() {
           </div>
         </Container>
       </section>
+
+      {/* RACING NOW — only renders when ongoing detection found something */}
+      <RacingNowSection ongoing={ongoing} />
 
       {/* NEXT UP + MOST RECENT */}
       {(nextUpEvent || mostRecentResult) ? (

@@ -166,9 +166,10 @@ A new `Badge` tone `"ongoing"`. Label: `"Ongoing"`. Visually distinct from `"don
   - With data: `"Currently 7th of 64 · ILCA 7 Open"`
   - Without data: `"Position not yet available — race in progress"` (rendered in `text-ink-3` muted style)
 - New subline below the title (only present for ongoing): `"Day 2 of 5 · Updated 14 min ago"`, computed from `dayOfRegatta` and `lastUpdated`. "Updated …" uses relative time; falls back to absolute if `> 24h`.
-- **Two external links** rendered side by side (each only shown if its URL is present):
-  - `"Live scoreboard ↗"` — points at `result.externalUrl` (the resolved results page).
-  - `"Notice board ↗"` — points at `result.noticeBoardUrl` (the regatta's ONB). The ONB hosts race documents, sailing instructions, results PDFs, and announcements — it's where the live scoreboard typically links from, so it gives donors broader race context beyond just the placement.
+- **Three links** rendered side by side (each only shown if its URL or target is present):
+  - `"Live scoreboard ↗"` — external link to `result.externalUrl` (the resolved results page).
+  - `"Notice board ↗"` — external link to `result.noticeBoardUrl` (the regatta's ONB). The ONB hosts race documents, sailing instructions, results PDFs, and announcements — it's where the live scoreboard typically links from, so it gives donors broader race context beyond just the placement.
+  - `"Press recaps →"` — internal link to `/events/<slug>#press`, where the event detail page renders a filtered list of press mentions tied to this regatta (see "Event-page press section" below). Only shown when at least one matching press mention exists.
 
 No new card component — reuse `ResultCard` to keep visual consistency and minimize surface area. The conditional branches are additive — past-result rendering is unchanged.
 
@@ -180,6 +181,18 @@ In `src/app/results/page.tsx`:
 - Pass ongoing entries to `ResultsFilter` as a separate prop.
 - `ResultsFilter` renders ongoing cards at the top of the grid, always visible regardless of the active year tab. A small section header `"Racing now"` precedes them.
 - Stat tiles (Regattas raced, Podiums, Top-10s, Countries) are unchanged — ongoing events don't count toward "raced" until they complete.
+
+#### Event-page press section
+
+`/events/<slug>` gains a new `"Press recaps"` section, anchored at `#press`, that surfaces press mentions tied to this regatta. New helper `getPressForEvent(event)` in `src/lib/press.ts`:
+
+- Calls existing `getPressMentions()`.
+- Filters to mentions where the regatta title (normalized — lowercased, whitespace-collapsed) appears in `articleTitle` or `excerpt`, **and** `publishedAt` falls within `[startDate - 7d, endDate + 30d]` (window captures pre-event previews and post-event recaps).
+- Sorted by `publishedAt` descending.
+
+The section reuses the existing press-list layout from `src/app/press/page.tsx` (publication monogram or image, title, excerpt, external link) — same structure, lighter visual treatment to fit inside the event page. If `getPressForEvent` returns zero entries, the section does not render and the `"Press recaps →"` link on the Ongoing card is hidden.
+
+Once `scripts/fetch-press.ts` runs daily, new recaps published during a live regatta land automatically — no additional pipeline needed.
 
 #### Home page (`/`)
 
@@ -234,3 +247,5 @@ A new "Racing now" section inserted in `src/app/page.tsx` directly after the her
 | `src/components/sections/ResultsFilter.tsx` | Accept and render ongoing cards above the grid |
 | `src/app/results/page.tsx` | Load and pass ongoing data |
 | `src/app/page.tsx` | Add "Racing now" section under hero |
+| `src/lib/press.ts` | Add `getPressForEvent(event)` filter helper |
+| `src/app/events/[slug]/page.tsx` | Render "Press recaps" section (`#press` anchor) when matching mentions exist |

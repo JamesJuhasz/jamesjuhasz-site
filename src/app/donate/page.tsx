@@ -265,7 +265,7 @@ export default async function DonatePage({
                 Help me get to LA 2028.
               </h1>
               <p className="mt-6 max-w-prose text-body-lg text-paper/85">
-                A full year on campaign costs $67,000 CAD. National funding
+                A full year of campaigning costs $67,000 CAD. National funding
                 covers part — donations and sponsorship close the $39,000 gap.
                 Recurring monthly support is the most useful as it allows me to
                 plan out my entire season.

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, MapPin, Search, Trophy } from "lucide-react";
+import { ArrowUpRight, MapPin, Radio, Search, Trophy } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { cn } from "@/lib/cn";
@@ -24,11 +24,25 @@ function googleSearchUrl(title: string) {
   return `https://www.google.com/search?q=${q}`;
 }
 
+function relativeFromNow(iso: string): string {
+  const then = new Date(iso).getTime();
+  const now = Date.now();
+  const min = Math.max(0, Math.round((now - then) / 60_000));
+  if (min < 1) return "just now";
+  if (min < 60) return `${min} min ago`;
+  const hr = Math.round(min / 60);
+  if (hr < 24) return `${hr} hr ago`;
+  return new Date(iso).toISOString().slice(0, 10);
+}
+
 export function ResultCard({ result, className }: { result: Result; className?: string }) {
   const src = result.coverImage?.url;
   const hasResult = Boolean(result.position);
   const hasUrl = Boolean(result.externalUrl);
   const hasPendingUrl = !hasUrl && Boolean(result.pendingUrl);
+  const isOngoing = result.status === "ongoing";
+  const hasNoticeBoard = isOngoing && Boolean(result.noticeBoardUrl);
+  const hasPressRecaps = isOngoing && Boolean(result.slug);
 
   return (
     <Card
@@ -59,7 +73,17 @@ export function ResultCard({ result, className }: { result: Result; className?: 
             />
           </div>
         )}
-        {result.country ? (
+        {isOngoing ? (
+          <div className="absolute top-3 left-3 z-10">
+            <Badge tone="ongoing">
+              <span
+                className="inline-block w-2 h-2 rounded-full bg-paper animate-pulse"
+                aria-hidden
+              />
+              Ongoing
+            </Badge>
+          </div>
+        ) : result.country ? (
           <div className="absolute top-3 left-3 z-10">
             <Badge tone="sand">{result.country}</Badge>
           </div>
@@ -86,12 +110,32 @@ export function ResultCard({ result, className }: { result: Result; className?: 
           </p>
         ) : null}
 
+        {isOngoing && (result.dayOfRegatta || result.lastUpdated) ? (
+          <p className="text-caption text-ink-3">
+            {result.dayOfRegatta
+              ? `Day ${result.dayOfRegatta.current} of ${result.dayOfRegatta.total}`
+              : null}
+            {result.dayOfRegatta && result.lastUpdated ? " · " : null}
+            {result.lastUpdated
+              ? `Updated ${relativeFromNow(result.lastUpdated)}`
+              : null}
+          </p>
+        ) : null}
+
         {hasResult ? (
           <p className="mt-2 font-display text-h4 text-ink">
+            {isOngoing ? "Currently " : null}
             {result.position}
             {result.totalCompetitors ? (
               <span className="text-ink-3"> of {result.totalCompetitors}</span>
             ) : null}
+            {isOngoing && result.fleet ? (
+              <span className="text-ink-3"> · {result.fleet}</span>
+            ) : null}
+          </p>
+        ) : isOngoing ? (
+          <p className="mt-2 text-body text-ink-3">
+            Position not yet available — race in progress
           </p>
         ) : (
           // No placement yet: render an honest "coming" badge instead of
@@ -110,7 +154,14 @@ export function ResultCard({ result, className }: { result: Result; className?: 
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 text-ink font-medium hover:text-ink-2"
             >
-              View full results <ArrowUpRight size={14} />
+              {isOngoing ? (
+                <>
+                  <Radio size={14} /> Live scoreboard
+                </>
+              ) : (
+                <>View full results</>
+              )}
+              <ArrowUpRight size={14} />
             </a>
           ) : hasPendingUrl ? (
             <a
@@ -132,7 +183,26 @@ export function ResultCard({ result, className }: { result: Result; className?: 
               <Search size={14} /> Search results
             </a>
           )}
-          {result.slug ? (
+
+          {hasNoticeBoard ? (
+            <a
+              href={result.noticeBoardUrl!}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-ink-3 hover:text-ink"
+            >
+              Notice board <ArrowUpRight size={14} />
+            </a>
+          ) : null}
+
+          {hasPressRecaps ? (
+            <Link
+              href={`/events/${result.slug}#press`}
+              className="inline-flex items-center gap-1 text-ink-3 hover:text-ink"
+            >
+              Press recaps →
+            </Link>
+          ) : result.slug ? (
             <Link
               href={`/events/${result.slug}`}
               className="inline-flex items-center gap-1 text-ink-3 hover:text-ink"

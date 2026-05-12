@@ -74,7 +74,9 @@ Then it calls `buildCandidates(ws)` and runs the standard extractor pipeline.
 New script, mirrors `scripts/fetch-results.ts` in style.
 
 - Loads `getOngoingRegattas()` (server-side, with `DATABASE_URL` available).
-- For each ongoing event, runs the discover + extract pipeline above.
+- For each ongoing event:
+  - **Discovery cache check (critical):** if `results-ongoing.json` already has a `resolvedUrl` for this event slug from a prior run, **skip the discover layer entirely** and re-fetch that URL directly. Only run `buildCandidates()` + extractors the first time we see a new ongoing regatta (or if the cached URL stops returning a valid extraction for N consecutive runs — see invalidation below).
+  - Otherwise, run the discover + extract pipeline. Persist the winning URL as `resolvedUrl` on the entry so subsequent runs reuse it.
 - Writes to a new file `src/data/results-ongoing.json`:
 
 ```json
@@ -90,14 +92,21 @@ New script, mirrors `scripts/fetch-results.ts` in style.
       "fleet": "ILCA 7 Open",
       "externalUrl": "https://...",
       "source": "manage2sail.com",
+      "resolvedUrl": "https://www.manage2sail.com/.../Result.aspx?...",
+      "resolvedAt": "2026-05-10T08:14:00Z",
+      "failedExtractions": 0,
       "scrapedAt": "2026-05-12T14:23:00Z"
     }
   ]
 }
 ```
 
+**Why this matters:** the discover layer can invoke Brave Search (Layer 3 backstop), which has a 2000-query/month free tier. Re-running discovery every 30 minutes for the duration of a 5-day regatta would burn ~240 queries per regatta in the worst case. Caching `resolvedUrl` drops this to roughly **one Brave query per regatta**.
+
+**Cache invalidation:** if a scrape against `resolvedUrl` fails to extract a "juhasz" row for **3 consecutive runs**, increment `failedExtractions`. On the next run after that, clear `resolvedUrl` and re-run discovery. This handles the case where the regatta site changes URL structure mid-event or the cached URL points at a stale page. The threshold balances "don't re-discover for transient network hiccups" against "don't go silent for an entire regatta if the URL is genuinely dead."
+
 - Idempotent: each run overwrites the file with the current set of ongoing events. Entries whose `endDate < today` are dropped (this is also the pruning mechanism).
-- Flags: `--dry` (no write), `--limit=N` (cap per run).
+- Flags: `--dry` (no write), `--limit=N` (cap per run), `--force-rediscover=<slug>` (clear `resolvedUrl` for a specific event and re-run discovery — escape hatch for when the cached URL is wrong).
 - New npm script: `"results:fetch-ongoing": "tsx scripts/fetch-ongoing-results.ts"`.
 
 ### Refresh cadence — cron
@@ -181,6 +190,7 @@ A new "Racing now" section inserted in `src/app/page.tsx` directly after the her
 | Regatta just ended, JSON stale | Read-side filter drops entries where `endDate < today`. Cron also prunes on next run. |
 | Cron failed for hours | Card still shows "race in progress" with last-known position. `lastUpdated` line makes staleness visible. |
 | Brave Search API key absent | Discover layer skips Layer 3, returns only Layer 2 results. Card may show "Position not yet available" longer, but still renders. |
+| Cached `resolvedUrl` extraction fails 3 runs in a row | Cache invalidated; full discovery re-runs on the next run. One extra Brave query at worst. |
 | Database unavailable | `getEventsIndex()` falls back to WS-only (existing behavior). WS won't have ongoing entries, so ongoing card simply doesn't render. Graceful degrade. |
 
 ## Testing

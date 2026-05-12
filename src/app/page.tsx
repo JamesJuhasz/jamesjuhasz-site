@@ -24,6 +24,7 @@ import { getEventsIndex } from "@/lib/events";
 import { getResults } from "@/lib/results";
 import { getOngoingResults } from "@/lib/ongoing";
 import { RacingNowSection } from "@/components/sections/RacingNowSection";
+import { RacingNowModal } from "@/components/sections/RacingNowModal";
 import { getPressMentions } from "@/lib/press";
 import { Badge } from "@/components/ui/Badge";
 import { SITE } from "@/lib/site";
@@ -143,6 +144,14 @@ export default async function HomePage() {
   return (
     <>
       <HomeHero />
+
+      {/* Modal pops once per session whenever a regatta is in progress.
+          Hidden entirely when ongoing is empty. */}
+      <RacingNowModal ongoing={ongoing} />
+
+      {/* RACING NOW — full-width red banner above the social proof bar.
+          Hidden entirely when no regatta is in progress. */}
+      <RacingNowSection ongoing={ongoing} />
 
       {/* SOCIAL PROOF BAR */}
       <section className="pt-20 pb-10 bg-fog border-y border-mist">
@@ -264,9 +273,6 @@ export default async function HomePage() {
           </div>
         </Container>
       </section>
-
-      {/* RACING NOW — only renders when ongoing detection found something */}
-      <RacingNowSection ongoing={ongoing} />
 
       {/* NEXT UP + MOST RECENT */}
       {(nextUpEvent || mostRecentResult) ? (

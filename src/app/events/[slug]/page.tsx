@@ -219,17 +219,15 @@ export default async function EventDetailPage({
       />
 
       {/* Hero */}
-      <section className="relative min-h-[32svh] flex items-end overflow-hidden">
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10"
-          style={{
-            background:
-              status === "upcoming"
-                ? "linear-gradient(135deg, #F5F2ED 0%, #C8CDD3 100%)"
-                : "linear-gradient(135deg, #2A2F36 0%, #0E1116 50%, #0B1E2E 100%)",
-          }}
-        />
+      <section
+        className="relative min-h-[20svh] flex items-end overflow-hidden isolate"
+        style={{
+          background:
+            status === "upcoming"
+              ? "linear-gradient(135deg, #F5F2ED 0%, #C8CDD3 100%)"
+              : "linear-gradient(135deg, #2A2F36 0%, #0E1116 50%, #0B1E2E 100%)",
+        }}
+      >
         {/* Hero cover image from WS enrichment */}
         {wsEvent?.coverImage?.asset.url ? (
           <Image
@@ -237,15 +235,15 @@ export default async function EventDetailPage({
             alt={wsEvent.coverImage.alt ?? title}
             fill
             priority
-            className="absolute inset-0 object-cover -z-10 opacity-30"
+            className="absolute inset-0 object-cover opacity-30"
             sizes="100vw"
           />
         ) : null}
         <div
           aria-hidden
-          className="absolute inset-x-0 bottom-0 h-1/2 -z-10 bg-gradient-to-t from-ink/85 via-ink/30 to-transparent"
+          className="absolute inset-0 bg-gradient-to-t from-ink/95 via-ink/70 to-ink/40"
         />
-        <Container width="wide" className="pb-16 pt-section-y">
+        <Container width="wide" className="relative z-10 pb-10 pt-20">
           <Link
             href="/results"
             className="inline-flex items-center gap-1 text-paper/85 hover:text-paper mb-6 text-caption uppercase tracking-wider"
@@ -280,7 +278,7 @@ export default async function EventDetailPage({
       </section>
 
       {/* Body + sidebar */}
-      <section className="py-section-y">
+      <section className="pt-10 pb-section-y">
         <Container width="wide">
           <div className="grid lg:grid-cols-12 gap-10">
             <article className="lg:col-span-8 prose-area">

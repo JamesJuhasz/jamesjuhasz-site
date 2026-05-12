@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit",
     "press:fetch": "tsx scripts/fetch-press.ts",
     "results:fetch": "tsx scripts/fetch-results.ts",
+    "results:fetch-ongoing": "tsx --env-file=.env.local scripts/fetch-ongoing-results.ts",
     "results:verify": "tsx --env-file=.env.local scripts/verify-results.ts",
     "ws:fetch": "tsx scripts/fetch-world-sailing.ts",
     "ws:enrich": "tsx --env-file=.env.local scripts/enrich-world-sailing.ts",

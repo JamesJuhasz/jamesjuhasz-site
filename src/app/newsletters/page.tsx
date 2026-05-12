@@ -2,6 +2,7 @@ import { Container } from "@/components/ui/Container";
 import { PostCard } from "@/components/cards/PostCard";
 import { HeroParallax } from "@/components/sections/HeroParallax";
 import { Reveal } from "@/components/ui/Reveal";
+import { Button } from "@/components/ui/Button";
 import { DonateCTAInline } from "@/components/cta/DonateCTA";
 import { getPostsIndex } from "@/lib/posts";
 
@@ -36,6 +37,15 @@ export default async function NewslettersPage() {
           <h1 className="font-display text-display text-paper max-w-[20ch]">
             The journey, post by post
           </h1>
+          <div className="mt-8">
+            <Button
+              href="/subscribe"
+              size="lg"
+              className="bg-paper text-ink hover:bg-fog"
+            >
+              Subscribe to the newsletter
+            </Button>
+          </div>
         </Container>
       </section>
 

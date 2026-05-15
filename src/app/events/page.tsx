@@ -124,13 +124,29 @@ export default async function EventsPage() {
     ? await enrichEventsWithImages(statsOngoingFresh)
     : [];
 
+  // At most one ongoing card is ever surfaced. Order of preference:
+  //   1. Races from getOngoingRegattas() — rich cover image + priority data
+  //   2. Race/training from statsApi.events — catches training blocks
+  //   3. Anything in the upcoming feed that happens to overlap today
+  // Within a tier, the most-recently-started event wins.
+  const upcomingOngoing = upcomingFromApi.filter((e) =>
+    isOngoing({ startDate: e.startDate, endDate: e.endDate }, today),
+  );
+  const pickByLatestStart = (xs: EnrichedEvent[]): EnrichedEvent | null =>
+    xs.length ? [...xs].sort((a, b) => b.startDate.localeCompare(a.startDate))[0] : null;
+
+  const ongoingPick =
+    pickByLatestStart(extraOngoingMerged) ??
+    pickByLatestStart(statsOngoingEnriched) ??
+    pickByLatestStart(upcomingOngoing);
+
+  const ongoingTitle = ongoingPick ? normalizeTitle(ongoingPick.title) : null;
+
   const scheduleItems: (EnrichedEvent & { isOngoing: boolean })[] = [
-    ...extraOngoingMerged.map((e) => ({ ...e, isOngoing: true })),
-    ...statsOngoingEnriched.map((e) => ({ ...e, isOngoing: true })),
-    ...upcomingFromApi.map((e) => ({
-      ...e,
-      isOngoing: isOngoing({ startDate: e.startDate, endDate: e.endDate }, today),
-    })),
+    ...(ongoingPick ? [{ ...ongoingPick, isOngoing: true }] : []),
+    ...upcomingFromApi
+      .filter((e) => normalizeTitle(e.title) !== ongoingTitle)
+      .map((e) => ({ ...e, isOngoing: false })),
   ].sort((a, b) => {
     if (a.isOngoing !== b.isOngoing) return a.isOngoing ? -1 : 1;
     return a.startDate.localeCompare(b.startDate);

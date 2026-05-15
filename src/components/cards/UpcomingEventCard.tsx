@@ -21,11 +21,13 @@ export function UpcomingEventCard({
   destinationImageUrl,
   city,
   venueCountry,
+  isOngoing = false,
 }: {
   event: ConsolidatedEvent;
   destinationImageUrl?: string | null;
   city?: string | null;
   venueCountry?: string | null;
+  isOngoing?: boolean;
 }) {
   const start = dateFmt.format(new Date(`${event.startDate}T00:00:00`));
   const end =
@@ -37,7 +39,13 @@ export function UpcomingEventCard({
     event.racePriority && /^(A|priority|priority-?A)/i.test(event.racePriority);
 
   return (
-    <div className="rounded-2xl overflow-hidden ring-1 ring-mist bg-paper shadow-soft transition-shadow duration-200 flex flex-col">
+    <div
+      className={
+        isOngoing
+          ? "rounded-2xl overflow-hidden ring-2 ring-red bg-paper shadow-soft transition-shadow duration-200 flex flex-col"
+          : "rounded-2xl overflow-hidden ring-1 ring-mist bg-paper shadow-soft transition-shadow duration-200 flex flex-col"
+      }
+    >
       {/* Image slot — always rendered so all cards share the same height */}
       <div className="h-28 flex-shrink-0 overflow-hidden bg-fog">
         {destinationImageUrl ? (
@@ -53,7 +61,17 @@ export function UpcomingEventCard({
       </div>
       <div className="flex flex-col gap-2 p-4">
         <div className="flex items-start justify-between gap-2">
-          <Badge tone="navy">Upcoming</Badge>
+          {isOngoing ? (
+            <Badge tone="red">
+              <span
+                aria-hidden
+                className="inline-block h-1.5 w-1.5 rounded-full bg-paper animate-pulse"
+              />
+              Ongoing
+            </Badge>
+          ) : (
+            <Badge tone="navy">Upcoming</Badge>
+          )}
           {isPriority ? (
             <Badge tone="donate">
               <Trophy size={12} /> Priority

@@ -17,13 +17,14 @@ import {
   filterDisplayable,
   type ConsolidatedEvent,
 } from "@/lib/coachaible";
-import { enrichEventsWithImages } from "@/lib/venue-image";
+import { enrichEventsWithImages, type EnrichedEvent } from "@/lib/venue-image";
 import { daysToLA2028 } from "@/lib/countdown";
+import { getOngoingRegattas, isOngoing } from "@/lib/ongoing";
 
 export const revalidate = 60;
 
 export const metadata = {
-  title: "Events",
+  title: "Schedule",
   description:
     "The training calendar — every regatta, training block, and coaching gig coming up on the LA28 campaign.",
 };
@@ -52,19 +53,66 @@ function StatOrDash({
   return <StatNumber value={value} label={label} suffix={suffix} />;
 }
 
+function normalizeTitle(t: string): string {
+  return t.trim().toLowerCase().replace(/\s+/g, " ");
+}
+
 export default async function EventsPage() {
-  const [events, upcomingApi, statsApi] = await Promise.all([
+  const today =
+    process.env.FAKE_TODAY ?? new Date().toISOString().slice(0, 10);
+
+  const [events, upcomingApi, statsApi, ongoingRegattas] = await Promise.all([
     getEventsIndex().catch(() => []),
     fetchUpcoming(100),
     fetchTrainingStats(365),
+    getOngoingRegattas(today).catch(() => []),
   ]);
 
   const upcomingFromApi = upcomingApi
     ? await enrichEventsWithImages(filterDisplayable(consolidateEvents(upcomingApi.events)))
     : [];
+
+  // Merge in ongoing regattas that aren't already in the upcoming feed
+  // (some feeds filter out events whose start date has passed).
+  const upcomingTitles = new Set(upcomingFromApi.map((e) => normalizeTitle(e.title)));
+  const extraOngoing = ongoingRegattas.filter(
+    (r) => !upcomingTitles.has(normalizeTitle(r.title)),
+  );
+  const extraOngoingAsConsolidated: ConsolidatedEvent[] = extraOngoing.map((r) => ({
+    id: `ongoing-${r.slug}`,
+    title: r.title,
+    startDate: r.startDate,
+    endDate: r.endDate,
+    eventType: "race",
+    racePriority: null,
+    country: null,
+  }));
+  const extraOngoingEnriched = extraOngoing.length
+    ? await enrichEventsWithImages(extraOngoingAsConsolidated)
+    : [];
+
+  // Prefer the pre-resolved cover image from the ongoing source, but rely on
+  // the Wikipedia enrichment for city/country — the OngoingRegatta `location`
+  // is a full "City, Country" string and would double up the country in the UI.
+  const extraOngoingMerged: EnrichedEvent[] = extraOngoingEnriched.map((e, i) => ({
+    ...e,
+    destinationImageUrl: extraOngoing[i].coverImage?.url ?? e.destinationImageUrl,
+  }));
+
+  const scheduleItems: (EnrichedEvent & { isOngoing: boolean })[] = [
+    ...extraOngoingMerged.map((e) => ({ ...e, isOngoing: true })),
+    ...upcomingFromApi.map((e) => ({
+      ...e,
+      isOngoing: isOngoing({ startDate: e.startDate, endDate: e.endDate }, today),
+    })),
+  ].sort((a, b) => {
+    if (a.isOngoing !== b.isOngoing) return a.isOngoing ? -1 : 1;
+    return a.startDate.localeCompare(b.startDate);
+  });
+
   const upcomingFromSanity = events.filter((e) => e.status === "upcoming");
   const usingSanityFallback =
-    !upcomingApi && upcomingFromSanity.length > 0;
+    !upcomingApi && scheduleItems.length === 0 && upcomingFromSanity.length > 0;
 
   const stats = statsApi ? deriveStats(statsApi) : null;
   const daysToLA = daysToLA2028();
@@ -84,7 +132,7 @@ export default async function EventsPage() {
         />
         <Container width="wide" className="pt-section-y pb-section-y">
           <p className="text-eyebrow uppercase font-medium text-paper/70 mb-3">
-            Events
+            Schedule
           </p>
           <h1 className="font-display text-display text-paper max-w-[20ch]">
             What&apos;s next
@@ -135,17 +183,23 @@ export default async function EventsPage() {
         </Container>
       </section>
 
-      {upcomingFromApi.length ? (
+      {scheduleItems.length ? (
         <section className="py-section-y">
           <Container width="wide">
             <SectionHeader
-              eyebrow="Upcoming"
-              title="Next on the calendar"
+              eyebrow="Schedule"
+              title="On the calendar"
             />
             <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {upcomingFromApi.map((e, i) => (
+              {scheduleItems.map((e, i) => (
                 <Reveal key={e.id} delay={Math.min(i * 0.06, 0.36)}>
-                  <UpcomingEventCard event={e} destinationImageUrl={e.destinationImageUrl} city={e.city} venueCountry={e.venueCountry} />
+                  <UpcomingEventCard
+                    event={e}
+                    destinationImageUrl={e.destinationImageUrl}
+                    city={e.city}
+                    venueCountry={e.venueCountry}
+                    isOngoing={e.isOngoing}
+                  />
                 </Reveal>
               ))}
             </div>

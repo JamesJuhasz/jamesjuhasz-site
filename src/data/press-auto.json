@@ -343,6 +343,14 @@
       "discoveredAt": "2026-05-07T15:28:35.741Z"
     },
     {
+      "publication": "Sail-World.com",
+      "articleTitle": "Canadian sailors aim at Olympic spot for the country in ILCA 7 at the World Championship - Sail-World.com",
+      "publishedAt": "2024-01-18",
+      "externalUrl": "https://news.google.com/rss/articles/CBMikAFBVV95cUxONWdWdXVBZllKbENOamhGWW5hYW45YmxZT2JvcFFvampVSGwyQWhFXzFQSGVGRGF0MHVFWk1IYmptRkF6TlFCSzNQNlFBLVN0QzhrOUxtVm9LNG56WWNqQU9iV1kzb0RMNnFYVzBURloxRWpDUTJFanROZHFlRVZjN1RBXzl6MG5kOTEwWGdpMGI?oc=5",
+      "excerpt": "Canadian sailors aim at Olympic spot for the country in ILCA 7 at the World Championship Sail-World.com",
+      "discoveredAt": "2026-05-15T15:13:23.047Z"
+    },
+    {
       "publication": "Sailweb",
       "articleTitle": "2024 Oceania & Australian ILCA Open – Lorenzo Chiavarini keeps lead after Day 2 - Sailweb",
       "publishedAt": "2024-01-04",
@@ -392,6 +400,14 @@
       "externalUrl": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNSllfc3pBRDREYjlsNk1yMEV1TnQ2ZlNiU0JwZVpMYTN2ZXlPc3YtcFIxQnd6aXBObUdvTndneG55OHhiTHJ2Rl9pUGxNTVN5U0tBUDhXN1Q4cnQzZ2dJOGIta2JTUUw1RWNHZUdVNEtTQWR4UWpLMWZDSGxxVGc3RTdZcw?oc=5",
       "excerpt": "Qualification for Paris 2024 starts at the 2023 Sailing World Championships Sail-World.com",
       "discoveredAt": "2026-05-07T15:28:35.905Z"
+    },
+    {
+      "publication": "Oakville News",
+      "articleTitle": "James Juhasz qualifies for Team Canada sailing nomination - Oakville News",
+      "publishedAt": "2023-04-17",
+      "externalUrl": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxQY2otNHpjbXdXNEgyRHZveUlQaDVDNkJsSi02aGlmeHZEUmlzTjFnb3dVVjItNmtNWGl1MW10SHZQeGoyMVRqTk9jN1ZudFEzSTRFRHNHcnZ4VDBPYXhhd3pVRWdsLVFzcjYwSkJ0T3hPTzNPWC1Sa3JtQm9rMFhFYWJrMTFwWmM5cUdqUHhob0gtaURuY0lLTGNtckFGaEJUY1lid01sX2haeWM?oc=5",
+      "excerpt": "James Juhasz qualifies for Team Canada sailing nomination Oakville News",
+      "discoveredAt": "2026-05-15T15:13:22.916Z"
     },
     {
       "publication": "INhalton",
@@ -494,6 +510,7 @@
     }
   ],
   "denylist": [
+    "https://afloat.ie/resources/news-update/oireachtas/item/71335-oireachtas-committee-visits-lady-s-island-lake-crisis",
     "https://news.google.com/rss/articles/CBMiY0FVX3lxTE0xek1fWEtsQ19jQk10WnhpMERhWVRmNld6Wmp0YU1WQ25BYzFRVnNMSVR3RW5aSk9YbmNvdnl4bmNXMUJzWGdtNThUZVFPQ0J1WGxrd2VLbFJlQjE4bE0xR2RGWQ?oc=5",
     "https://news.google.com/rss/articles/CBMickFVX3lxTE5DMkFsNEJIRXZsc3BNRWNwYy1VN1RXUS1MMWFOWjRCWG9xVy1tc0dwa1cxcDQ1dUlscG9JOW9CQ042b0JyZ1RfRnVxTzl3Q09VLW5SRVByenZLU2RHaC1LbGRkOHd4Sm14eG9wQlc0STE2QQ?oc=5",
     "https://news.google.com/rss/articles/CBMigAFBVV95cUxOQnNnbnpVTmFEOUstd2NlMGxyS2pGVXM2b01DLS1TUXM3ZjlpZlRoQ1FkYkpOUk1QcVNldi1namc4cW90MUxzQV84MjBnT1hPYi00cmJlNVZJZzdXNXNxU3dBMVZBQW9zcG92TlRKaUc4aWdxODYxWmFOSjUyMEd5ZQ?oc=5",
@@ -680,6 +697,25 @@
     "https://www.sail-world.com/news/296130/?source=rss",
     "https://www.sail-world.com/news/296131/?source=rss",
     "https://www.sail-world.com/news/296132/?source=rss",
+    "https://www.sail-world.com/news/296134/?source=rss",
+    "https://www.sail-world.com/news/296135/?source=rss",
+    "https://www.sail-world.com/news/296136/?source=rss",
+    "https://www.sail-world.com/news/296137/?source=rss",
+    "https://www.sail-world.com/news/296139/?source=rss",
+    "https://www.sail-world.com/news/296140/?source=rss",
+    "https://www.sail-world.com/news/296141/?source=rss",
+    "https://www.sail-world.com/news/296142/?source=rss",
+    "https://www.sail-world.com/news/296143/?source=rss",
+    "https://www.sail-world.com/news/296144/?source=rss",
+    "https://www.sail-world.com/news/296146/?source=rss",
+    "https://www.sail-world.com/news/296147/?source=rss",
+    "https://www.sail-world.com/news/296148/?source=rss",
+    "https://www.sail-world.com/news/296150/?source=rss",
+    "https://www.sail-world.com/news/296152/?source=rss",
+    "https://www.sail-world.com/news/296157/?source=rss",
+    "https://www.sail-world.com/news/296158/?source=rss",
+    "https://www.sail-world.com/news/296160/?source=rss",
+    "https://www.sail-world.com/news/296161/?source=rss",
     "https://www.sailing.ca/2026-call-for-nominations-to-the-sail-canada-board-of-directors/",
     "https://www.sailing.ca/2026-canadian-sailing-hall-of-fame-inductees-announced/",
     "https://www.sailing.ca/call-for-canadian-teams-2026-offshore-double-handed-world-championships/",
@@ -727,15 +763,23 @@
     "https://www.sailingscuttlebutt.com/2026/05/07/game-time-for-etchells-world-champs/",
     "https://www.sailingscuttlebutt.com/2026/05/07/sailgp-five-things-to-watch-in-bermuda-2/",
     "https://www.sailingscuttlebutt.com/2026/05/08/from-cocktail-server-to-boat-builder/",
+    "https://www.sailingscuttlebutt.com/2026/05/09/heroics-seal-52-super-series-win/",
     "https://www.sailingscuttlebutt.com/2026/05/09/little-things-that-make-a-difference/",
     "https://www.sailingscuttlebutt.com/2026/05/10/australia-win-at-sailgp-bermuda/",
     "https://www.sailingscuttlebutt.com/2026/05/11/2026-orc-world-championship-in-italy/",
+    "https://www.sailingscuttlebutt.com/2026/05/11/all-academic-college-sailing-team/",
+    "https://www.sailingscuttlebutt.com/2026/05/11/farewell-tour-for-college-sailing-coach/",
+    "https://www.sailingscuttlebutt.com/2026/05/11/formula-kite-worlds-in-portugal/",
+    "https://www.sailingscuttlebutt.com/2026/05/11/inside-ac-are-france-the-underdog/",
     "https://www.sailingscuttlebutt.com/2026/05/11/olympic-test-comes-to-france/",
+    "https://www.sailingscuttlebutt.com/2026/05/11/way-outside-the-americas-cup-box/",
     "https://www.sailingscuttlebutt.com/2026/05/11/win-with-style-lose-with-style-6/",
+    "https://www.sailingscuttlebutt.com/2026/05/12/australia-returning-to-the-americas-cup/",
     "https://www.sailingscuttlebutt.com/2026/05/12/curmudgeons-observation-358/",
     "https://www.sailingscuttlebutt.com/2026/05/12/master-class-with-a-4x-olympic-medalist/",
     "https://www.sailingscuttlebutt.com/2026/05/12/three-pro-drills-to-fire-up-your-season/",
     "https://www.sailingscuttlebutt.com/2026/05/13/designing-fastest-boat-in-the-world/",
+    "https://www.sailingscuttlebutt.com/2026/05/13/is-it-still-one-of-sports-great-tests/",
     "https://www.sailingscuttlebutt.com/2026/05/13/new-challenge-for-38th-americas-cup/"
   ]
 }

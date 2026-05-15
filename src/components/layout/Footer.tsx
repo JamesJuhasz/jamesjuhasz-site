@@ -20,7 +20,7 @@ const footerNavGroups: {
   {
     label: "Calendar",
     items: [
-      { href: "/events", label: "Events" },
+      { href: "/events", label: "Schedule" },
       { href: "/results", label: "Results" },
     ],
   },

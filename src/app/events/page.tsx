@@ -15,6 +15,7 @@ import {
   fetchTrainingStats,
   fetchUpcoming,
   filterDisplayable,
+  filterOngoing,
   type ConsolidatedEvent,
 } from "@/lib/coachaible";
 import { enrichEventsWithImages, type EnrichedEvent } from "@/lib/venue-image";
@@ -72,8 +73,19 @@ export default async function EventsPage() {
     ? await enrichEventsWithImages(filterDisplayable(consolidateEvents(upcomingApi.events)))
     : [];
 
-  // Merge in ongoing regattas that aren't already in the upcoming feed
-  // (some feeds filter out events whose start date has passed).
+  // Ongoing events live in two sources beyond the upcoming feed (which filters
+  // out anything with startDate ≤ today):
+  //   1. `getOngoingRegattas()` — races (CoachAible + admin DB + World Sailing scrape)
+  //   2. `statsApi.events` — last 365 days of training + race events
+  // We need both because (1) carries the rich cover image / location data for
+  // races, but skips training; (2) catches ongoing training blocks like Bermuda.
+  const ongoingFromStats: ConsolidatedEvent[] = statsApi
+    ? filterOngoing(
+        filterDisplayable(consolidateEvents(statsApi.events)),
+        today,
+      )
+    : [];
+
   const upcomingTitles = new Set(upcomingFromApi.map((e) => normalizeTitle(e.title)));
   const extraOngoing = ongoingRegattas.filter(
     (r) => !upcomingTitles.has(normalizeTitle(r.title)),
@@ -99,8 +111,22 @@ export default async function EventsPage() {
     destinationImageUrl: extraOngoing[i].coverImage?.url ?? e.destinationImageUrl,
   }));
 
+  // Stats-derived ongoing: dedupe against upcoming AND against the regatta
+  // source (races already covered with rich cover images).
+  const coveredTitles = new Set([
+    ...upcomingTitles,
+    ...extraOngoingMerged.map((e) => normalizeTitle(e.title)),
+  ]);
+  const statsOngoingFresh = ongoingFromStats.filter(
+    (e) => !coveredTitles.has(normalizeTitle(e.title)),
+  );
+  const statsOngoingEnriched = statsOngoingFresh.length
+    ? await enrichEventsWithImages(statsOngoingFresh)
+    : [];
+
   const scheduleItems: (EnrichedEvent & { isOngoing: boolean })[] = [
     ...extraOngoingMerged.map((e) => ({ ...e, isOngoing: true })),
+    ...statsOngoingEnriched.map((e) => ({ ...e, isOngoing: true })),
     ...upcomingFromApi.map((e) => ({
       ...e,
       isOngoing: isOngoing({ startDate: e.startDate, endDate: e.endDate }, today),

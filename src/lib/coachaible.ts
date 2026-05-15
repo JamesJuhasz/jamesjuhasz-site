@@ -180,6 +180,13 @@ export function filterDisplayable(
   return events.filter((e) => DISPLAY_TYPES.has(e.eventType));
 }
 
+export function filterOngoing(
+  events: ConsolidatedEvent[],
+  today: string,
+): ConsolidatedEvent[] {
+  return events.filter((e) => today >= e.startDate && today <= e.endDate);
+}
+
 export function deriveStats(
   stats: CoachaibleStatsResponse,
   now: Date = new Date(),

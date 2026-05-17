@@ -12,6 +12,7 @@ import { getEventsIndex } from "@/lib/events";
 import {
   consolidateEvents,
   deriveStats,
+  eventInstanceKey,
   fetchTrainingStats,
   fetchUpcoming,
   filterDisplayable,
@@ -54,10 +55,6 @@ function StatOrDash({
   return <StatNumber value={value} label={label} suffix={suffix} />;
 }
 
-function normalizeTitle(t: string): string {
-  return t.trim().toLowerCase().replace(/\s+/g, " ");
-}
-
 export default async function EventsPage() {
   const today =
     process.env.FAKE_TODAY ?? new Date().toISOString().slice(0, 10);
@@ -86,9 +83,11 @@ export default async function EventsPage() {
       )
     : [];
 
-  const upcomingTitles = new Set(upcomingFromApi.map((e) => normalizeTitle(e.title)));
+  // Dedup by (title, startDate) — the same trip recurs (e.g. "Training: Bermuda"
+  // in May and again in June). A title-only key incorrectly collapses them.
+  const upcomingKeys = new Set(upcomingFromApi.map(eventInstanceKey));
   const extraOngoing = ongoingRegattas.filter(
-    (r) => !upcomingTitles.has(normalizeTitle(r.title)),
+    (r) => !upcomingKeys.has(eventInstanceKey(r)),
   );
   const extraOngoingAsConsolidated: ConsolidatedEvent[] = extraOngoing.map((r) => ({
     id: `ongoing-${r.slug}`,
@@ -113,12 +112,12 @@ export default async function EventsPage() {
 
   // Stats-derived ongoing: dedupe against upcoming AND against the regatta
   // source (races already covered with rich cover images).
-  const coveredTitles = new Set([
-    ...upcomingTitles,
-    ...extraOngoingMerged.map((e) => normalizeTitle(e.title)),
+  const coveredKeys = new Set([
+    ...upcomingKeys,
+    ...extraOngoingMerged.map(eventInstanceKey),
   ]);
   const statsOngoingFresh = ongoingFromStats.filter(
-    (e) => !coveredTitles.has(normalizeTitle(e.title)),
+    (e) => !coveredKeys.has(eventInstanceKey(e)),
   );
   const statsOngoingEnriched = statsOngoingFresh.length
     ? await enrichEventsWithImages(statsOngoingFresh)
@@ -140,12 +139,12 @@ export default async function EventsPage() {
     pickByLatestStart(statsOngoingEnriched) ??
     pickByLatestStart(upcomingOngoing);
 
-  const ongoingTitle = ongoingPick ? normalizeTitle(ongoingPick.title) : null;
+  const ongoingKey = ongoingPick ? eventInstanceKey(ongoingPick) : null;
 
   const scheduleItems: (EnrichedEvent & { isOngoing: boolean })[] = [
     ...(ongoingPick ? [{ ...ongoingPick, isOngoing: true }] : []),
     ...upcomingFromApi
-      .filter((e) => normalizeTitle(e.title) !== ongoingTitle)
+      .filter((e) => eventInstanceKey(e) !== ongoingKey)
       .map((e) => ({ ...e, isOngoing: false })),
   ].sort((a, b) => {
     if (a.isOngoing !== b.isOngoing) return a.isOngoing ? -1 : 1;

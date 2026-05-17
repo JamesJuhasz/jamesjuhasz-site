@@ -136,6 +136,16 @@ function normalizeTitle(t: string): string {
   return t.trim().toLowerCase().replace(/\s+/g, " ");
 }
 
+// Key that uniquely identifies one *instance* of a recurring trip. Title alone
+// collides across instances (e.g. "Training: Bermuda" runs in both May and
+// June) and causes an ongoing instance to be deduped against a future one.
+export function eventInstanceKey(e: {
+  title: string;
+  startDate: string;
+}): string {
+  return `${normalizeTitle(e.title)}|${e.startDate}`;
+}
+
 export function consolidateEvents(
   events: CoachaibleRawEvent[],
 ): ConsolidatedEvent[] {

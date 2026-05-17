@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   consolidateEvents,
+  eventInstanceKey,
   filterDisplayable,
   filterOngoing,
   type CoachaibleRawEvent,
@@ -56,5 +57,39 @@ describe("filterOngoing", () => {
       "2026-05-15",
     );
     expect(ongoing.map((e) => e.title)).toEqual(["Bermuda"]);
+  });
+});
+
+describe("eventInstanceKey", () => {
+  it("distinguishes same-titled trips that recur on different dates", () => {
+    // Regression: the schedule page deduped stats-derived ongoing events
+    // against upcoming events by title only. With Bermuda training scheduled
+    // twice ("Training: Bermuda" May 14–21 and again Jun 6–11), the live
+    // May trip got suppressed by the future June one and never surfaced
+    // as the ongoing card.
+    const ongoingTrip = {
+      title: "Training: Bermuda",
+      startDate: "2026-05-14",
+      endDate: "2026-05-21",
+    };
+    const futureTrip = {
+      title: "Training: Bermuda",
+      startDate: "2026-06-06",
+      endDate: "2026-06-11",
+    };
+    expect(eventInstanceKey(ongoingTrip)).not.toBe(eventInstanceKey(futureTrip));
+
+    const upcomingKeys = new Set([futureTrip].map(eventInstanceKey));
+    const statsOngoing = [ongoingTrip];
+    const statsOngoingFresh = statsOngoing.filter(
+      (e) => !upcomingKeys.has(eventInstanceKey(e)),
+    );
+    expect(statsOngoingFresh).toEqual([ongoingTrip]);
+  });
+
+  it("normalizes title whitespace and case", () => {
+    expect(
+      eventInstanceKey({ title: "  Training:   Bermuda  ", startDate: "2026-05-14" }),
+    ).toBe(eventInstanceKey({ title: "training: bermuda", startDate: "2026-05-14" }));
   });
 });

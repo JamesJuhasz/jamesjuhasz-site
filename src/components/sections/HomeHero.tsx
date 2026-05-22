@@ -18,7 +18,10 @@ export function HomeHero() {
       </div>
 
       {/* Mobile: single portrait-friendly image */}
-      <div className="sm:hidden absolute inset-0 -z-20 overflow-hidden">
+      {/* `bg-ink` mirrors HeroParallax's dark fallback so white hero text and
+         the transparent sticky header stay legible while the image loads
+         (or if it fails entirely on a flaky mobile network). */}
+      <div className="sm:hidden absolute inset-0 -z-20 overflow-hidden bg-ink">
         <Image
           src="/images/hero-candidates/dsc04465.jpg"
           alt=""

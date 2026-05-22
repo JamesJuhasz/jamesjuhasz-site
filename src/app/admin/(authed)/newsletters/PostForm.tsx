@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Editor, type EditorValue } from "./Editor";
 import { slugify } from "@/lib/admin/slug";
 import { proxyImageUrl } from "@/lib/img-proxy";
+import { prepareForUpload } from "@/lib/admin/upload-client";
 
 export type PostInitial = {
   id?: number;
@@ -59,10 +60,11 @@ export function PostForm({ initial }: { initial?: PostInitial }) {
   async function uploadCover(file: File) {
     setCoverUploading(true);
     try {
+      const prepared = await prepareForUpload(file);
       const res = await fetch("/api/admin/upload", {
         method: "POST",
-        body: file,
-        headers: { "content-type": file.type || "application/octet-stream" },
+        body: prepared,
+        headers: { "content-type": prepared.type || "application/octet-stream" },
       });
       const data = (await res.json()) as { ok: boolean; url?: string; error?: string };
       if (!data.ok || !data.url) throw new Error(data.error ?? "upload failed");

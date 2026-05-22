@@ -6,6 +6,7 @@ import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
+import { prepareForUpload } from "@/lib/admin/upload-client";
 
 export type EditorValue = { html: string; json: unknown };
 
@@ -76,17 +77,18 @@ export function Editor({
     if (!file || !editor) return;
     setUploading(true);
     try {
+      const prepared = await prepareForUpload(file);
       const res = await fetch("/api/admin/upload", {
         method: "POST",
-        body: file,
-        headers: { "content-type": file.type || "application/octet-stream" },
+        body: prepared,
+        headers: { "content-type": prepared.type || "application/octet-stream" },
       });
       const data = (await res.json()) as { ok: boolean; url?: string; error?: string };
       if (!data.ok || !data.url) {
         alert(`Upload failed: ${data.error ?? res.status}`);
         return;
       }
-      editor.chain().focus().setImage({ src: data.url, alt: file.name }).run();
+      editor.chain().focus().setImage({ src: data.url, alt: prepared.name }).run();
     } catch (err) {
       alert(`Upload failed: ${(err as Error).message}`);
     } finally {

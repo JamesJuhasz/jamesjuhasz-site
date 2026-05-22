@@ -163,20 +163,15 @@ function escapeText(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-// 16:10 landscape crop, email-client safe.
-// The image URL is set as a CSS `background-image` on a table cell with
-// `background-size:cover` (crops to fill). A 1x1 transparent GIF, sized via
-// HTML `width`/`height` attributes that establish the intrinsic aspect ratio,
-// sits inside the cell as a spacer — it's what gives the cell its responsive
-// 16:10 height (the spacer scales with the email container width). This is
-// the bulletproof email technique: `aspect-ratio` CSS gets stripped by Gmail,
-// and `object-fit` on an `<img>` can't override the natural portrait aspect
-// when the source is taller than wide.
-const SPACER_GIF =
-  "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
-
 /**
- * Render a single cropped landscape image as an email-safe table cell.
+ * Render an image as an email-safe responsive `<img>`.
+ *
+ * Earlier versions used a `background-image` on a `<td>` with a 1×1 spacer GIF
+ * to force a 16:10 crop. That fails on Gmail iOS/Android and Yahoo mobile —
+ * they strip CSS `background-image` on `<td>`, leaving only the invisible
+ * spacer (blank gap instead of the photo). A plain `<img>` renders everywhere
+ * at the cost of using the source's natural aspect ratio instead of a crop.
+ *
  * Caller is responsible for absolutizing `src` if it's a relative URL.
  */
 export function renderCroppedImage(args: {
@@ -185,7 +180,7 @@ export function renderCroppedImage(args: {
   width: number;
   height: number;
 }): string {
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0;padding:0;border-collapse:collapse;"><tr><td background="${escapeAttr(args.src)}" style="background-image:url('${escapeAttr(args.src)}');background-size:cover;background-position:center center;background-repeat:no-repeat;font-size:0;line-height:0;mso-line-height-rule:exactly;"><img src="${SPACER_GIF}" alt="${escapeAttr(args.alt ?? "")}" width="${args.width}" height="${args.height}" style="display:block;width:100%;height:auto;border:0;" /></td></tr></table>`;
+  return `<img src="${escapeAttr(args.src)}" alt="${escapeAttr(args.alt ?? "")}" width="${args.width}" style="display:block;width:100%;max-width:${args.width}px;height:auto;border:0;outline:none;text-decoration:none;" />`;
 }
 
 export function renderNewsletterEmail(input: NewsletterEmailInput): string {

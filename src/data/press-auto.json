@@ -1,6 +1,23 @@
 {
   "items": [
     {
+      "publication": "Sail Canada",
+      "articleTitle": "Sail Canada introduces the 2026-2027 Canadian Sailing Team",
+      "publishedAt": "2026-05-21",
+      "externalUrl": "https://www.sailing.ca/sail-canada-introduces-the-2026-2027-canadian-sailing-team/",
+      "excerpt": "Kingston, May 21, 2026 – Sail Canada is pleased to announce the list of sailors who will be part of the 2026-2027 Canadian Sailing Team. The 14 athletes were selected based on the Canadian Sailing Team Sport Canada Carding Criteria. Carded sailors from the Canadian Sailing Team…",
+      "discoveredAt": "2026-05-22T15:48:09.497Z"
+    },
+    {
+      "publication": "Scuttlebutt Sailing News",
+      "articleTitle": "2026-27 Canadian Sailing Team",
+      "publishedAt": "2026-05-21",
+      "externalUrl": "https://www.sailingscuttlebutt.com/2026/05/21/2026-27-canadian-sailing-team/",
+      "excerpt": "Sail Canada has confirmed the list of sailors who will be part of the 2026-2027 Canadian Sailing Team. The 14 athletes were selected based on the Canadian Sailing Team Sport Canada Carding Criteria. - Full report",
+      "imageUrl": "https://www.sailingscuttlebutt.com/wp-content/uploads/2026/05/2026-05-21_13-11-26.jpg",
+      "discoveredAt": "2026-05-22T15:48:09.497Z"
+    },
+    {
       "publication": "Québec Yachting",
       "articleTitle": "Valentino Blewett registers best Canadian performance with 17th position in iQFoil at the second Sailing Grand Slam Series regatta of the season - Québec Yachting",
       "publishedAt": "2026-05-05",
@@ -811,6 +828,7 @@
     "https://www.sail-world.com/news/296243/?source=rss",
     "https://www.sail-world.com/news/296244/?source=rss",
     "https://www.sail-world.com/news/296245/?source=rss",
+    "https://www.sail-world.com/news/296248/?source=rss",
     "https://www.sail-world.com/news/296250/?source=rss",
     "https://www.sail-world.com/news/296254/?source=rss",
     "https://www.sail-world.com/news/296255/?source=rss",
@@ -849,6 +867,8 @@
     "https://www.sail-world.com/news/296320/?source=rss",
     "https://www.sail-world.com/news/296322/?source=rss",
     "https://www.sail-world.com/news/296323/?source=rss",
+    "https://www.sail-world.com/news/296325/?source=rss",
+    "https://www.sail-world.com/news/296326/?source=rss",
     "https://www.sail-world.com/news/296331/?source=rss",
     "https://www.sail-world.com/news/296334/?source=rss",
     "https://www.sail-world.com/news/296339/?source=rss",
@@ -858,6 +878,21 @@
     "https://www.sail-world.com/news/296344/?source=rss",
     "https://www.sail-world.com/news/296345/?source=rss",
     "https://www.sail-world.com/news/296346/?source=rss",
+    "https://www.sail-world.com/news/296347/?source=rss",
+    "https://www.sail-world.com/news/296348/?source=rss",
+    "https://www.sail-world.com/news/296349/?source=rss",
+    "https://www.sail-world.com/news/296350/?source=rss",
+    "https://www.sail-world.com/news/296352/?source=rss",
+    "https://www.sail-world.com/news/296353/?source=rss",
+    "https://www.sail-world.com/news/296354/?source=rss",
+    "https://www.sail-world.com/news/296355/?source=rss",
+    "https://www.sail-world.com/news/296356/?source=rss",
+    "https://www.sail-world.com/news/296357/?source=rss",
+    "https://www.sail-world.com/news/296358/?source=rss",
+    "https://www.sail-world.com/news/296359/?source=rss",
+    "https://www.sail-world.com/news/296361/?source=rss",
+    "https://www.sail-world.com/news/296362/?source=rss",
+    "https://www.sail-world.com/news/296363/?source=rss",
     "https://www.sailing.ca/2026-call-for-nominations-to-the-sail-canada-board-of-directors/",
     "https://www.sailing.ca/2026-canadian-sailing-hall-of-fame-inductees-announced/",
     "https://www.sailing.ca/antonia-and-georgia-lewin-lafrance-finish-the-2026-49erfx-world-championship-on-a-high-note-taking-4th-overall/",
@@ -950,6 +985,9 @@
     "https://www.sailingscuttlebutt.com/2026/05/20/top-18-set-for-college-open-nationals/",
     "https://www.sailingscuttlebutt.com/2026/05/20/what-mattered-to-him-was-winning/",
     "https://www.sailingscuttlebutt.com/2026/05/21/butler-family-liquidating-all-contents/",
-    "https://www.sailingscuttlebutt.com/2026/05/21/game-time-for-j-70-corinthian-worlds/"
+    "https://www.sailingscuttlebutt.com/2026/05/21/first-test-for-38th-americas-cup-teams/",
+    "https://www.sailingscuttlebutt.com/2026/05/21/game-time-for-j-70-corinthian-worlds/",
+    "https://www.sailingscuttlebutt.com/2026/05/21/orc-double-handed-worlds-in-north-sea/",
+    "https://www.sailingscuttlebutt.com/2026/05/22/good-news-for-atlantic-hurricane-season/"
   ]
 }

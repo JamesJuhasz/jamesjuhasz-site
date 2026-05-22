@@ -4,6 +4,21 @@ Running log of corrections, gotchas, and patterns to repeat. Reviewed at session
 
 ---
 
+## 2026-05-22 — `background-image` on `<td>` with a spacer GIF is not bulletproof — Gmail mobile breaks it
+
+**Context.** Newsletter and gallery-announcement emails sent via Resend rendered photos correctly on desktop (Apple Mail, Gmail web, Outlook) but showed blank gaps on mobile (Gmail iOS/Android). The `renderCroppedImage` helper in `src/lib/admin/newsletter-html.ts` used the "CSS background-image on `<td>` + 1×1 transparent spacer GIF sized via width/height attrs + `width:100%;height:auto`" technique to force a 16:10 crop. Gmail's mobile webview strips CSS `background-image` on `<td>` (and ignores the `background="..."` HTML fallback unless it's Outlook VML), so the only thing rendered is the invisible spacer = blank cell.
+
+**Rule.** For images in email HTML, use a plain `<img>` with `display:block; width:100%; max-width:Wpx; height:auto;` and a `width="W"` HTML attribute. Accept the source's natural aspect ratio. Do not rely on `background-image`, `aspect-ratio`, or `object-fit` to force a crop in email — coverage across clients is too inconsistent and degradation is silent (invisible images, not broken-image icons).
+
+**How to apply.**
+- For email crops, do them server-side (image transformation) and serve a pre-cropped URL, OR drop the crop and use natural aspect.
+- The spacer-GIF + background-image trick is widely quoted as "bulletproof" but it isn't — particularly fails on Gmail iOS, Gmail Android, Yahoo mobile, and AOL.
+- The original comment in the code claimed `aspect-ratio` CSS gets stripped by Gmail — true historically, but Gmail web supports it since 2023. Mobile apps still lag. If we want a real crop in email later, the only reliable path is server-side pre-cropping.
+
+**Pattern to repeat.** Email-safe responsive image: `<img src="..." width="W" alt="..." style="display:block; width:100%; max-width:Wpx; height:auto; border:0;" />`. Caller must absolutize relative URLs against the production origin (Resend won't proxy localhost).
+
+---
+
 ## 2026-05-12 — Server-side fetches to third-party APIs need an explicit User-Agent in prod
 
 **Context.** Upcoming-event destination photos worked locally but were missing in prod (Railway). Initial investigation chased lazy-loading and viewport theories on the wrong server. The user's redirect ("they load locally but not in prod") forced a re-frame: it had to be an environment difference, not a client-rendering issue. The actual root cause: `fetchWikipediaImage` and the opensearch / Brave search calls in `src/lib/venue-image.ts` had no `User-Agent` header. Wikipedia returns 403 for empty UAs and aggressively rate-limits / blocks anonymous-looking fetches from cloud-datacenter IPs (Railway), while letting them through from residential IPs. Result: every venue lookup returned null in prod and the prerendered HTML had zero `<img>` tags for upcoming cards.

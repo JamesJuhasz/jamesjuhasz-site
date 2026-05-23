@@ -49,7 +49,14 @@ export function HeroParallax({
   return (
     <div
       ref={ref}
-      className="absolute inset-0 -z-20 overflow-hidden"
+      // `bg-ink` is a defensive fallback: every consumer overlays white text
+      // (`text-paper`) on this hero. If the image is slow, blocked, or fails
+      // (large unoptimized JPEGs over flaky mobile cellular, content blockers,
+      // older iOS image-format edge cases), the body's `bg-paper` would show
+      // through and render the text — and the transparent sticky header
+      // overlaying it — invisible. The dark fallback keeps text legible at all
+      // times; once the image paints, it covers this bg entirely.
+      className="absolute inset-0 -z-20 overflow-hidden bg-ink"
     >
       <motion.div
         className="absolute top-0 left-0 right-0"

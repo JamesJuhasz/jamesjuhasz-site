@@ -4,6 +4,22 @@ Running log of corrections, gotchas, and patterns to repeat. Reviewed at session
 
 ---
 
+## 2026-05-22 — Dark-hero sections must own a dark `background-color`, not rely on the image
+
+**Context.** Users on some mobile phones (across Safari *and* Chrome) reported intermittent white-on-white text in the navigation menu and in the `/newsletters` hero. Root cause: every hero (`HomeHero`, `/newsletters`, `/donate`, `/about`, etc.) overlays `text-paper` (white) on a hero image and a dark gradient, but the section itself had no `background-color`. Hero images are large (1–4 MB), priority-loaded, served via Next.js `<Image unoptimized>`, so on flaky cellular / content-blocker / older-iOS-format edges the image paints late or not at all — and the body's `bg-paper` (white) showed through. The transparent sticky `Header` overlaying the hero suffered the same fate. Symptom is mobile-only because mobile is the slow/blocked-image surface and matches the "some phones, intermittent, both browsers" pattern exactly.
+
+**Rule.** Any section that places white text over a hero image MUST also carry a `background-color` matching the dark gradient endpoint (here, `bg-ink`). Don't rely on the image being painted to make the text legible. Same rule for an explicit `color-scheme` meta declaration: a light-mode site without it can be re-tinted by Chrome Mobile's "Auto Dark Theme for web contents," producing subtle inversions the design never anticipated.
+
+**How to apply.**
+- `HeroParallax`'s outer wrapper now ships `bg-ink` by default — most callers inherit the fix automatically. Any new hero that bypasses the component (e.g. the `<Image>` direct branch in `HomeHero` for mobile portrait crops) must add `bg-ink` itself to the absolute-positioned `-z-20` wrapper.
+- For any future "white text on a photo" layout, set the section's *background-color* — not just the gradient — to the gradient's dark endpoint. The gradient is the *aesthetic* layer; the bg-color is the *safety* layer.
+- Keep `viewport.colorScheme = "light"` in `src/app/layout.tsx`. Removing it re-opens the door to Chrome Auto Dark Theme algorithmically re-tinting `text-paper` / `bg-paper` pairs.
+- Verification recipe: in `preview_eval`, set `visibility: hidden` on every `<img>` inside the hero, screenshot, and confirm the text is still legible. If it isn't, the bg-color is missing or the wrong layer is dark.
+
+**Pattern to repeat.** When CSS depends on an asset loading to be readable, treat the asset as a *progressive enhancement*, not a hard requirement. Bake a same-palette fallback color into the same box so the text-contrast contract holds at every step of the load (and on every load that never finishes).
+
+---
+
 ## 2026-05-22 — `background-image` on `<td>` with a spacer GIF is not bulletproof — Gmail mobile breaks it
 
 **Context.** Newsletter and gallery-announcement emails sent via Resend rendered photos correctly on desktop (Apple Mail, Gmail web, Outlook) but showed blank gaps on mobile (Gmail iOS/Android). The `renderCroppedImage` helper in `src/lib/admin/newsletter-html.ts` used the "CSS background-image on `<td>` + 1×1 transparent spacer GIF sized via width/height attrs + `width:100%;height:auto`" technique to force a 16:10 crop. Gmail's mobile webview strips CSS `background-image` on `<td>` (and ignores the `background="..."` HTML fallback unless it's Outlook VML), so the only thing rendered is the invisible spacer = blank cell.

@@ -60,6 +60,10 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#0E1116",
+  // Site is a light-mode design (paper/ink). Declare it so Chrome Mobile's
+  // "Auto Dark Theme for web contents" doesn't algorithmically re-tint pages
+  // and so iOS Safari renders form controls/scrollbars in the matching scheme.
+  colorScheme: "light",
   width: "device-width",
   initialScale: 1,
 };

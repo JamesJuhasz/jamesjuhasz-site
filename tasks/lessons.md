@@ -4,6 +4,22 @@ Running log of corrections, gotchas, and patterns to repeat. Reviewed at session
 
 ---
 
+## 2026-05-22 — Don't ship `initial={{ opacity: 0 }}` on SSR'd framer-motion wrappers
+
+**Context.** After fixing the dark-hero white-on-white issue, users on some mobile phones still reported huge blank sections of the site. Screenshots showed the mobile hamburger drawer opening to a completely empty white sheet (8 nav links missing) and the homepage rendering with most content below the hero invisible. Root cause: `Reveal` (`src/components/ui/Reveal.tsx`) used `<motion.div initial={{ opacity: 0, y }} whileInView={{ opacity: 1, y: 0 }} />` and the mobile menu items in `Header.tsx` used the same shape (`initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}`). Framer-motion's `initial` is serialized into the SSR HTML as inline `style="opacity: 0; transform: translateY(16px)"`. On devices where the client-side animation never fires (hydration race, IntersectionObserver edge case, aggressive battery saver, JS error elsewhere on the page, service-worker-cached stale JS) the content stays at `opacity: 0` forever — invisible. The home page has 32 `Reveal` usages, so a single client-side animation failure makes most of the site disappear.
+
+**Rule.** SSR'd framer-motion wrappers must never have `opacity: 0` (or any other "make me invisible") in `initial`. If the animation fails to fire on the client, the user sees a blank page. Animate `y`, `scale`, or other transform properties instead — those degrade gracefully (worst case is a small static offset; the content remains visible).
+
+**How to apply.**
+- Translate-only reveals: `initial={{ y: 16 }} whileInView={{ y: 0 }}`. SSR emits `transform: translateY(16px)`; failure mode is a 16px static shift — barely perceptible, always legible.
+- If a true fade is absolutely required, gate it behind a `useEffect`-set `mounted` flag so the SSR output renders fully visible and only the client (after hydration) starts the fade. Accept the brief "no-fade" first paint as the cost of safety.
+- Animations on user-triggered states (e.g. the mobile drawer's stagger): also drop opacity. The drawer itself uses `translate-x-full → translate-x-0`, so item-level fade-in is decoration, not the reveal mechanic.
+- Verification: `curl <url> | grep -oE 'opacity:[^;\"]*'` — the count must be zero (or only `opacity: 1`). Running it against `/` and `/newsletters` catches the most-used `Reveal` paths in one pass.
+
+**Pattern to repeat.** Framer-motion's `initial` becomes static SSR style. Treat it as "the state the user will see if JS never runs" — design it to be readable on its own. Use animation to enhance the readable state, never to *create* it.
+
+---
+
 ## 2026-05-22 — Dark-hero sections must own a dark `background-color`, not rely on the image
 
 **Context.** Users on some mobile phones (across Safari *and* Chrome) reported intermittent white-on-white text in the navigation menu and in the `/newsletters` hero. Root cause: every hero (`HomeHero`, `/newsletters`, `/donate`, `/about`, etc.) overlays `text-paper` (white) on a hero image and a dark gradient, but the section itself had no `background-color`. Hero images are large (1–4 MB), priority-loaded, served via Next.js `<Image unoptimized>`, so on flaky cellular / content-blocker / older-iOS-format edges the image paints late or not at all — and the body's `bg-paper` (white) showed through. The transparent sticky `Header` overlaying the hero suffered the same fate. Symptom is mobile-only because mobile is the slow/blocked-image surface and matches the "some phones, intermittent, both browsers" pattern exactly.

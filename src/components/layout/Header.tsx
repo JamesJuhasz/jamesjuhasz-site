@@ -151,15 +151,24 @@ export function Header() {
         <div className="flex h-full flex-col px-container-x py-8">
           <nav className="flex flex-col gap-1" aria-label="Primary mobile">
             {SITE.nav.map((item, i) => (
+              // We intentionally don't animate `opacity` on these items. The
+              // drawer itself slides in via `translate-x-full → translate-x-0`,
+              // so items don't need their own fade-in. SSR emits framer-motion
+              // `initial` styles inline — if the animation never fires on a
+              // given device (hydration race, JS error upstream, etc.) an
+              // `opacity: 0` initial leaves the nav links invisible inside the
+              // open drawer (bug reported on some mobile phones, 2026-05-22).
+              // Translating `y` only means the worst case is an 8px static
+              // offset — barely perceptible, but always visible.
               <motion.div
                 key={item.href}
-                initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+                initial={reduceMotion ? false : { y: 8 }}
                 animate={
                   open && !reduceMotion
-                    ? { opacity: 1, y: 0 }
+                    ? { y: 0 }
                     : reduceMotion
                       ? undefined
-                      : { opacity: 0, y: 8 }
+                      : { y: 8 }
                 }
                 transition={{
                   duration: 0.4,

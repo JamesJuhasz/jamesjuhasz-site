@@ -75,11 +75,25 @@ export function DonorboxEmbed({ amount, className }: Props) {
       <div
         ref={ref}
         className={cn(
-          "w-full bg-white shadow-lift sm:max-w-[420px] sm:ml-auto",
+          // Cap at 425px to match Donorbox's own internal max-inline-size on
+          // <dbox-widget>. Going wider leaves a white gap on the right because
+          // the widget self-aligns left. Right-align within the column on sm+.
+          "w-full bg-white shadow-lift sm:max-w-[425px] sm:ml-auto",
           className,
         )}
         dangerouslySetInnerHTML={{ __html: `<dbox-widget ${attrs}></dbox-widget>` }}
       />
+      <p className="mt-3 text-caption text-paper/80 sm:max-w-[425px] sm:ml-auto sm:text-right">
+        Form not loading?{" "}
+        <a
+          href={`https://donorbox.org/${encodeURIComponent(campaign)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline hover:no-underline"
+        >
+          Donate directly on Donorbox →
+        </a>
+      </p>
       <Script
         type="module"
         src="https://donorbox.org/widgets.js"

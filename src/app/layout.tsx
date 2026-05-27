@@ -78,11 +78,22 @@ export default function RootLayout({
       lang="en"
       className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-paper text-ink">
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <FloatingDonateCTA />
+      <body className="min-h-full bg-paper text-ink">
+        {/*
+          overflow-x: clip lives on this wrapper, not on <body>, so that
+          third-party popups appended directly to <body> (reCAPTCHA challenge,
+          Stripe 3DS, etc.) can render past the viewport boundary without
+          being clipped. Decorative absolute children of our in-flow content
+          (hero parallax oversize, donate-button fireworks canvas) sit inside
+          this wrapper and stay clipped — preserving the no-horizontal-scroll
+          guarantee on narrow phones.
+        */}
+        <div className="relative min-h-full flex flex-col overflow-x-clip">
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <FloatingDonateCTA />
+        </div>
         <DonatePopup />
         <AnalyticsBridge />
         <JsonLd data={personJsonLd} />

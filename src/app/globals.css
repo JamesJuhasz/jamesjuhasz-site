@@ -79,10 +79,6 @@
   html {
     background: var(--color-paper);
     color: var(--color-ink);
-    /* Decorative absolute children (donate-button fireworks canvas, hero
-       parallax oversize) can extend past the viewport on narrow phones.
-       Clip horizontally to prevent page scroll without breaking sticky. */
-    overflow-x: clip;
   }
 
   body {
@@ -91,10 +87,13 @@
     line-height: var(--text-body--line-height);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
-    /* Decorative absolute children (e.g. donate-button fireworks canvas, hero
-       parallax oversize) can extend past the viewport on narrow phones. Clip
-       horizontally to prevent unwanted page scroll without breaking sticky. */
-    overflow-x: clip;
+    /*
+      No overflow-x clip on <body> — third-party popups appended directly to
+      body (reCAPTCHA v2 challenge popup, Stripe 3DS modals, etc.) need to
+      render past the viewport edge without being clipped. Decorative absolute
+      children of our flowing content (hero parallax, fireworks canvas) are
+      clipped by the overflow-x-clip wrapper inside this body in layout.tsx.
+    */
   }
 
   /* Headings default to display sans (Space Grotesk). */

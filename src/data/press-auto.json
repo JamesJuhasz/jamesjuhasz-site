@@ -1,6 +1,14 @@
 {
   "items": [
     {
+      "publication": "Québec Yachting",
+      "articleTitle": "Sail Canada introduces the 2026-2027 Canadian Sailing Team - Québec Yachting",
+      "publishedAt": "2026-07-06",
+      "externalUrl": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxOQ2hGXzhUTVVDVTJyNE00NVNQUWdCZC1wNWZubjN4Z25neTJQNWx0RFctQzlBYUZ3cDdJM0ZMcERYdUZCY1REVDFlcVM5bmZMWWNGTGEyTGZBelZmVGxmeDRmVTh4eU0xWmlnT1FFWWZLUmZIZ05UdTlMVy1JSTdyNUY3OERyS1pkbU5aN1AzcndmRXAxOUJRM0VpQW14Y2hSTkNzMDhaNXpRNUk?oc=5",
+      "excerpt": "Sail Canada introduces the 2026-2027 Canadian Sailing Team Québec Yachting",
+      "discoveredAt": "2026-07-07T15:43:12.896Z"
+    },
+    {
       "publication": "Sail-World.com",
       "articleTitle": "Kiel 29er EuroCup - Recap",
       "publishedAt": "2026-06-29",
@@ -563,6 +571,14 @@
       "externalUrl": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPdDBfN0Z6TVNIbnR5cjAzcXozY0VLcGZhZk1raVNuT2F2UkhsZHlZMmNmWkFLU0Zxb0Jqdi1yeUJ4dC1QS1VSeThVUmxHczhXQnNjNktEZU91dlMtVldyam10VGxSUUE4eVFmWEJJcFdnVmRFa29TeFV2WkYwdm41OW1PTVVIQlFFYUQw?oc=5",
       "excerpt": "Sarah Douglas pursues her road to Paris 2024 at French Olympic Week in Hyères Sail-World.com",
       "discoveredAt": "2026-05-08T14:51:32.824Z"
+    },
+    {
+      "publication": "Yachts and Yachting Online",
+      "articleTitle": "UKLA ILCA 7 National Championships at Weymouth & Portland National Sailing Academy - Overall - Yachts and Yachting Online",
+      "publishedAt": "2021-08-21",
+      "externalUrl": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOWXd1YzZsNTBSV1pFaFI4dG4xMGM2SFVsY3RTbzVKQlp5M3hjMHpybU9weWV2V3VPdGtzQUdoTVNUS0VtUkI1WjE1RTZ4MklDY2ttaU50Z0s1eHNEM0VkV0IyUGFtaExHOXU0MVh1LUp3SENoUzJId2xrUjZ6a1R5cUpCSFl1amtxaHItZndOOThBQQ?oc=5",
+      "excerpt": "UKLA ILCA 7 National Championships at Weymouth & Portland National Sailing Academy - Overall Yachts and Yachting Online",
+      "discoveredAt": "2026-07-07T15:43:12.797Z"
     },
     {
       "publication": "Yachts and Yachting Online",
@@ -1807,14 +1823,34 @@
     "https://www.sail-world.com/news/297727/?source=rss",
     "https://www.sail-world.com/news/297728/?source=rss",
     "https://www.sail-world.com/news/297729/?source=rss",
+    "https://www.sail-world.com/news/297730/?source=rss",
     "https://www.sail-world.com/news/297731/?source=rss",
     "https://www.sail-world.com/news/297732/?source=rss",
     "https://www.sail-world.com/news/297733/?source=rss",
     "https://www.sail-world.com/news/297734/?source=rss",
     "https://www.sail-world.com/news/297735/?source=rss",
+    "https://www.sail-world.com/news/297736/?source=rss",
     "https://www.sail-world.com/news/297737/?source=rss",
     "https://www.sail-world.com/news/297738/?source=rss",
     "https://www.sail-world.com/news/297739/?source=rss",
+    "https://www.sail-world.com/news/297743/?source=rss",
+    "https://www.sail-world.com/news/297748/?source=rss",
+    "https://www.sail-world.com/news/297749/?source=rss",
+    "https://www.sail-world.com/news/297750/?source=rss",
+    "https://www.sail-world.com/news/297751/?source=rss",
+    "https://www.sail-world.com/news/297753/?source=rss",
+    "https://www.sail-world.com/news/297754/?source=rss",
+    "https://www.sail-world.com/news/297756/?source=rss",
+    "https://www.sail-world.com/news/297757/?source=rss",
+    "https://www.sail-world.com/news/297759/?source=rss",
+    "https://www.sail-world.com/news/297760/?source=rss",
+    "https://www.sail-world.com/news/297761/?source=rss",
+    "https://www.sail-world.com/news/297762/?source=rss",
+    "https://www.sail-world.com/news/297763/?source=rss",
+    "https://www.sail-world.com/news/297764/?source=rss",
+    "https://www.sail-world.com/news/297767/?source=rss",
+    "https://www.sail-world.com/news/297769/?source=rss",
+    "https://www.sail-world.com/news/297771/?source=rss",
     "https://www.sailing.ca/2026-call-for-nominations-to-the-sail-canada-board-of-directors/",
     "https://www.sailing.ca/2026-canadian-sailing-hall-of-fame-inductees-announced/",
     "https://www.sailing.ca/antonia-and-georgia-lewin-lafrance-finish-the-2026-49erfx-world-championship-on-a-high-note-taking-4th-overall/",
@@ -1822,6 +1858,7 @@
     "https://www.sailing.ca/call-for-canadian-teams-2026-offshore-double-handed-world-championships/",
     "https://www.sailing.ca/canada-ocean-racing-pathway-program/",
     "https://www.sailing.ca/canadian-sailors-antonia-and-georgia-lewin-lafrance-add-another-gold-medal-at-grand-slam-series-event/",
+    "https://www.sailing.ca/canadian-sailors-antonia-and-georgia-lewin-lafrance-back-in-action-at-49er-49erfx-and-nacra-17-european-championships/",
     "https://www.sailing.ca/canadian-sailors-antonia-and-georgia-lewin-lafrance-back-in-action-at-next-grand-slam-series-event-in-germany/",
     "https://www.sailing.ca/coaches-opportunity-for-the-youth-sailing-world-championships/",
     "https://www.sailing.ca/kingston-to-host-a-sailing-country-qualification-competition-for-the-lima-2027-pan-american-games/",
@@ -2093,6 +2130,10 @@
     "https://www.sailingscuttlebutt.com/2026/07/04/happy-250th-birthday/",
     "https://www.sailingscuttlebutt.com/2026/07/04/poole-courtois-triumph-in-sweden/",
     "https://www.sailingscuttlebutt.com/2026/07/05/breaking-eggs-to-make-an-omelette/",
-    "https://www.sailingscuttlebutt.com/2026/07/05/three-sneakily-powerful-words/"
+    "https://www.sailingscuttlebutt.com/2026/07/05/three-sneakily-powerful-words/",
+    "https://www.sailingscuttlebutt.com/2026/07/06/entries-open-for-2027-admirals-cup/",
+    "https://www.sailingscuttlebutt.com/2026/07/07/behind-the-scenes-july-2026/",
+    "https://www.sailingscuttlebutt.com/2026/07/07/has-technology-reduced-sailings-spirit/",
+    "https://www.sailingscuttlebutt.com/2026/07/07/marinas-are-quietly-banning-older-boats/"
   ]
 }

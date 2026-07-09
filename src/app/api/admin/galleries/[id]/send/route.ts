@@ -83,19 +83,19 @@ export async function POST(
   req: NextRequest,
   ctx: { params: Promise<{ id: string }> },
 ) {
-  // Any uncaught throw below (e.g. a transient DB error) would otherwise
-  // fall through to Next's default non-JSON error response, which breaks
-  // the client's `res.json()` call (Safari surfaces this as the cryptic
-  // "The string did not match the expected pattern"). Always answer JSON.
+  // Return 200 with { ok:false } for ALL failures — never a 5xx. The edge
+  // (Railway/Cloudflare) replaces any 5xx response *body* with its own HTML
+  // error page, so a JSON error sent with a 5xx status never reaches the
+  // client: `res.json()` then chokes on "<!DOCTYPE" (Safari: "The string did
+  // not match the expected pattern"; Chrome: "Unexpected token '<'"). The
+  // client keys off `data.ok`, not the HTTP status, so 200 is safe here.
   try {
     return await handlePost(req, ctx);
   } catch (err) {
     console.error("[send] unhandled error:", err);
-    // Admin-only endpoint — surface the real message so a failure is
-    // diagnosable from the UI instead of an opaque crash.
     return NextResponse.json(
       { ok: false, error: `internal_error: ${(err as Error).message}` },
-      { status: 500 },
+      { status: 200 },
     );
   }
 }
@@ -142,10 +142,8 @@ async function handlePost(
     const verdict = verifyAdminPassword(password);
     if (!verdict.ok) {
       if (verdict.reason === "not_configured") {
-        return NextResponse.json(
-          { ok: false, error: "admin_not_configured" },
-          { status: 500 },
-        );
+        // 200 (not 5xx) so the JSON error survives the edge — see POST().
+        return NextResponse.json({ ok: false, error: "admin_not_configured" });
       }
       return NextResponse.json(
         { ok: false, error: "wrong_password" },
@@ -186,10 +184,8 @@ async function handlePost(
       html,
     });
     if (!result.ok) {
-      return NextResponse.json(
-        { ok: false, error: result.error },
-        { status: 502 },
-      );
+      // 200 (not 5xx) so the JSON error survives the edge — see POST().
+      return NextResponse.json({ ok: false, error: result.error });
     }
     return NextResponse.json({ ok: true, mode: "test", id: result.id });
   }
@@ -201,10 +197,8 @@ async function handlePost(
     name: subject,
   });
   if (!result.ok) {
-    return NextResponse.json(
-      { ok: false, error: result.error },
-      { status: 502 },
-    );
+    // 200 (not 5xx) so the JSON error survives the edge — see POST().
+    return NextResponse.json({ ok: false, error: result.error });
   }
   const updated = await markGalleryAnnounced(id);
   return NextResponse.json({

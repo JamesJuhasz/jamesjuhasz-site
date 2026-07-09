@@ -41,6 +41,25 @@ export async function POST(
   req: NextRequest,
   ctx: { params: Promise<{ id: string }> },
 ) {
+  // Any uncaught throw below (e.g. a transient DB error) would otherwise
+  // fall through to Next's default non-JSON error response, which breaks
+  // the client's `res.json()` call (Safari surfaces this as the cryptic
+  // "The string did not match the expected pattern"). Always answer JSON.
+  try {
+    return await handlePost(req, ctx);
+  } catch (err) {
+    console.error("[send] unhandled error:", err);
+    return NextResponse.json(
+      { ok: false, error: "internal_error" },
+      { status: 500 },
+    );
+  }
+}
+
+async function handlePost(
+  req: NextRequest,
+  ctx: { params: Promise<{ id: string }> },
+) {
   const { id: idStr } = await ctx.params;
   const id = Number(idStr);
   if (!Number.isInteger(id) || id <= 0) {

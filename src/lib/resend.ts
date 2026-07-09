@@ -29,6 +29,10 @@ export function getAudienceId(): string | undefined {
   return AUDIENCE_ID;
 }
 
+function truncate(s: string, max: number): string {
+  return s.length <= max ? s : s.slice(0, max - 1).trimEnd() + "…";
+}
+
 export async function addContactToAudience(args: {
   email: string;
   firstName?: string;
@@ -136,7 +140,10 @@ export async function createAndSendBroadcast(args: {
       from: FROM,
       subject: args.subject,
       html: args.html,
-      name: args.name,
+      // Resend caps the broadcast `name` (an internal dashboard label only —
+      // not the subject subscribers see) at 70 chars; longer values are
+      // rejected. Titles over 70 chars would otherwise fail the whole send.
+      name: args.name ? truncate(args.name, 70) : undefined,
     });
     if (created.error || !created.data?.id) {
       return {

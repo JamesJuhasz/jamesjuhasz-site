@@ -91,8 +91,10 @@ export async function POST(
     return await handlePost(req, ctx);
   } catch (err) {
     console.error("[send] unhandled error:", err);
+    // Admin-only endpoint — surface the real message so a failure is
+    // diagnosable from the UI instead of an opaque crash.
     return NextResponse.json(
-      { ok: false, error: "internal_error" },
+      { ok: false, error: `internal_error: ${(err as Error).message}` },
       { status: 500 },
     );
   }

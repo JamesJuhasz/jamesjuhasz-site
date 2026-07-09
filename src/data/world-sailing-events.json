@@ -1,9 +1,26 @@
 {
-  "fetchedAt": "2026-07-08T16:12:39.493Z",
+  "fetchedAt": "2026-07-09T16:26:24.591Z",
   "source": "https://www.sailing.org/sailor/james-juhasz?ref=CANJJ18",
   "sailorName": "James Juhasz",
   "worldSailingId": "CANJJ18",
   "events": [
+    {
+      "worldSailingEventId": "23e4ef87-bf3a-4ad0-bdd2-bc32605d77aa",
+      "worldSailingRegattaId": "3ffb2298-e4f2-4f5b-9d11-c1e0048805f2",
+      "worldSailingRegattaCode": "CAN202508JFL",
+      "regattaName": "ILCA Canadian National Championships",
+      "startDate": "2026-06-26",
+      "endDate": "2026-06-28",
+      "position": 5,
+      "className": "ILCA 7",
+      "classCode": "ILCA7",
+      "discipline": "Fleet racing",
+      "grade": "50",
+      "eventName": "ILCA 7 Men",
+      "regattaWebsite": "https://ilcanasailing.org/major-regattas",
+      "description": null,
+      "sailNumber": ""
+    },
     {
       "worldSailingEventId": "6fc594e8-37bc-4bf3-92a0-5ee9a95361fe",
       "worldSailingRegattaId": "badbce12-ffef-47cb-bac4-621ef91a833b",

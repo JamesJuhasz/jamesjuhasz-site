@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-08T16:12:41.743Z",
+  "generatedAt": "2026-07-09T16:27:05.826Z",
   "results": [
     {
       "worldSailingEventId": "104e108a-374b-462b-83ed-d1c21ad41bae",
@@ -95,6 +95,62 @@
           "rejectReason": "name-not-found",
           "notes": [
             "tables-found=0",
+            "no-row-matched",
+            "via-playwright"
+          ]
+        }
+      ],
+      "needsReview": true,
+      "reviewReasons": [
+        "below-review-threshold:low-confidence",
+        "name-not-found",
+        "class-implied-not-confirmed"
+      ]
+    },
+    {
+      "worldSailingEventId": "23e4ef87-bf3a-4ad0-bdd2-bc32605d77aa",
+      "verifiedAt": "2026-07-09T16:27:05.780Z",
+      "confidenceScore": 0,
+      "confidenceBreakdown": {
+        "nameMatch": 0,
+        "eventNameMatch": 0.06451612903225806,
+        "dateOverlap": 0,
+        "classMatch": 0.5,
+        "positionAgreement": 0.5,
+        "sourceTier": 1
+      },
+      "primarySource": {
+        "url": "https://ilcanasailing.org/major-regattas",
+        "domain": "ilcanasailing.org",
+        "tier": "HIGH",
+        "fetchedAt": "2026-07-09T16:26:29.601Z",
+        "contentType": "playwright-html"
+      },
+      "externalPosition": null,
+      "totalCompetitors": null,
+      "fleet": null,
+      "candidates": [
+        {
+          "url": "https://ilcanasailing.org/major-regattas",
+          "domain": "ilcanasailing.org",
+          "tier": "HIGH",
+          "contentType": "playwright-html",
+          "fetchedAt": "2026-07-09T16:26:29.601Z",
+          "confidenceScore": 0,
+          "confidenceBreakdown": {
+            "nameMatch": 0,
+            "eventNameMatch": 0.06451612903225806,
+            "dateOverlap": 0,
+            "classMatch": 0.5,
+            "positionAgreement": 0.5,
+            "sourceTier": 1
+          },
+          "externalPosition": null,
+          "totalCompetitors": null,
+          "fleet": null,
+          "rejectReason": "name-not-found",
+          "notes": [
+            "tables-found=2",
             "no-row-matched",
             "via-playwright"
           ]

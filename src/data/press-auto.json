@@ -1,6 +1,15 @@
 {
   "items": [
     {
+      "publication": "Sail-World.com",
+      "articleTitle": "2026 29er World Championship Kiel overall",
+      "publishedAt": "2026-07-10",
+      "externalUrl": "https://www.sail-world.com/news/297889/?source=rss",
+      "excerpt": "It was a day full of suspense, especially when it came to deciding the 2026 World Champions. A fierce battle unfolded between Argentina, Sweden, and France, keeping everyone on edge until the very last moment.",
+      "imageUrl": "http://yandy.co.uk/photos/29er/350/yysw575924.jpg",
+      "discoveredAt": "2026-07-10T15:31:33.207Z"
+    },
+    {
       "publication": "Québec Yachting",
       "articleTitle": "Sail Canada introduces the 2026-2027 Canadian Sailing Team - Québec Yachting",
       "publishedAt": "2026-07-06",
@@ -1853,6 +1862,7 @@
     "https://www.sail-world.com/news/297769/?source=rss",
     "https://www.sail-world.com/news/297770/?source=rss",
     "https://www.sail-world.com/news/297771/?source=rss",
+    "https://www.sail-world.com/news/297777/?source=rss",
     "https://www.sail-world.com/news/297782/?source=rss",
     "https://www.sail-world.com/news/297790/?source=rss",
     "https://www.sail-world.com/news/297795/?source=rss",
@@ -1874,6 +1884,7 @@
     "https://www.sail-world.com/news/297816/?source=rss",
     "https://www.sail-world.com/news/297818/?source=rss",
     "https://www.sail-world.com/news/297819/?source=rss",
+    "https://www.sail-world.com/news/297821/?source=rss",
     "https://www.sail-world.com/news/297830/?source=rss",
     "https://www.sail-world.com/news/297831/?source=rss",
     "https://www.sail-world.com/news/297832/?source=rss",
@@ -1888,9 +1899,25 @@
     "https://www.sail-world.com/news/297844/?source=rss",
     "https://www.sail-world.com/news/297845/?source=rss",
     "https://www.sail-world.com/news/297846/?source=rss",
+    "https://www.sail-world.com/news/297847/?source=rss",
     "https://www.sail-world.com/news/297848/?source=rss",
     "https://www.sail-world.com/news/297850/?source=rss",
     "https://www.sail-world.com/news/297851/?source=rss",
+    "https://www.sail-world.com/news/297852/?source=rss",
+    "https://www.sail-world.com/news/297853/?source=rss",
+    "https://www.sail-world.com/news/297855/?source=rss",
+    "https://www.sail-world.com/news/297870/?source=rss",
+    "https://www.sail-world.com/news/297871/?source=rss",
+    "https://www.sail-world.com/news/297872/?source=rss",
+    "https://www.sail-world.com/news/297873/?source=rss",
+    "https://www.sail-world.com/news/297874/?source=rss",
+    "https://www.sail-world.com/news/297875/?source=rss",
+    "https://www.sail-world.com/news/297876/?source=rss",
+    "https://www.sail-world.com/news/297877/?source=rss",
+    "https://www.sail-world.com/news/297879/?source=rss",
+    "https://www.sail-world.com/news/297884/?source=rss",
+    "https://www.sail-world.com/news/297886/?source=rss",
+    "https://www.sail-world.com/news/297887/?source=rss",
     "https://www.sailing.ca/2026-call-for-nominations-to-the-sail-canada-board-of-directors/",
     "https://www.sailing.ca/2026-canadian-sailing-hall-of-fame-inductees-announced/",
     "https://www.sailing.ca/23-canadian-sailors-to-prepare-for-la-2028-at-last-grand-slam-series-stop-of-the-season-in-california/",
@@ -2183,9 +2210,14 @@
     "https://www.sailingscuttlebutt.com/2026/07/07/has-technology-reduced-sailings-spirit/",
     "https://www.sailingscuttlebutt.com/2026/07/07/marinas-are-quietly-banning-older-boats/",
     "https://www.sailingscuttlebutt.com/2026/07/07/what-no-french-team-has-done-before/",
+    "https://www.sailingscuttlebutt.com/2026/07/08/capsize-for-french-ac-team/",
+    "https://www.sailingscuttlebutt.com/2026/07/08/curmudgeons-observation-377/",
     "https://www.sailingscuttlebutt.com/2026/07/08/energy-system-to-redefine-ocean-passage/",
     "https://www.sailingscuttlebutt.com/2026/07/08/how-to-deal-with-end-of-life-vessels/",
     "https://www.sailingscuttlebutt.com/2026/07/08/racing-on-olympic-waters-in-long-beach/",
-    "https://www.sailingscuttlebutt.com/2026/07/08/thirty-years-later-santiago-lange/"
+    "https://www.sailingscuttlebutt.com/2026/07/08/thirty-years-later-santiago-lange/",
+    "https://www.sailingscuttlebutt.com/2026/07/09/does-the-bowline-matter/",
+    "https://www.sailingscuttlebutt.com/2026/07/09/eight-bells-john-ruf/",
+    "https://www.sailingscuttlebutt.com/2026/07/10/field-set-for-govcup-2026/"
   ]
 }

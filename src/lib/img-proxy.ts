@@ -24,11 +24,22 @@ export function proxyImageUrl(url: string, width = 1200): string {
 
 // Match `<img …src="https://…"`, requiring a whitespace before `src=` so we
 // don't accidentally rewrite `data-src` or other src-suffixed attributes.
-const IMG_SRC_RE = /(<img\b[^>]*?\s)src="(https?:\/\/[^"]+)"/gi;
+// `tag` is the `<img` open, `mid` is everything up to and including `src=`.
+const IMG_SRC_RE = /(<img\b)([^>]*?\s)src="(https?:\/\/[^"]+)"/gi;
 
 export function proxyImagesInHtml(html: string, width = 1200): string {
   if (!html) return html;
-  return html.replace(IMG_SRC_RE, (_match, prefix: string, url: string) => {
-    return `${prefix}src="${proxyImageUrl(url, width)}"`;
-  });
+  return html.replace(
+    IMG_SRC_RE,
+    (_match, tag: string, mid: string, url: string) => {
+      // Lazy-load inline body images so a single reader doesn't fire every
+      // optimizer request on load — only images scrolling into view. This
+      // spreads the per-page burst on Next's image optimizer. Skip if the
+      // author's HTML already set a loading strategy.
+      const attrs = /\sloading=/i.test(mid)
+        ? ""
+        : ' loading="lazy" decoding="async"';
+      return `${tag}${attrs}${mid}src="${proxyImageUrl(url, width)}"`;
+    },
+  );
 }

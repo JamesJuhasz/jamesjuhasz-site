@@ -54,6 +54,22 @@ describe("normalizeImage (downscale-on-upload)", () => {
     expect(out.mime).toBe("image/jpeg");
   });
 
+  it("rejects a truncated/corrupt upload instead of storing a smeared image", async () => {
+    // A whole PNG re-encodes fine; a truncated one must fail loud, not silently
+    // produce the corrupt-bottom-band image (failOn must not be "none").
+    const whole = await sharp({
+      create: { width: 1600, height: 900, channels: 3, background: { r: 30, g: 90, b: 150 } },
+    })
+      .png()
+      .toBuffer();
+    const truncated = whole.subarray(0, Math.floor(whole.length * 0.9));
+
+    await expect(normalizeImage(whole, "image/png")).resolves.toBeDefined();
+    await expect(normalizeImage(truncated, "image/png")).rejects.toThrow(
+      /corrupt_or_truncated_image/,
+    );
+  });
+
   it("passes animated GIF and AVIF through untouched", async () => {
     const gifBytes = Buffer.from("not-really-a-gif");
     const gif = await normalizeImage(gifBytes, "image/gif");

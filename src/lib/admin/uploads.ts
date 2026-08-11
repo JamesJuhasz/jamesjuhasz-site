@@ -44,19 +44,32 @@ export async function normalizeImage(
   if (mime === "image/gif" || mime === "image/avif") {
     return { data, mime };
   }
-  // failOn:"none" keeps slightly-malformed phone exports from hard-failing.
-  const pipeline = sharp(data, { failOn: "none" })
+  // failOn:"error" aborts on truncated/corrupt input (e.g. an upload cut short
+  // by a network blip) while still tolerating benign warnings some phone
+  // exports trigger. Do NOT use "none" here: it makes sharp silently emit a
+  // half-decoded image with a smeared/repeated bottom band instead of failing,
+  // and we'd store that corruption permanently. Failing loud lets the caller
+  // reject the upload so the user simply retries.
+  const pipeline = sharp(data, { failOn: "error" })
     .rotate()
     .resize({ width: MAX_EDGE, height: MAX_EDGE, fit: "inside", withoutEnlargement: true });
 
-  if (mime === "image/png") {
-    return { data: await pipeline.png({ compressionLevel: 9 }).toBuffer(), mime: "image/png" };
+  try {
+    if (mime === "image/png") {
+      return { data: await pipeline.png({ compressionLevel: 9 }).toBuffer(), mime: "image/png" };
+    }
+    if (mime === "image/webp") {
+      return { data: await pipeline.webp({ quality: 82 }).toBuffer(), mime: "image/webp" };
+    }
+    // jpeg, heic, heif → jpeg
+    return { data: await pipeline.jpeg({ quality: 82 }).toBuffer(), mime: "image/jpeg" };
+  } catch (err) {
+    // sharp surfaces low-level decoder text (e.g. "pngload_buffer: libspng read
+    // error"). Wrap it so the upload route returns something actionable.
+    throw new Error(
+      `corrupt_or_truncated_image: ${(err as Error).message}`,
+    );
   }
-  if (mime === "image/webp") {
-    return { data: await pipeline.webp({ quality: 82 }).toBuffer(), mime: "image/webp" };
-  }
-  // jpeg, heic, heif → jpeg
-  return { data: await pipeline.jpeg({ quality: 82 }).toBuffer(), mime: "image/jpeg" };
 }
 
 export async function saveUpload(

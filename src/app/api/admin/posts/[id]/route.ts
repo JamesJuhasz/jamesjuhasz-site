@@ -6,6 +6,8 @@ import {
   updatePost,
 } from "@/lib/admin/store/posts";
 import { slugify } from "@/lib/admin/slug";
+import { prewarmPostImages } from "@/lib/admin/prewarm-images";
+import { SITE } from "@/lib/site";
 
 export const runtime = "nodejs";
 
@@ -80,6 +82,16 @@ export async function PUT(
   const row = await updatePost(id, patch);
   if (!row)
     return NextResponse.json({ ok: false, error: "not_found" }, { status: 404 });
+
+  // Once a post is published its public page is live and shareable, so warm the
+  // image optimizer now rather than making the first real visitor pay for it.
+  // Fire-and-forget: this must not delay the save response or fail it.
+  if (row.publishedAt && row.bodyHtml) {
+    void prewarmPostImages(row, SITE.url).catch((err) =>
+      console.warn("[posts] image prewarm failed:", err),
+    );
+  }
+
   return NextResponse.json({ ok: true, post: row });
 }
 

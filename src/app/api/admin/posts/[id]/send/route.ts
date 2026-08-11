@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { getPostById, markSent } from "@/lib/admin/store/posts";
 import { renderNewsletterEmail } from "@/lib/admin/newsletter-html";
+import { prewarmPostImages } from "@/lib/admin/prewarm-images";
 import { verifyAdminPassword } from "@/lib/admin/password";
 import { rateLimit, clientIp } from "@/lib/rate-limit";
 import {
@@ -159,6 +160,16 @@ async function handlePost(
       { ok: false, error: "already_sent" },
       { status: 409 },
     );
+  }
+
+  // Warm Next's image optimizer for this post's images BEFORE the broadcast
+  // goes out, so the derivatives are cached when the wave of readers arrives
+  // from the email. Best-effort: never let a warming hiccup block the send.
+  try {
+    const warm = await prewarmPostImages(post, emailOrigin());
+    console.log("[send] image prewarm:", warm);
+  } catch (err) {
+    console.warn("[send] image prewarm failed:", err);
   }
 
   // Broadcast path: leave the unsubscribe URL as the Resend placeholder so

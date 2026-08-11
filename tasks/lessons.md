@@ -4,6 +4,37 @@ Running log of corrections, gotchas, and patterns to repeat. Reviewed at session
 
 ---
 
+## 2026-08-11 — iPhone HEIC only decodes reliably via Apple's decoder (Safari native), not WASM libheif or server sharp
+
+**Context.** After the corrupt-upload guard shipped, HEIC uploads failed with `corrupt_or_truncated_image: pngload_buffer: libspng read error`; plain JPG worked. Diagnosis on the actual file (`~/Downloads/IMG_8545 2.HEIC`, a 4283×4283 iPhone HEIC): sharp `metadata()` read it, but decoding threw `source: bad seek to 2045836` (32 bytes past EOF). macOS `sips` decoded it to a full clean image — so the file is fine, but **libheif can't read it**. Padding the file past the seek surfaced the deeper truth: this project's prebuilt sharp has **no HEVC decoder at all** (`Support for this compression format has not been built in`). That's why the codebase converts HEIC→JPEG in the browser via `heic-to` (WASM libheif) before upload — but WASM libheif chokes on the same large "grid"/slightly-short iPhone HEICs, emitting a smeared partial image or throwing.
+
+**Rule.** The only decoder in a Linux-server + browser stack that reliably reads real iPhone HEICs is **Apple's own**, reachable in-browser through Safari's native `<img>` decoding (macOS/iOS). Prefer native decode; treat WASM libheif (`heic-to`/`heic2any`/`heic-convert`) as a fallback, not the primary path. Never assume server sharp can touch HEIC in this project.
+
+**How to apply.**
+- Client HEIC→JPEG: load into `<img>` → draw to `<canvas>` → `toBlob("image/jpeg")`. Cap the canvas at ~2048px longest edge — iPhone HEICs (4283²≈18 MP) exceed iOS Safari's ~16.7 MP canvas-area limit, and 2048 already matches the server's `MAX_EDGE` (`src/lib/admin/uploads.ts`). See `decodeHeicNatively()` in `src/lib/admin/upload-client.ts`.
+- The native path can't be verified in Chromium tooling (the in-app Browser pane, Playwright) — Chromium has no HEIC decoder. Verify by uploading a HEIC in Safari; state that limitation instead of claiming browser-verified.
+- Diagnosing "image won't upload/renders wrong": pull the real bytes and cross-check decoders — `sharp` (libheif/libspng), macOS `sips` (Apple), and note which succeed. Divergence between Apple and libheif is the tell for an Apple-format issue, not a corrupt file.
+- Escape hatch for the user: iPhone → Settings → Camera → Formats → "Most Compatible" shoots JPEG and sidesteps the whole HEIC decode problem.
+
+**Pattern to repeat.** When a format "works in Preview but not in code," suspect a decoder-implementation gap (Apple ImageIO vs libheif/libspng), not a damaged file — and route decoding to whichever engine actually supports it (often the browser's native one) rather than fighting the strict library. See [[never-decode-uploads-with-sharp-failon-none]].
+
+---
+
+## 2026-08-11 — Never decode uploads with sharp `failOn: "none"` — it stores corruption
+
+**Context.** After adding downscale-on-upload to `src/lib/admin/uploads.ts` (`normalizeImage()` runs every raster upload through `sharp(...).rotate().resize(...).png/webp/jpeg()`), a re-uploaded newsletter image rendered with a smeared/repeated band across the bottom ~12%. The corruption was in the **original file stored in R2**, not the Next optimizer — verified by pulling both the R2 original and the `/_next/image` output with sharp and viewing them. Root cause: I had passed `sharp(data, { failOn: "none" })` to "tolerate slightly-malformed phone exports." When the upload arrives truncated (a network blip on a multi-MB file), `failOn: "none"` makes sharp **silently emit a half-decoded image** — the smeared band — instead of throwing. That corrupt result was re-encoded and persisted. Reproduced deterministically: a clean PNG truncated to 92% under `failOn:"none"` succeeds with the exact artifact; under `failOn:"truncated"`/`"error"` it throws `pngload_buffer: libspng read error`.
+
+**Rule.** When re-encoding user uploads server-side, decode with `failOn: "error"` (aborts on truncated/corrupt input, still tolerates benign warnings), never `"none"`. A bad upload must **fail loud** so the route returns an error and the user retries — silently storing a corrupt derivative is far worse than rejecting the upload. Wrap sharp's low-level message (`corrupt_or_truncated_image: …`) so the client sees something actionable.
+
+**How to apply.**
+- Diagnosing "image renders weird" (band, smear, partial): pull the actual bytes from storage AND the optimizer output and inspect with sharp (`metadata()` + re-encode to a viewable file + `Read` the image). Determines source-corruption vs optimizer-corruption in one pass — don't theorize from the screenshot.
+- A stored image whose long edge is exactly your resize cap (here 2048) is a strong signal it passed through your upload pipeline, not a raw original.
+- Corruption already persisted before the fix can't be repaired in code — the user must re-upload. Say so explicitly.
+
+**Pattern to repeat.** Tolerant decoders (`failOn:"none"`, `ImzTruncated`-style flags) trade a loud, recoverable failure for a silent, permanent one. Default to strict; only loosen with evidence of a specific benign case, and never to the point of accepting truncated data.
+
+---
+
 ## 2026-05-22 — Don't ship `initial={{ opacity: 0 }}` on SSR'd framer-motion wrappers
 
 **Context.** After fixing the dark-hero white-on-white issue, users on some mobile phones still reported huge blank sections of the site. Screenshots showed the mobile hamburger drawer opening to a completely empty white sheet (8 nav links missing) and the homepage rendering with most content below the hero invisible. Root cause: `Reveal` (`src/components/ui/Reveal.tsx`) used `<motion.div initial={{ opacity: 0, y }} whileInView={{ opacity: 1, y: 0 }} />` and the mobile menu items in `Header.tsx` used the same shape (`initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}`). Framer-motion's `initial` is serialized into the SSR HTML as inline `style="opacity: 0; transform: translateY(16px)"`. On devices where the client-side animation never fires (hydration race, IntersectionObserver edge case, aggressive battery saver, JS error elsewhere on the page, service-worker-cached stale JS) the content stays at `opacity: 0` forever — invisible. The home page has 32 `Reveal` usages, so a single client-side animation failure makes most of the site disappear.

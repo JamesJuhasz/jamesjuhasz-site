@@ -15,6 +15,7 @@
 
 import wsRaw from "@/data/world-sailing-events.json";
 import enrichmentRaw from "@/data/world-sailing-enrichment.json";
+import manualRaw from "@/data/manual-results.json";
 import { getVerified, getReview } from "@/lib/scrape/verified-accessor";
 import type { Result } from "@/lib/results";
 import type { SeedEvent, CoverImage } from "@/lib/seed-data";
@@ -77,6 +78,19 @@ type EnrichmentFile = {
 
 const dump = wsRaw as WSDump;
 const enrichments = (enrichmentRaw as EnrichmentFile).entries ?? {};
+
+/* Manual results overlay: regattas absent from James's World Sailing profile
+   (national / club events scored on Sailwave, etc.). Lives in a separate file
+   so it survives `npm run ws:fetch`, which fully rewrites world-sailing-events.json.
+   See src/data/manual-results.json for the contract. */
+const manualResults = ((manualRaw as { results?: Result[] }).results ?? []).slice();
+
+/* Dedup key so a manual entry auto-drops if WS ever lists the same regatta.
+   Normalized title (lowercased, punctuation-stripped) + start year. */
+function resultDedupKey(title: string, startDate: string): string {
+  const t = title.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  return `${t}::${startDate.slice(0, 4)}`;
+}
 
 /* ---------------------------------------------------------------------------
    Cover-image map. Keyed by World Sailing event UUID (stable across re-fetch).
@@ -317,10 +331,20 @@ export function getWorldSailingAdjacentEvents(
 }
 
 export function getWorldSailingResults(): Result[] {
-  const rows = dump.events.slice().sort((a, b) =>
+  const wsResults = dump.events.map((row) => toResult(row));
+
+  // Merge in manual (non-WS) results, but let a real WS row win if the same
+  // regatta is ever published to the federation profile.
+  const wsKeys = new Set(
+    wsResults.map((r) => resultDedupKey(r.title, r.startDate)),
+  );
+  const extras = manualResults.filter(
+    (m) => !wsKeys.has(resultDedupKey(m.title, m.startDate)),
+  );
+
+  return [...wsResults, ...extras].sort((a, b) =>
     a.startDate < b.startDate ? 1 : -1,
   );
-  return rows.map((row) => toResult(row));
 }
 
 export function getWorldSailingPastEvents(): SeedEvent[] {

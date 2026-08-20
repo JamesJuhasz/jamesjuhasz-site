@@ -1,0 +1,22 @@
+{
+  "note": "Regatta results NOT present in James's World Sailing athlete profile — national / club events scored on Sailwave etc. Merged into the results list by getWorldSailingResults() in src/lib/world-sailing.ts, so these survive `npm run ws:fetch` (which fully overwrites world-sailing-events.json). If World Sailing ever lists one of these regattas, the WS row wins and the manual entry is auto-dropped (dedup by normalized title + start year). Shape mirrors the `Result` type in src/lib/results.ts.",
+  "results": [
+    {
+      "id": "manual-irish-ilca-nationals-2026",
+      "title": "Grant Thornton ILCA Irish National Championships",
+      "startDate": "2026-07-24",
+      "endDate": "2026-07-26",
+      "country": "IRL",
+      "position": "2",
+      "totalCompetitors": 24,
+      "fleet": "ILCA 7",
+      "externalUrl": "https://www.sailwave.com/results/Irish_2026_ILCA_Cship.htm",
+      "source": "Official results",
+      "location": "Royal St George Yacht Club, Dún Laoghaire, Ireland",
+      "coverImage": {
+        "url": "/images/section/03.jpg",
+        "alt": "ILCA Irish National Championships — Dún Laoghaire"
+      }
+    }
+  ]
+}

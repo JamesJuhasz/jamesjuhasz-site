@@ -1,9 +1,26 @@
 {
-  "fetchedAt": "2026-09-01T17:35:07.908Z",
+  "fetchedAt": "2026-09-02T17:36:04.683Z",
   "source": "https://www.sailing.org/sailor/james-juhasz?ref=CANJJ18",
   "sailorName": "James Juhasz",
   "worldSailingId": "CANJJ18",
   "events": [
+    {
+      "worldSailingEventId": "34c55a8e-03ab-40a7-ac2a-8cc8e68239a4",
+      "worldSailingRegattaId": "6487bb2c-a679-4e83-a9d4-3f5befd61c57",
+      "worldSailingRegattaCode": "IRL202609VBZ",
+      "regattaName": "ILCA 7 Men's World Championship",
+      "startDate": "2026-08-23",
+      "endDate": "2026-08-30",
+      "position": 66,
+      "className": "ILCA 7",
+      "classCode": "ILCA7",
+      "discipline": "Fleet racing",
+      "grade": "200",
+      "eventName": "ILCA 7 Men",
+      "regattaWebsite": "https://2026ilca7men.ilca-worlds.org",
+      "description": null,
+      "sailNumber": "217718"
+    },
     {
       "worldSailingEventId": "23e4ef87-bf3a-4ad0-bdd2-bc32605d77aa",
       "worldSailingRegattaId": "3ffb2298-e4f2-4f5b-9d11-c1e0048805f2",

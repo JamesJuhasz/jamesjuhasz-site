@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-01T17:35:11.381Z",
+  "generatedAt": "2026-09-02T17:36:40.064Z",
   "results": [
     {
       "worldSailingEventId": "104e108a-374b-462b-83ed-d1c21ad41bae",
@@ -151,6 +151,62 @@
           "rejectReason": "name-not-found",
           "notes": [
             "tables-found=2",
+            "no-row-matched",
+            "via-playwright"
+          ]
+        }
+      ],
+      "needsReview": true,
+      "reviewReasons": [
+        "below-review-threshold:low-confidence",
+        "name-not-found",
+        "class-implied-not-confirmed"
+      ]
+    },
+    {
+      "worldSailingEventId": "34c55a8e-03ab-40a7-ac2a-8cc8e68239a4",
+      "verifiedAt": "2026-09-02T17:36:40.035Z",
+      "confidenceScore": 0,
+      "confidenceBreakdown": {
+        "nameMatch": 0,
+        "eventNameMatch": 0.56,
+        "dateOverlap": 1,
+        "classMatch": 0.5,
+        "positionAgreement": 0.5,
+        "sourceTier": 1
+      },
+      "primarySource": {
+        "url": "https://2026ilca7men.ilca-worlds.org/",
+        "domain": "2026ilca7men.ilca-worlds.org",
+        "tier": "HIGH",
+        "fetchedAt": "2026-09-02T17:36:08.215Z",
+        "contentType": "playwright-html"
+      },
+      "externalPosition": null,
+      "totalCompetitors": null,
+      "fleet": null,
+      "candidates": [
+        {
+          "url": "https://2026ilca7men.ilca-worlds.org/",
+          "domain": "2026ilca7men.ilca-worlds.org",
+          "tier": "HIGH",
+          "contentType": "playwright-html",
+          "fetchedAt": "2026-09-02T17:36:08.215Z",
+          "confidenceScore": 0,
+          "confidenceBreakdown": {
+            "nameMatch": 0,
+            "eventNameMatch": 0.56,
+            "dateOverlap": 1,
+            "classMatch": 0.5,
+            "positionAgreement": 0.5,
+            "sourceTier": 1
+          },
+          "externalPosition": null,
+          "totalCompetitors": null,
+          "fleet": null,
+          "rejectReason": "name-not-found",
+          "notes": [
+            "tables-found=0",
             "no-row-matched",
             "via-playwright"
           ]

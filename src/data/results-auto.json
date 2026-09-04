@@ -97,7 +97,7 @@
       "fleet": null,
       "externalUrl": null,
       "source": null,
-      "scrapedAt": "2026-09-03T17:06:00.203Z"
+      "scrapedAt": "2026-09-04T16:55:24.507Z"
     },
     {
       "coachaibleId": "coachaible-2963",
@@ -106,7 +106,7 @@
       "fleet": null,
       "externalUrl": null,
       "source": null,
-      "scrapedAt": "2026-09-03T17:05:59.873Z"
+      "scrapedAt": "2026-09-04T16:55:24.010Z"
     },
     {
       "coachaibleId": "coachaible-2962",
@@ -115,7 +115,7 @@
       "fleet": null,
       "externalUrl": null,
       "source": null,
-      "scrapedAt": "2026-09-03T17:05:59.545Z"
+      "scrapedAt": "2026-09-04T16:55:23.514Z"
     },
     {
       "coachaibleId": "coachaible-2956",
@@ -124,16 +124,16 @@
       "fleet": null,
       "externalUrl": null,
       "source": null,
-      "scrapedAt": "2026-09-03T17:05:58.986Z"
+      "scrapedAt": "2026-09-04T16:55:23.034Z"
     },
     {
       "coachaibleId": "coachaible-2940",
       "position": null,
       "totalCompetitors": null,
       "fleet": null,
-      "externalUrl": null,
-      "source": null,
-      "scrapedAt": "2026-09-03T17:05:58.609Z"
+      "externalUrl": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOMG1mOXQ1Q0FXWVdTUy1rTFpyQzFGVXZaUmhwcjJwSHE4U3VLVHhsYkZMUTJUcS1tSkhMLU1icklfdEVaV2QtLTdySk9idDRVNTZnWFItcl9JOS1OYTVTTXZ0QWRzcVV0Ykw3QW5udm1QRmNqZnJtYXRqdkl2ek5XNTkyQTRJTzli?oc=5",
+      "source": "news.google.com",
+      "scrapedAt": "2026-09-04T16:55:22.530Z"
     },
     {
       "coachaibleId": "coachaible-294",
@@ -151,7 +151,7 @@
       "fleet": null,
       "externalUrl": null,
       "source": null,
-      "scrapedAt": "2026-09-03T17:05:58.487Z"
+      "scrapedAt": "2026-09-04T16:55:21.082Z"
     },
     {
       "coachaibleId": "coachaible-2910",
@@ -160,7 +160,7 @@
       "fleet": null,
       "externalUrl": null,
       "source": null,
-      "scrapedAt": "2026-09-03T17:05:58.147Z"
+      "scrapedAt": "2026-09-04T16:55:20.631Z"
     },
     {
       "coachaibleId": "coachaible-2890",
@@ -169,7 +169,7 @@
       "fleet": null,
       "externalUrl": null,
       "source": null,
-      "scrapedAt": "2026-09-03T17:05:58.071Z"
+      "scrapedAt": "2026-09-04T16:55:20.336Z"
     },
     {
       "coachaibleId": "coachaible-2875",
@@ -178,7 +178,7 @@
       "fleet": null,
       "externalUrl": null,
       "source": null,
-      "scrapedAt": "2026-09-03T17:05:57.941Z"
+      "scrapedAt": "2026-09-04T16:55:19.643Z"
     },
     {
       "coachaibleId": "coachaible-2873",
@@ -187,7 +187,7 @@
       "fleet": null,
       "externalUrl": null,
       "source": null,
-      "scrapedAt": "2026-09-03T17:05:57.910Z"
+      "scrapedAt": "2026-09-04T16:55:19.619Z"
     },
     {
       "coachaibleId": "coachaible-2870",
@@ -196,7 +196,7 @@
       "fleet": null,
       "externalUrl": null,
       "source": null,
-      "scrapedAt": "2026-09-03T17:05:57.734Z"
+      "scrapedAt": "2026-09-04T16:55:19.019Z"
     },
     {
       "coachaibleId": "coachaible-287",
@@ -212,9 +212,9 @@
       "position": null,
       "totalCompetitors": null,
       "fleet": null,
-      "externalUrl": null,
-      "source": null,
-      "scrapedAt": "2026-09-03T17:06:02.834Z"
+      "externalUrl": "https://news.google.com/rss/articles/CBMigwFBVV95cUxOS0lQZWh1UDFFeWp4UklfbUo2Y09NNURDQU5WSTkyTWt3ZEJZX3dqY3IzTU01R0pMVktyVktyTUdGVnluYTVMUFpzd1AtdWlBOFFRakRsbEROLTR2cFNwMEtONS1oMktzVjJkUlowN0F3d1U2cVFUTVJnVjktcGpYZUJRMA?oc=5",
+      "source": "news.google.com",
+      "scrapedAt": "2026-09-04T16:55:29.981Z"
     },
     {
       "coachaibleId": "coachaible-2862",
@@ -223,7 +223,7 @@
       "fleet": null,
       "externalUrl": null,
       "source": null,
-      "scrapedAt": "2026-09-03T17:06:02.767Z"
+      "scrapedAt": "2026-09-04T16:55:28.651Z"
     },
     {
       "coachaibleId": "coachaible-2856",
@@ -232,7 +232,7 @@
       "fleet": null,
       "externalUrl": null,
       "source": null,
-      "scrapedAt": "2026-09-03T17:06:02.168Z"
+      "scrapedAt": "2026-09-04T16:55:28.180Z"
     },
     {
       "coachaibleId": "coachaible-2847",
@@ -241,7 +241,7 @@
       "fleet": null,
       "externalUrl": null,
       "source": null,
-      "scrapedAt": "2026-09-03T17:06:01.888Z"
+      "scrapedAt": "2026-09-04T16:55:27.669Z"
     },
     {
       "coachaibleId": "coachaible-2842",
@@ -250,7 +250,7 @@
       "fleet": null,
       "externalUrl": null,
       "source": null,
-      "scrapedAt": "2026-09-03T17:06:01.392Z"
+      "scrapedAt": "2026-09-04T16:55:27.148Z"
     },
     {
       "coachaibleId": "coachaible-2835",
@@ -259,7 +259,7 @@
       "fleet": null,
       "externalUrl": null,
       "source": null,
-      "scrapedAt": "2026-09-03T17:06:01.300Z"
+      "scrapedAt": "2026-09-04T16:55:26.849Z"
     },
     {
       "coachaibleId": "coachaible-2828",
@@ -268,7 +268,7 @@
       "fleet": null,
       "externalUrl": null,
       "source": null,
-      "scrapedAt": "2026-09-03T17:06:00.908Z"
+      "scrapedAt": "2026-09-04T16:55:26.361Z"
     },
     {
       "coachaibleId": "coachaible-2808",
@@ -277,7 +277,7 @@
       "fleet": null,
       "externalUrl": null,
       "source": null,
-      "scrapedAt": "2026-09-03T17:06:00.829Z"
+      "scrapedAt": "2026-09-04T16:55:26.095Z"
     },
     {
       "coachaibleId": "coachaible-2794",
@@ -286,7 +286,7 @@
       "fleet": null,
       "externalUrl": null,
       "source": null,
-      "scrapedAt": "2026-09-03T17:06:00.494Z"
+      "scrapedAt": "2026-09-04T16:55:25.588Z"
     },
     {
       "coachaibleId": "coachaible-2790",
@@ -295,7 +295,7 @@
       "fleet": null,
       "externalUrl": null,
       "source": null,
-      "scrapedAt": "2026-09-03T17:06:00.309Z"
+      "scrapedAt": "2026-09-04T16:55:25.015Z"
     },
     {
       "coachaibleId": "coachaible-275",

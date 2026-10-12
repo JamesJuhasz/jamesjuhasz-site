@@ -40,6 +40,7 @@ export const SITE = {
     {
       label: "Equipment",
       items: [
+        { name: "Ovington Boats", href: "https://www.ovingtonboats.com", logo: "/images/supporters/ovington-boats.png" },
         { name: "Covey Watersport", href: "https://covywatersport.com", logo: "/images/supporters/covey-watersport.png" },
         { name: "Allen Sailing Hardware", href: "https://www.allenbrothers.co.uk", logo: "/images/supporters/allen-sailing-hardware.png" },
         { name: "Helly Hansen", href: "https://www.hellyhansen.com", logo: "/images/supporters/helly-hansen.png" },
@@ -53,6 +54,7 @@ export const SITE = {
     { name: "Ontario Quest for Gold", href: "https://www.coachingathletes.org", logo: "/images/supporters/ontario-quest-for-gold-dark.svg" },
     { name: "CoachAible.fit", href: "https://www.coachaible.fit", logo: "/images/supporters/coachaible-dark.svg" },
     { name: "SailCoach", href: "https://sailcoach.com", logo: "/images/supporters/sailcoach.png" },
+    { name: "Ovington Boats", href: "https://www.ovingtonboats.com", logo: "/images/supporters/ovington-boats.png" },
     { name: "Covey Watersport", href: "https://covywatersport.com", logo: "/images/supporters/covey-watersport.png" },
     { name: "Allen Sailing Hardware", href: "https://www.allenbrothers.co.uk", logo: "/images/supporters/allen-sailing-hardware.png" },
     { name: "Helly Hansen", href: "https://www.hellyhansen.com", logo: "/images/supporters/helly-hansen.png" },

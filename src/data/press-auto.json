@@ -1,6 +1,14 @@
 {
   "items": [
     {
+      "publication": "Sail-World.com",
+      "articleTitle": "Sail Canada introduces its 2026-2027 Board of Directors - Sail-World.com",
+      "publishedAt": "2026-11-03",
+      "externalUrl": "https://news.google.com/rss/articles/CBMikgFBVV95cUxOQ0JPVmVoQUpxWS1PcU9GS3h6eU1lWEtCeXBib1lPLXE2T2RNdzdvR0hicUE0RTgyLUt0SkY3MDNPdmFpSVJvX085S1RZZmNFeDNuZ2cxTDlmQXJIZ1o5QnJMb1YtZTZvUTJyQTlEcVhSSkp1U3QzTTU1NFptV1RRUmo1dXc1UE5Fb2ZnQVNMalhpdw?oc=5",
+      "excerpt": "Sail Canada introduces its 2026-2027 Board of Directors Sail-World.com",
+      "discoveredAt": "2026-11-03T20:00:48.933Z"
+    },
+    {
       "publication": "Sail Canada",
       "articleTitle": "Sail Canada introduces its 2026-2027 Board of Directors",
       "publishedAt": "2026-11-02",
@@ -8,6 +16,15 @@
       "excerpt": "Kingston, November 2, 2026 – Sail Canada is proud to introduce its new Board of Directors for 2026-2027, following the Annual Meeting that was held virtually last week. At the Annual Meeting, one new member was elected to the Sail Canada Board of Directors: Nick Cogger from Know…",
       "imageUrl": "https://www.sailing.ca/wp-content/uploads/2026/11/board-square-26-27-1024x1024.jpg",
       "discoveredAt": "2026-11-02T22:10:07.107Z"
+    },
+    {
+      "publication": "Scuttlebutt Sailing News",
+      "articleTitle": "Sail Canada Board of Directors 2026-27",
+      "publishedAt": "2026-11-02",
+      "externalUrl": "https://www.sailingscuttlebutt.com/2026/11/02/sail-canada-board-of-directors-2026-27/",
+      "excerpt": "The Sail Canada Board of Directors has elected Nick Cogger from Knowlton, Quebec for the 2026-2027 term. He will take the seat previously held by Valérie Lavigne from Quebec, who completed the limit of two terms starting in 2020. - Full report",
+      "imageUrl": "https://www.sailingscuttlebutt.com/wp-content/uploads/2026/11/2026-11-02_14-03-47.jpg",
+      "discoveredAt": "2026-11-03T20:00:48.933Z"
     },
     {
       "publication": "Québec Yachting",
@@ -4282,6 +4299,8 @@
     "https://www.sail-world.com/news/301201/?source=rss",
     "https://www.sail-world.com/news/301202/?source=rss",
     "https://www.sail-world.com/news/301203/?source=rss",
+    "https://www.sail-world.com/news/301204/?source=rss",
+    "https://www.sail-world.com/news/301206/?source=rss",
     "https://www.sail-world.com/news/301210/?source=rss",
     "https://www.sail-world.com/news/301215/?source=rss",
     "https://www.sail-world.com/news/301216/?source=rss",
@@ -4301,6 +4320,7 @@
     "https://www.sail-world.com/news/301231/?source=rss",
     "https://www.sail-world.com/news/301233/?source=rss",
     "https://www.sail-world.com/news/301234/?source=rss",
+    "https://www.sail-world.com/news/301235/?source=rss",
     "https://www.sail-world.com/news/301236/?source=rss",
     "https://www.sail-world.com/news/301237/?source=rss",
     "https://www.sail-world.com/news/301238/?source=rss",
@@ -4314,8 +4334,23 @@
     "https://www.sail-world.com/news/301253/?source=rss",
     "https://www.sail-world.com/news/301254/?source=rss",
     "https://www.sail-world.com/news/301255/?source=rss",
+    "https://www.sail-world.com/news/301256/?source=rss",
     "https://www.sail-world.com/news/301259/?source=rss",
+    "https://www.sail-world.com/news/301260/?source=rss",
     "https://www.sail-world.com/news/301261/?source=rss",
+    "https://www.sail-world.com/news/301263/?source=rss",
+    "https://www.sail-world.com/news/301264/?source=rss",
+    "https://www.sail-world.com/news/301265/?source=rss",
+    "https://www.sail-world.com/news/301266/?source=rss",
+    "https://www.sail-world.com/news/301267/?source=rss",
+    "https://www.sail-world.com/news/301268/?source=rss",
+    "https://www.sail-world.com/news/301269/?source=rss",
+    "https://www.sail-world.com/news/301270/?source=rss",
+    "https://www.sail-world.com/news/301274/?source=rss",
+    "https://www.sail-world.com/news/301277/?source=rss",
+    "https://www.sail-world.com/news/301279/?source=rss",
+    "https://www.sail-world.com/news/301284/?source=rss",
+    "https://www.sail-world.com/news/301285/?source=rss",
     "https://www.sailing.ca/2025-sail-canada-sail-central-championships-at-hudson-yacht-club-fruitbowl-regatta-win-sail-canadas-regatta-of-the-year-award/",
     "https://www.sailing.ca/2026-call-for-nominations-to-the-sail-canada-board-of-directors/",
     "https://www.sailing.ca/2026-canadian-sailing-hall-of-fame-inductees-announced/",

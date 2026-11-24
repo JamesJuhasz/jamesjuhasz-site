@@ -1039,6 +1039,14 @@
       "discoveredAt": "2026-10-09T18:39:40.277Z"
     },
     {
+      "publication": "Vancouver Is Awesome",
+      "articleTitle": "Promising Canadian sailor already faces plenty of challenges on Olympic journey - Vancouver Is Awesome",
+      "publishedAt": "2020-03-23",
+      "externalUrl": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxPWGFKT3pLVjh2X2lKQWZqejlzZzZWRF93dnRZZmZyMW9GaGVUWDI4OVRrekRYNVBPZDVaMF9Ua2pHenJ4LXpoM1hHX3FtNGxEcEI0V1l0dVRaRWJfbzFrZG5jZGVUQUgxZzBnU0k5WDE2ZUQ3a1poYklfbHIzby1HWHlKLTBVVVY4QkFyWWlYS3E2cENTbTJKcGVBU3B1VGxWWXp6a1RLRjZURkhrZEppY1VrRTFxYWdKMWttWVZJSG1reUVPOFQ0bERCQ1BYc29VRG1SRQ?oc=5",
+      "excerpt": "Promising Canadian sailor already faces plenty of challenges on Olympic journey Vancouver Is Awesome",
+      "discoveredAt": "2026-11-24T22:55:24.411Z"
+    },
+    {
       "publication": "Sail-World.com",
       "articleTitle": "2017 Sail Canada Youth Championships - Day 1 - Sail-World.com",
       "publishedAt": "2018-02-12",
@@ -4717,6 +4725,7 @@
     "https://www.sail-world.com/news/301700/?source=rss",
     "https://www.sail-world.com/news/301701/?source=rss",
     "https://www.sail-world.com/news/301702/?source=rss",
+    "https://www.sail-world.com/news/301703/?source=rss",
     "https://www.sail-world.com/news/301706/?source=rss",
     "https://www.sail-world.com/news/301707/?source=rss",
     "https://www.sail-world.com/news/301708/?source=rss",
@@ -4782,6 +4791,19 @@
     "https://www.sail-world.com/news/301796/?source=rss",
     "https://www.sail-world.com/news/301797/?source=rss",
     "https://www.sail-world.com/news/301798/?source=rss",
+    "https://www.sail-world.com/news/301799/?source=rss",
+    "https://www.sail-world.com/news/301801/?source=rss",
+    "https://www.sail-world.com/news/301802/?source=rss",
+    "https://www.sail-world.com/news/301803/?source=rss",
+    "https://www.sail-world.com/news/301808/?source=rss",
+    "https://www.sail-world.com/news/301809/?source=rss",
+    "https://www.sail-world.com/news/301810/?source=rss",
+    "https://www.sail-world.com/news/301811/?source=rss",
+    "https://www.sail-world.com/news/301812/?source=rss",
+    "https://www.sail-world.com/news/301813/?source=rss",
+    "https://www.sail-world.com/news/301818/?source=rss",
+    "https://www.sail-world.com/news/301819/?source=rss",
+    "https://www.sail-world.com/news/301821/?source=rss",
     "https://www.sailing.ca/2025-sail-canada-sail-central-championships-at-hudson-yacht-club-fruitbowl-regatta-win-sail-canadas-regatta-of-the-year-award/",
     "https://www.sailing.ca/2026-call-for-nominations-to-the-sail-canada-board-of-directors/",
     "https://www.sailing.ca/2026-canadian-sailing-hall-of-fame-inductees-announced/",
@@ -5644,12 +5666,14 @@
     "https://www.sailingscuttlebutt.com/2026/11/21/the-10-best-yacht-club-bars-in-america/",
     "https://www.sailingscuttlebutt.com/2026/11/21/who-is-junior-sailing-actually-for/",
     "https://www.sailingscuttlebutt.com/2026/11/21/who-is-minding-the-store/",
+    "https://www.sailingscuttlebutt.com/2026/11/22/eight-nations-go-home-at-ssl-gold-cup/",
     "https://www.sailingscuttlebutt.com/2026/11/22/ownership-of-digital-performance-history/",
     "https://www.sailingscuttlebutt.com/2026/11/22/sailgp-new-zealand-wins-in-dubai/",
     "https://www.sailingscuttlebutt.com/2026/11/23/decisions-that-shape-global-sailing-future/",
     "https://www.sailingscuttlebutt.com/2026/11/23/golden-globe-dismasted-in-indian-ocean/",
     "https://www.sailingscuttlebutt.com/2026/11/23/sailing-to-the-games-los-angeles-2028/",
     "https://www.sailingscuttlebutt.com/2026/11/23/ted-turner-gets-in-the-last-word/",
-    "https://www.sailingscuttlebutt.com/2026/11/23/usa-wins-most-improved-team-award/"
+    "https://www.sailingscuttlebutt.com/2026/11/23/usa-wins-most-improved-team-award/",
+    "https://www.sailingscuttlebutt.com/2026/11/24/hannah-mills-to-lead-uae-sailgp-team/"
   ]
 }
